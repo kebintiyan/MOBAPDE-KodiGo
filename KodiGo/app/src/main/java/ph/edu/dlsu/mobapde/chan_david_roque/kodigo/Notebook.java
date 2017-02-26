@@ -30,6 +30,7 @@ public class Notebook implements Parcelable {
 
     public Notebook(){
 
+        pages = new ArrayList<>();
     }
 
     protected Notebook(Parcel in) {

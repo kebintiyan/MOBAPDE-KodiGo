@@ -31,6 +31,8 @@ public class Page implements Parcelable {
 
     public Page(){
 
+        images = new ArrayList<>();
+        comments = new ArrayList<>();
     }
 
     protected Page(Parcel in) {

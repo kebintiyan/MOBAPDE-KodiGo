@@ -1,11 +1,14 @@
 package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Created by kevin on 2/26/2017.
@@ -21,6 +24,60 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
     }
 
     /*********** CREATE METHODS ***********/
+
+    public long insertNotebook(Notebook n) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put(Notebook.COLUMN_TITLE, n.getTitle());
+        cv.put(Notebook.COLUMN_TITLE_COLOR, n.getTitleColor());
+        cv.put(Notebook.COLUMN_NOTEBOOK_COLOR, n.getNotebookColor());
+        cv.put(Notebook.COLUMN_NOTEBOOK_NUMBER, getNextNotebookNumber());
+        cv.put(Notebook.COLUMN_DATE_CREATED, getCurrentDate());
+
+        return db.insert(Notebook.TABLE_NAME, null, cv);
+    }
+
+    public long insertPage(Page p) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put(Page.COLUMN_NOTEBOOK_ID, p.getNotebookID());
+        cv.put(Page.COLUMN_NAME, p.getName());
+        cv.put(Page.COLUMN_TEXT, p.getText());
+        cv.put(Page.COLUMN_PAGE_NUMBER, getNextPageNumber(p.getNotebookID()));
+        cv.put(Page.COLUMN_DATE_CREATED, getCurrentDate());
+
+        for (Comment c : p.getComments()) {
+            insertComment(c);
+        }
+
+        for (Image i : p.getImages()) {
+            insertImage(i);
+        }
+
+        return db.insert(Page.TABLE_NAME, null, cv);
+    }
+
+    public long insertComment(Comment c) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put(Comment.COLUMN_PAGE_ID, c.getPageID());
+        cv.put(Comment.COLUMN_COMMENT, c.getComment());
+
+        return db.insert(Comment.TABLE_NAME, null, cv);
+    }
+
+    public long insertImage(Image i) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put(Image.COLUMN_PAGE_ID, i.getPageID());
+        cv.put(Image.COLUMN_URL, i.getUrl());
+
+        return db.insert(Comment.TABLE_NAME, null, cv);
+    }
 
     /*********** READ METHODS ***********/
 
@@ -332,9 +389,93 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
     /*********** UPDATE METHODS ***********/
 
+    public int updateNotebook(Notebook n) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put(Notebook.COLUMN_TITLE, n.getTitle());
+        cv.put(Notebook.COLUMN_TITLE_COLOR, n.getTitleColor());
+        cv.put(Notebook.COLUMN_NOTEBOOK_COLOR, n.getNotebookColor());
+        cv.put(Notebook.COLUMN_NOTEBOOK_NUMBER, getNextNotebookNumber());
+        cv.put(Notebook.COLUMN_DATE_CREATED, getCurrentDate());
+
+        return db.update(Notebook.TABLE_NAME, cv, Notebook.COLUMN_NOTEBOOK_ID + " = ? ",
+                new String[]{Integer.toString(n.getNotebookID())});
+    }
+
+    public int updatePage(Page p) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put(Page.COLUMN_NOTEBOOK_ID, p.getNotebookID());
+        cv.put(Page.COLUMN_NAME, p.getName());
+        cv.put(Page.COLUMN_TEXT, p.getText());
+        cv.put(Page.COLUMN_PAGE_NUMBER, getNextPageNumber(p.getNotebookID()));
+        cv.put(Page.COLUMN_DATE_CREATED, getCurrentDate());
+
+        /*for (Comment c : p.getComments()) {
+            insertComment(c);
+        }
+
+        for (Image i : p.getImages()) {
+            insertImage(i);
+        }*/
+
+        return db.update(Page.TABLE_NAME, cv, Page.COLUMN_PAGE_ID + " = ? ",
+                new String[]{Integer.toString(p.getPageID())});
+    }
+
+    public int updateComment(Comment c) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put(Comment.COLUMN_PAGE_ID, c.getPageID());
+        cv.put(Comment.COLUMN_COMMENT, c.getComment());
+
+        return db.update(Comment.TABLE_NAME, cv, Comment.COLUMN_COMMENT_ID + " = ? ",
+                new String[]{Integer.toString(c.getCommentID())});
+    }
+
+    public int updateImage(Image i) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put(Image.COLUMN_PAGE_ID, i.getPageID());
+        cv.put(Image.COLUMN_URL, i.getUrl());
+
+        return db.update(Image.TABLE_NAME, cv, Image.COLUMN_IMAGE_ID + " = ? ",
+                new String[]{Integer.toString(i.getImageID())});
+    }
+
     /*********** DELETE METHODS ***********/
 
+    public int deleteNotebook(int id) {
+        SQLiteDatabase db = getWritableDatabase();
 
+        return db.delete(Notebook.TABLE_NAME, Notebook.COLUMN_NOTEBOOK_ID + " = ? ",
+                new String[]{Integer.toString(id)});
+    }
+
+    public int deletePage(int id) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        return db.delete(Page.TABLE_NAME, Page.COLUMN_PAGE_ID + " = ? ",
+                new String[]{Integer.toString(id)});
+    }
+
+    public int deleteComment(int id) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        return db.delete(Comment.TABLE_NAME, Comment.COLUMN_COMMENT_ID+ " = ? ",
+                new String[]{Integer.toString(id)});
+    }
+
+    public int deleteImage(int id) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        return db.delete(Comment.TABLE_NAME, Image.COLUMN_IMAGE_ID + " = ? ",
+                new String[]{Integer.toString(id)});
+    }
 
     /*********** INITIALIZE DATABASE METHODS ***********/
 
@@ -400,4 +541,25 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
     }
+
+    /*********** HELPER METHODS ***********/
+
+    private String getCurrentDate() {
+        Calendar c = Calendar.getInstance();
+
+        SimpleDateFormat df = new SimpleDateFormat("MMM dd, yyyy");
+
+        return df.format(c.getTime());
+    }
+
+    private int getNextNotebookNumber() {
+
+        return 0;
+    }
+
+    private int getNextPageNumber(int notebookID) {
+
+        return 0;
+    }
+
 }
