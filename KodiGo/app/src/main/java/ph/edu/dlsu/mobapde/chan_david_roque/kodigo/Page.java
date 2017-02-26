@@ -11,24 +11,33 @@ import java.util.ArrayList;
 
 public class Page implements Parcelable {
 
-    private String pageID;
-    private String notebookID;
+    public static final String TABLE_NAME           = " page ";
+    public static final String COLUMN_PAGE_ID       = " pageID ";
+    public static final String COLUMN_NOTEBOOK_ID   = " notebookID ";
+    public static final String COLUMN_NAME          = " name ";
+    public static final String COLUMN_TEXT          = " text ";
+    public static final String COLUMN_PAGE_NUMBER   = " pageNumber ";
+    public static final String COLUMN_DATE_CREATED  = " dateCreated ";
+
+    private int pageID;
+    private int notebookID;
     private String name;
-    private ArrayList<String> text;
-    private ArrayList<Image> images;
-    private ArrayList<Comment> comments;
+    private String text;
     private int pageNumber;
     private String dateCreated;
+
+    private ArrayList<Image> images;
+    private ArrayList<Comment> comments;
 
     public Page(){
 
     }
 
     protected Page(Parcel in) {
-        setPageID(in.readString());
-        notebookID = in.readString();
+        setPageID(in.readInt());
+        notebookID = in.readInt();
         name = in.readString();
-        text = in.readArrayList(null);
+        text = in.readString();
         images = in.readArrayList(null);
         comments = in.readArrayList(null);
         pageNumber = in.readInt();
@@ -56,75 +65,83 @@ public class Page implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(getPageID());
-        dest.writeString(getNotebookID());
+        dest.writeInt(getPageID());
+        dest.writeInt(getNotebookID());
         dest.writeString(getName());
         //dest.writeStringArray(getText());
 
         dest.writeString(getDateCreated());
     }
 
-    public String getPageID() {
+    public int getPageID() {
         return pageID;
     }
 
-    public void setPageID(String pageID) {
+    public Page setPageID(int pageID) {
         this.pageID = pageID;
+        return this;
     }
 
-    public String getNotebookID() {
+    public int getNotebookID() {
         return notebookID;
     }
 
-    public void setNotebookID(String notebookID) {
+    public Page setNotebookID(int notebookID) {
         this.notebookID = notebookID;
+        return this;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public Page setName(String name) {
         this.name = name;
+        return this;
     }
 
-    public ArrayList<String> getText() {
+    public String getText() {
         return text;
     }
 
-    public void setText(ArrayList<String> text) {
+    public Page setText(String text) {
         this.text = text;
+        return this;
     }
 
     public ArrayList<Image> getImages() {
         return images;
     }
 
-    public void setImages(ArrayList<Image> images) {
+    public Page setImages(ArrayList<Image> images) {
         this.images = images;
+        return this;
     }
 
     public ArrayList<Comment> getComments() {
         return comments;
     }
 
-    public void setComments(ArrayList<Comment> comments) {
+    public Page setComments(ArrayList<Comment> comments) {
         this.comments = comments;
+        return this;
     }
 
     public int getPageNumber() {
         return pageNumber;
     }
 
-    public void setPageNumber(int pageNumber) {
+    public Page setPageNumber(int pageNumber) {
         this.pageNumber = pageNumber;
+        return this;
     }
 
     public String getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(String dateCreated) {
+    public Page setDateCreated(String dateCreated) {
         this.dateCreated = dateCreated;
+        return this;
     }
 }

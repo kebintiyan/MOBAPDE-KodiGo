@@ -6,34 +6,42 @@ package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 
 public class Comment {
 
-    private String imageID;
-    private String pageID;
-    private String url;
+    public static final String TABLE_NAME           = " comment ";
+    public static final String COLUMN_COMMENT_ID    = " commentID ";
+    public static final String COLUMN_PAGE_ID       = " pageID ";
+    public static final String COLUMN_COMMENT       = " comment ";
+
+    private int commentID;
+    private int pageID;
+    private String comment;
 
     public Comment() {
 
     }
-    public String getImageID() {
-        return imageID;
+    public int getCommentID() {
+        return commentID;
     }
 
-    public void setImageID(String imageID) {
-        this.imageID = imageID;
+    public Comment setCommentID(int commentID) {
+        this.commentID = commentID;
+        return this;
     }
 
-    public String getPageID() {
+    public int getPageID() {
         return pageID;
     }
 
-    public void setPageID(String pageID) {
+    public Comment setPageID(int pageID) {
         this.pageID = pageID;
+        return this;
     }
 
-    public String getUrl() {
-        return url;
+    public String getComment() {
+        return comment;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public Comment setComment(String comment) {
+        this.comment = comment;
+        return this;
     }
 }
