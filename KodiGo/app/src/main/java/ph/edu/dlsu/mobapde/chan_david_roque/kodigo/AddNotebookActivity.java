@@ -16,6 +16,8 @@ import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import java.util.ArrayList;
+
 import static android.app.Activity.RESULT_OK;
 
 public class AddNotebookActivity extends ActionBarActivity {
@@ -23,7 +25,7 @@ public class AddNotebookActivity extends ActionBarActivity {
     EditText notebookName;
     Button submitButton;
     Button cancelButton;
-
+    DatabaseOpenHelper dbhelper;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -34,6 +36,8 @@ public class AddNotebookActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_notebook);
+        dbhelper = new DatabaseOpenHelper(getBaseContext());
+
 
         notebookName = (EditText) findViewById(R.id.notebookName);
         submitButton = (Button) findViewById(R.id.submitButton);
@@ -42,9 +46,16 @@ public class AddNotebookActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent result = new Intent();
+
                 Notebook notebook = new Notebook();
                 notebook.setTitle(notebookName.getText().toString());
+                notebook.setTitleColor("blue");
+                notebook.setNotebookColor("blue");
+                notebook.setNotebookNumber(1);
+                notebook.setDateCreated("12-12-2323");
+
                 result.putExtra(MainActivity.KEY_NOTEBOOK, (Parcelable) notebook);
+                dbhelper.insertNotebook(notebook);
                 setResult(RESULT_OK, result);
                 Log.i("AddNotebookActivity", "Notebook created");
                 finish();
