@@ -25,8 +25,8 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     FloatingActionButton addNotebookButton;
     NotebookAdapter notebookAdapter;
-    DatabaseOpenHelper dbhelper = new DatabaseOpenHelper(getBaseContext());
-
+    DatabaseOpenHelper dbhelper ;
+    ArrayList<Notebook> notebooks;
     final static int REQUEST_ADD_NOTEBOOK = 0;
     final static String KEY_NOTEBOOK = "notebook";
     /**
@@ -39,19 +39,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        dbhelper = new DatabaseOpenHelper(getApplicationContext());
         // Step 1: create recycler view
         recyclerView = (RecyclerView) findViewById(R.id.notebook_recyclerview);
 
-        ArrayList<Notebook> notebooks = new ArrayList<>();
-       // Log.i("num", "siiiize"+dbhelper.queryAllNotebooks().size());
-           notebooks = dbhelper.queryAllNotebooks();
-        // Step 3: Create our adapter
-        notebookAdapter = new NotebookAdapter(notebooks);
+        notebooks = (ArrayList<Notebook>) getIntent().getExtras().get("LoadedNotebooks");
 
+        notebookAdapter = new NotebookAdapter(notebooks);
         // Step 4: Attach adapter to UI
         recyclerView.setAdapter(notebookAdapter);
-        notebookAdapter.addNotebook(new Notebook().setTitle("HELLO"));
         // Step 5: Attach layout manager to UI
         recyclerView.setLayoutManager(
                 new StaggeredGridLayoutManager(
