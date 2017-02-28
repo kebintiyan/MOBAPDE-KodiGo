@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -83,34 +84,28 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
     public ArrayList<Notebook> queryAllNotebooks() {
         SQLiteDatabase db = getReadableDatabase();
-
-        Cursor c = db.query(
-                Notebook.TABLE_NAME,
-                null,
-                null,
-                null,
-                null,
-                null,
-                Notebook.COLUMN_NOTEBOOK_NUMBER);
+        String sql = "Select * From " +Notebook.TABLE_NAME + ";";
+        Cursor c = db.rawQuery(sql,null);
 
         ArrayList<Notebook> notebooks = new ArrayList<>();
 
-        try {
-            while(c.moveToNext()) {
-                Notebook n = new Notebook()
-                        .setNotebookID(c.getInt(c.getColumnIndex(Notebook.COLUMN_NOTEBOOK_ID)))
-                        .setTitle(c.getString(c.getColumnIndex(Notebook.COLUMN_TITLE)))
-                        .setTitleColor(c.getString(c.getColumnIndex(Notebook.COLUMN_TITLE_COLOR)))
-                        .setNotebookColor(c.getString(c.getColumnIndex(Notebook.COLUMN_NOTEBOOK_COLOR)))
-                        .setNotebookNumber(c.getInt(c.getColumnIndex(Notebook.COLUMN_NOTEBOOK_NUMBER)))
-                        .setDateCreated(c.getString(c.getColumnIndex(Notebook.COLUMN_DATE_CREATED)));
+        if(c.getCount()>0) {
+            try {
+                while (c.moveToNext()) {
+                    Notebook n = new Notebook()
+                            .setNotebookID(c.getInt(c.getColumnIndex(Notebook.COLUMN_NOTEBOOK_ID)))
+                            .setTitle(c.getString(c.getColumnIndex(Notebook.COLUMN_TITLE)))
+                            .setTitleColor(c.getString(c.getColumnIndex(Notebook.COLUMN_TITLE_COLOR)))
+                            .setNotebookColor(c.getString(c.getColumnIndex(Notebook.COLUMN_NOTEBOOK_COLOR)))
+                            .setNotebookNumber(c.getInt(c.getColumnIndex(Notebook.COLUMN_NOTEBOOK_NUMBER)))
+                            .setDateCreated(c.getString(c.getColumnIndex(Notebook.COLUMN_DATE_CREATED)));
 
-                notebooks.add(n);
+                    notebooks.add(n);
+                }
+            } finally {
+                c.close();
             }
-        } finally {
-            c.close();
         }
-
         return notebooks;
     }
 
@@ -491,7 +486,12 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         db.execSQL(getCreatePageTableSQL());
         db.execSQL(getCreateCommentTableSQL());
         db.execSQL(getCreateImageTableSQL());
+
+        Log.i("TEST", "DB Created");
+
     }
+
+
 
     private String getCreateNotebookTableSQL() {
         String sql = "CREATE TABLE " + Notebook.TABLE_NAME + "(" +
