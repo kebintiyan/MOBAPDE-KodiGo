@@ -36,8 +36,7 @@ public class AddNotebookActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_notebook);
-        dbhelper = new DatabaseOpenHelper(getBaseContext());
-
+        dbhelper = new DatabaseOpenHelper(getApplicationContext());
 
         notebookName = (EditText) findViewById(R.id.notebookName);
         submitButton = (Button) findViewById(R.id.submitButton);
@@ -55,8 +54,8 @@ public class AddNotebookActivity extends ActionBarActivity {
                 notebook.setDateCreated("12-12-2323");
 
                 result.putExtra(MainActivity.KEY_NOTEBOOK, (Parcelable) notebook);
-                dbhelper.insertNotebook(notebook);
                 setResult(RESULT_OK, result);
+                dbhelper.insertNotebook(notebook);
                 Log.i("AddNotebookActivity", "Notebook created");
                 finish();
 
