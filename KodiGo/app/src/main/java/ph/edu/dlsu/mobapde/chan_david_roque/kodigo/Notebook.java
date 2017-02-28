@@ -11,13 +11,13 @@ import java.util.ArrayList;
 
 public class Notebook implements Parcelable {
 
-    public static final String TABLE_NAME               = " notebook ";
-    public static final String COLUMN_NOTEBOOK_ID       = " notebookID ";
-    public static final String COLUMN_TITLE             = " title ";
-    public static final String COLUMN_TITLE_COLOR       = " titleColor ";
-    public static final String COLUMN_NOTEBOOK_COLOR    = " notebookColor ";
-    public static final String COLUMN_NOTEBOOK_NUMBER   = " notebookNumber ";
-    public static final String COLUMN_DATE_CREATED      = " dateCreated ";
+    public static final String TABLE_NAME               = "notebook";
+    public static final String COLUMN_NOTEBOOK_ID       = "notebookID";
+    public static final String COLUMN_TITLE             = "title";
+    public static final String COLUMN_TITLE_COLOR       = "titleColor";
+    public static final String COLUMN_NOTEBOOK_COLOR    = "notebookColor";
+    public static final String COLUMN_NOTEBOOK_NUMBER   = "notebookNumber";
+    public static final String COLUMN_DATE_CREATED      = "dateCreated";
 
     private int notebookID;
     private String title;
