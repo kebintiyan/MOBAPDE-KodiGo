@@ -21,8 +21,8 @@ public class Notebook implements Parcelable {
 
     private int notebookID;
     private String title;
-    private String titleColor;
-    private String notebookColor;
+    private int titleColor;
+    private int notebookColor;
     private int notebookNumber;
     private String dateCreated;
 
@@ -36,12 +36,12 @@ public class Notebook implements Parcelable {
     protected Notebook(Parcel in) {
         notebookID = in.readInt();
         title = in.readString();
-        titleColor = in.readString();
-        notebookColor = in.readString();
+        titleColor = in.readInt();
+        notebookColor = in.readInt();
         dateCreated = in.readString();
     }
 
-    public Notebook(int notebookID, String title, String titleColor, String notebookColor, String dateCreated){
+    public Notebook(int notebookID, String title, int titleColor, int notebookColor, String dateCreated){
         this.notebookID = notebookID;
         this.title = title;
         this.titleColor = titleColor;
@@ -79,20 +79,20 @@ public class Notebook implements Parcelable {
         return this;
     }
 
-    public String getTitleColor() {
+    public int getTitleColor() {
         return this.titleColor;
     }
 
-    public Notebook setTitleColor(String titleColor) {
+    public Notebook setTitleColor(int titleColor) {
         this.titleColor = titleColor;
         return this;
     }
 
-    public String getNotebookColor() {
+    public int getNotebookColor() {
         return this.notebookColor;
     }
 
-    public Notebook setNotebookColor(String notebookColor) {
+    public Notebook setNotebookColor(int notebookColor) {
         this.notebookColor = notebookColor;
         return this;
     }
@@ -133,8 +133,8 @@ public class Notebook implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(notebookID);
         dest.writeString(title);
-        dest.writeString(titleColor);
-        dest.writeString(notebookColor);
+        dest.writeInt(titleColor);
+        dest.writeInt(notebookColor);
         dest.writeString(dateCreated);
     }
 }
