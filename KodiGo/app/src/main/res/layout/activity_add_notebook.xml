@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_add_notebook"
     android:layout_width="match_parent"
@@ -14,13 +16,70 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/notebookName"
-        android:hint="Name"/>
+        android:hint="Name"
+        android:layout_marginBottom="10dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Notebook Color: "
+        android:layout_below="@id/notebookName"
+        android:id="@+id/notebook_label"
+        android:layout_marginBottom="10dp"/>
+
+    <ImageView
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:background="@color/colorPrimary"
+        android:id="@+id/notebookColor"
+        android:layout_below="@id/notebook_label"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="7dp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choose a color"
+        android:id="@+id/notebookColor_button"
+        android:layout_toRightOf="@id/notebookColor"
+        android:layout_below="@id/notebook_label"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Title Color: "
+        android:layout_below="@id/notebookColor_button"
+        android:id="@+id/title_label"
+        android:layout_marginBottom="10dp"/>
+
+    <ImageView
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:background="@color/colorPrimary"
+        android:id="@+id/titleColor"
+        android:layout_below="@id/title_label"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="7dp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choose a color"
+        android:id="@+id/titleColor_button"
+        android:layout_below="@id/title_label"
+        android:layout_toRightOf="@id/titleColor"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Submit"
-        android:layout_below="@id/notebookName"
+        android:layout_below="@id/titleColor_button"
         android:id="@+id/submitButton"
         android:layout_margin="20dp"/>
 
@@ -28,7 +87,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Cancel"
-        android:layout_below="@id/notebookName"
+        android:layout_below="@id/titleColor_button"
         android:id="@+id/cancelButton"
         android:layout_margin="20dp"
         android:layout_toRightOf="@id/submitButton"/>

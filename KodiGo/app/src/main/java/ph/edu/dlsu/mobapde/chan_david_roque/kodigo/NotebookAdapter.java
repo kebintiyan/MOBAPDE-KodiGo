@@ -52,7 +52,8 @@ public class NotebookAdapter extends RecyclerView.Adapter<NotebookAdapter.Notebo
         Notebook notebook = notebooks.get(position);
         //notebookHolder.notebookIcon.setText(notebook.getTitle());
         //notebookHolder.ivGenre.setImageResource(notebook.getResourceId());
-        notebookHolder.notebookIcon.setBackgroundColor(Color.BLUE);
+        notebookHolder.notebookIcon.setBackgroundColor(notebook.getNotebookColor());
+        notebookHolder.notebookName.setTextColor(notebook.getTitleColor());
         notebookHolder.notebookName.setText(notebook.getTitle());
         notebookHolder.container.setTag(R.id.key_item_notebook_holder, notebookHolder);
         notebookHolder.container.setTag(R.id.key_item_notebook, notebook);

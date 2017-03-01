@@ -100,8 +100,8 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                 Notebook n = new Notebook()
                         .setNotebookID(c.getInt(c.getColumnIndex(Notebook.COLUMN_NOTEBOOK_ID)))
                         .setTitle(c.getString(c.getColumnIndex(Notebook.COLUMN_TITLE)))
-                        .setTitleColor(c.getString(c.getColumnIndex(Notebook.COLUMN_TITLE_COLOR)))
-                        .setNotebookColor(c.getString(c.getColumnIndex(Notebook.COLUMN_NOTEBOOK_COLOR)))
+                        .setTitleColor(c.getInt(c.getColumnIndex(Notebook.COLUMN_TITLE_COLOR)))
+                        .setNotebookColor(c.getInt(c.getColumnIndex(Notebook.COLUMN_NOTEBOOK_COLOR)))
                         .setNotebookNumber(c.getInt(c.getColumnIndex(Notebook.COLUMN_NOTEBOOK_NUMBER)))
                         .setDateCreated(c.getString(c.getColumnIndex(Notebook.COLUMN_DATE_CREATED)));
 
@@ -152,8 +152,8 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
             n = new Notebook()
                     .setNotebookID(c.getInt(c.getColumnIndex(Notebook.COLUMN_NOTEBOOK_ID)))
                     .setTitle(c.getString(c.getColumnIndex(Notebook.COLUMN_TITLE)))
-                    .setTitleColor(c.getString(c.getColumnIndex(Notebook.COLUMN_TITLE_COLOR)))
-                    .setNotebookColor(c.getString(c.getColumnIndex(Notebook.COLUMN_NOTEBOOK_COLOR)))
+                    .setTitleColor(c.getInt(c.getColumnIndex(Notebook.COLUMN_TITLE_COLOR)))
+                    .setNotebookColor(c.getInt(c.getColumnIndex(Notebook.COLUMN_NOTEBOOK_COLOR)))
                     .setNotebookNumber(c.getInt(c.getColumnIndex(Notebook.COLUMN_NOTEBOOK_NUMBER)))
                     .setDateCreated(c.getString(c.getColumnIndex(Notebook.COLUMN_DATE_CREATED)));
         }
