@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -25,10 +26,9 @@ public class AddNotebookActivity extends AppCompatActivity {
     EditText notebookName;
     Button submitButton;
     Button cancelButton;
-    Button notebookColor_button;
-    Button titleColor_button;
     ImageView titleColor;
     ImageView notebookColor;
+    RelativeLayout notebookIcon;
 
     final static int REQUEST_ADD_COLOR_TITILE = 0;
     final static int REQUEST_ADD_COLOR_NOTEBOOK = 1;
@@ -44,8 +44,7 @@ public class AddNotebookActivity extends AppCompatActivity {
         cancelButton = (Button) findViewById(R.id.cancelButton);
         notebookColor = (ImageView) findViewById(R.id.notebookColor);
         titleColor = (ImageView) findViewById(R.id.titleColor);
-        notebookColor_button = (Button) findViewById(R.id.notebookColor_button);
-        titleColor_button = (Button) findViewById(R.id.titleColor_button);
+        notebookIcon = (RelativeLayout) findViewById(R.id.notebookIcon);
 
 
         submitButton.setOnClickListener(new View.OnClickListener() {
@@ -74,14 +73,14 @@ public class AddNotebookActivity extends AppCompatActivity {
             }
         });
 
-        notebookColor_button.setOnClickListener(new View.OnClickListener(){
+        notebookColor.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 colorPicker(REQUEST_ADD_COLOR_NOTEBOOK);
             }
         });
 
-        titleColor_button.setOnClickListener(new View.OnClickListener(){
+        titleColor.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 colorPicker(REQUEST_ADD_COLOR_TITILE);
@@ -111,9 +110,11 @@ public class AddNotebookActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(REQUEST_ADD_COLOR_TITILE == requestCode && resultCode == RESULT_OK){
             titleColor.setBackgroundColor((Integer) data.getExtras().get(KEY_COLOR));
+            notebookName.setTextColor((Integer) data.getExtras().get(KEY_COLOR));;
         }
         else if(REQUEST_ADD_COLOR_NOTEBOOK == requestCode && resultCode == RESULT_OK){
             notebookColor.setBackgroundColor((Integer) data.getExtras().get(KEY_COLOR));
+            notebookIcon.setBackgroundColor((Integer) data.getExtras().get(KEY_COLOR));
         }
     }
 }

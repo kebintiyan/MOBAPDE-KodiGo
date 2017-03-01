@@ -15,7 +15,7 @@
     </android.support.v7.widget.RecyclerView>
 
     <android.support.design.widget.FloatingActionButton
-        android:src="@drawable/pencil"
+        android:src="@drawable/plus"
         app:fabSize="normal"
         android:id="@+id/addNotebookButton"
         android:layout_gravity="bottom|right"

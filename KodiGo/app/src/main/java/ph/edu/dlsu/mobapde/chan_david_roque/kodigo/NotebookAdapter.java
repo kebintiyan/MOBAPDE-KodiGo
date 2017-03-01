@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -28,13 +29,13 @@ public class NotebookAdapter extends RecyclerView.Adapter<NotebookAdapter.Notebo
 
     public class NotebookHolder extends RecyclerView.ViewHolder{
         //Button notebookIcon;
-        ImageView notebookIcon;
+        RelativeLayout notebookIcon;
         TextView notebookName;
         View container;
         public NotebookHolder (View itemView) {
             super(itemView);
             //notebookIcon = (Button) itemView.findViewById(R.id.notebookIcon);
-            notebookIcon = (ImageView) itemView.findViewById(R.id.notebookIcon);
+            notebookIcon = (RelativeLayout) itemView.findViewById(R.id.notebookIcon);
             notebookName = (TextView) itemView.findViewById(R.id.notebookName);
             container = itemView.findViewById(R.id.container);
 

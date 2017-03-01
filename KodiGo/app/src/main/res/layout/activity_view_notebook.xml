@@ -16,7 +16,7 @@
 
 
     <android.support.design.widget.FloatingActionButton
-        android:src="@drawable/plus"
+        android:src="@drawable/pencil"
         app:fabSize="normal"
         android:id="@+id/addNotebookButton"
         android:layout_gravity="bottom|right"
