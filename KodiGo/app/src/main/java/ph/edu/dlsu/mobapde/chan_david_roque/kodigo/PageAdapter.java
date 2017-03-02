@@ -1,6 +1,7 @@
 package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,11 +29,11 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.PageHolder>{
     }
 
     public class PageHolder extends RecyclerView.ViewHolder{
-        Button pageIcon;
+        //Button pageIcon;
         View container;
         public PageHolder (View itemView) {
             super(itemView);
-            pageIcon = (Button) itemView.findViewById(R.id.pageIcon);
+           // pageIcon = (Button) itemView.findViewById(R.id.pageIcon);
             container = itemView.findViewById(R.id.container);
 
         }
@@ -47,10 +48,13 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.PageHolder>{
     @Override
     public void onBindViewHolder(PageHolder pageHolder, int position) {
         Page page = pages.get(position);
-        pageHolder.pageIcon.setText(page.getName());
+        //pageHolder.pageIcon.setText(page.getName());
         //pageHolder.ivGenre.setImageResource(page.getResourceId());
+
         pageHolder.container.setTag(R.id.key_item_page_holder, pageHolder);
         pageHolder.container.setTag(R.id.key_item_page, page);
+
+
 
         pageHolder.container.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -65,9 +69,9 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.PageHolder>{
         pageHolder.container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Page s = (Page) v.getTag(R.id.key_item_page);
-////                v.getContext().startActivity(new Intent(v.getContext(),ViewPageActivity.class)
-////                        .putExtra(MainActivity.KEY_TITLE, s.getTitle())
+                Page s = (Page) v.getTag(R.id.key_item_page);
+                v.getContext().startActivity(new Intent(v.getContext(),ViewPageActivity.class)
+                    .putExtra("Current Page", s));
 ////                        .putExtra(MainActivity.KEY_LYRICS, s.getLyrics()));
 //                v.getContext().startActivity(new Intent(v.getContext(), ViewPageActivity.class)
 //                        .putExtra(MainActivity.KEY_PAGE, s));
@@ -83,5 +87,15 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.PageHolder>{
     public void addPage(Page page){
         pages.add(page);
         notifyItemInserted(getItemCount()-1);
+    }
+
+    private OnItemClickListener mOnItemClickListener;
+
+    public void setmOnItemClickListener(OnItemClickListener onItemClickListener){
+        mOnItemClickListener = onItemClickListener;
+    }
+
+    public interface OnItemClickListener{
+        public void onItemClick(Page page);
     }
 }

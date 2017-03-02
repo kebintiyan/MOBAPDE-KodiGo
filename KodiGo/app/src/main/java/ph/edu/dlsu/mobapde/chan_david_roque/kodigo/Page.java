@@ -30,7 +30,7 @@ public class Page implements Parcelable {
     private ArrayList<Comment> comments;
 
     public Page(){
-
+        name = "Untitled Page";
         images = new ArrayList<>();
         comments = new ArrayList<>();
     }

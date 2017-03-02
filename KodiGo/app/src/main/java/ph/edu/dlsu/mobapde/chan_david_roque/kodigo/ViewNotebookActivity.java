@@ -16,6 +16,7 @@ public class ViewNotebookActivity extends AppCompatActivity {
     FloatingActionButton addPageButton;
     PageAdapter pageAdapter;
 
+
     final static int REQUEST_ADD_PAGE = 0;
     final static String KEY_PAGE = "page";
 
@@ -40,6 +41,14 @@ public class ViewNotebookActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(
                 new StaggeredGridLayoutManager(
                         2, StaggeredGridLayoutManager.VERTICAL));
+        addPageButton = (FloatingActionButton) findViewById(R.id.addPageButton);
+
+        addPageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pageAdapter.addPage(new Page());
+            }
+        });
 
         //addPageButton = (FloatingActionButton) findViewById(R.id.addPageButton);
 
