@@ -92,7 +92,7 @@
             android:layout_height="wrap_content"
             android:text="Submit"
             android:background="@color/colorPrimaryDark"
-            android:textColor="@color/colorWhite"
+            android:textColor="@color/colorIcons"
             android:id="@+id/submitButton"
             android:layout_margin="20dp"
             android:layout_toRightOf="@+id/cancelButton"/>

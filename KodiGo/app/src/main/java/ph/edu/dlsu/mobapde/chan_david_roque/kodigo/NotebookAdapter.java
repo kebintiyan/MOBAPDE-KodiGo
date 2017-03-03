@@ -82,18 +82,6 @@ public class NotebookAdapter extends RecyclerView.Adapter<NotebookAdapter.Notebo
             }
         });
 
-        notebookHolder.notebookIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("NotebookAdapter", "hi");
-                Notebook n = (Notebook) v.getTag(R.id.key_item_notebook);
-//                v.getContext().startActivity(new Intent(v.getContext(),ViewNotebookActivity.class)
-//                        .putExtra(MainActivity.KEY_TITLE, s.getTitle())
-//                        .putExtra(MainActivity.KEY_LYRICS, s.getLyrics()));
-                v.getContext().startActivity(new Intent(v.getContext(), ViewNotebookActivity.class)
-                        .putExtra(MainActivity.KEY_NOTEBOOK, n));
-            }
-        });
     }
 
     @Override

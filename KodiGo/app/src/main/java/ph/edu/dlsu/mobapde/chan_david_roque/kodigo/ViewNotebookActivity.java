@@ -24,8 +24,10 @@ public class ViewNotebookActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_notebook);
 
-        Page n = (Page) getIntent().getExtras().get(MainActivity.KEY_NOTEBOOK);
+        Notebook n = (Notebook) getIntent().getExtras().get(MainActivity.KEY_NOTEBOOK);
         // Step 1: create recycler view
+
+        getActionBar().setTitle(n.getTitle());
         recyclerView = (RecyclerView) findViewById(R.id.page_recyclerview);
 
         ArrayList<Page> pages = new ArrayList<>();

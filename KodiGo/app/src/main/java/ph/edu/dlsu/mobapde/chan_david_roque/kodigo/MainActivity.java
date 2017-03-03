@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -41,6 +42,10 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(
                 new StaggeredGridLayoutManager(
                         2, StaggeredGridLayoutManager.VERTICAL));
+
+        // Create an `ItemTouchHelper` and attach it to the `RecyclerView`
+        ItemTouch it = new ItemTouch(notebookAdapter, notebooks);
+        it.attachToRecyclerView(recyclerView);
 
         addNotebookButton = (FloatingActionButton) findViewById(R.id.addNotebookButton);
 
