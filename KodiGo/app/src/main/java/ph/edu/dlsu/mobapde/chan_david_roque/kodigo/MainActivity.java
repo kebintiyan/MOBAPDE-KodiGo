@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     NotebookAdapter notebookAdapter;
     DatabaseOpenHelper dbhelper ;
     ArrayList<Notebook> notebooks;
+    ArrayList<Integer> notebooksID;
     final static int REQUEST_ADD_NOTEBOOK = 0;
     final static String KEY_NOTEBOOK = "notebook";
     /**
@@ -43,9 +44,26 @@ public class MainActivity extends AppCompatActivity {
         // Step 1: create recycler view
         recyclerView = (RecyclerView) findViewById(R.id.notebook_recyclerview);
 
-        notebooks = (ArrayList<Notebook>) getIntent().getExtras().get("LoadedNotebooks");
+        notebooksID = (ArrayList<Integer>) getIntent().getExtras().get("LoadedNotebooks");
+        notebooks = new ArrayList<>();
+        for(int i=0; i<notebooksID.size();i++){
+            Log.i("nbforID", ""+notebooksID.get(i));
+            notebooks.add(dbhelper.queryNotebookByID(notebooksID.get(i)));
+        }
 
+        //notebooks = new ArrayList<>();
         notebookAdapter = new NotebookAdapter(notebooks);
+
+        notebookAdapter.setOnNotebookClickListener(new NotebookAdapter.OnNotebookClickListener() {
+            @Override
+            public void onNotebookClick(View view, Notebook n) {
+                Intent i = new Intent(getBaseContext(), LoadPagesActivity.class);
+                Log.i("curNbID", ""+n.getNotebookID());
+                i.putExtra("currentNotebook", n.getNotebookID());
+                startActivity(i);
+
+            }
+        });
         // Step 4: Attach adapter to UI
         recyclerView.setAdapter(notebookAdapter);
         // Step 5: Attach layout manager to UI
@@ -70,7 +88,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (REQUEST_ADD_NOTEBOOK == requestCode && resultCode == RESULT_OK) {
-            notebookAdapter.addNotebook((Notebook) data.getExtras().get(KEY_NOTEBOOK));
+            String newNotebookID = data.getExtras().get(KEY_NOTEBOOK).toString();
+            Notebook n = dbhelper.queryNotebookByID(Integer.parseInt(newNotebookID));
+            notebookAdapter.addNotebook(n);
         }
     }
 
