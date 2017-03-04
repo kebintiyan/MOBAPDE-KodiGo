@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="key_item_notebook_position" type="id"/>
+    <item name="key_item_notebook_text" type="id"/>
+    <item name="key_item_notebook_holder" type="id"/>
+    <item name="key_item_notebook" type="id"/>
+
+    <item name="key_item_page_position" type="id"/>
+    <item name="key_item_page_text" type="id"/>
+    <item name="key_item_page_holder" type="id"/>
+    <item name="key_item_page" type="id"/>
+</resources>
