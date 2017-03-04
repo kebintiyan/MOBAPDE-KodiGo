@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * Created by USER on 2/25/2017.
  */
 
-public class Notebook implements Parcelable {
+public class Notebook{
 
     public static final String TABLE_NAME               = "notebook";
     public static final String COLUMN_NOTEBOOK_ID       = "notebookID";
@@ -33,14 +33,6 @@ public class Notebook implements Parcelable {
         pages = new ArrayList<>();
     }
 
-    protected Notebook(Parcel in) {
-        notebookID = in.readInt();
-        title = in.readString();
-        titleColor = in.readString();
-        notebookColor = in.readString();
-        dateCreated = in.readString();
-    }
-
     public Notebook(int notebookID, String title, String titleColor, String notebookColor, String dateCreated){
         this.notebookID = notebookID;
         this.title = title;
@@ -48,18 +40,6 @@ public class Notebook implements Parcelable {
         this.notebookColor = notebookColor;
         this.dateCreated = dateCreated;
     }
-
-    public static final Creator<Notebook> CREATOR = new Creator<Notebook>() {
-        @Override
-        public Notebook createFromParcel(Parcel in) {
-            return new Notebook(in);
-        }
-
-        @Override
-        public Notebook[] newArray(int size) {
-            return new Notebook[size];
-        }
-    };
 
     public int getNotebookID() {
         return this.notebookID;
@@ -124,17 +104,5 @@ public class Notebook implements Parcelable {
         return this;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(notebookID);
-        dest.writeString(title);
-        dest.writeString(titleColor);
-        dest.writeString(notebookColor);
-        dest.writeString(dateCreated);
-    }
 }
