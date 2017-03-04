@@ -23,11 +23,15 @@ public class LoadNotebookActivity extends AppCompatActivity {
         dbhelper = new DatabaseOpenHelper(this);
 
         ArrayList<Notebook> notebooks = new ArrayList<>();
+        ArrayList<Integer> notebooksID = new ArrayList<>();
         notebooks = dbhelper.queryAllNotebooks();
+        for(int i=0; i<notebooks.size();i++){
+            notebooksID.add(notebooks.get(i).getNotebookID());
+        }
         Log.i("num", "siiiize"+notebooks.size());
 
         Intent i = new Intent(getBaseContext(), MainActivity.class);
-        i.putExtra("LoadedNotebooks", notebooks);
+        i.putExtra("LoadedNotebooks", notebooksID);
         startActivity(i);
     }
 }
