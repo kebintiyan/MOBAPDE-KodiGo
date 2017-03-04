@@ -53,9 +53,9 @@ public class AddNotebookActivity extends ActionBarActivity {
                 notebook.setNotebookNumber(1);
                 notebook.setDateCreated("12-12-2323");
 
-                result.putExtra(MainActivity.KEY_NOTEBOOK, (Parcelable) notebook);
+                result.putExtra(MainActivity.KEY_NOTEBOOK, dbhelper.insertNotebook(notebook));
                 setResult(RESULT_OK, result);
-                dbhelper.insertNotebook(notebook);
+
                 Log.i("AddNotebookActivity", "Notebook created");
                 finish();
 
