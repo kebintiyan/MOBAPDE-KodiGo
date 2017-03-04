@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginTop="19dp"
-        android:id="@+id/titlePage"
+        android:id="@+id/editTitlePage"
         android:text="" />
 
     <EditText
@@ -24,10 +24,21 @@
         android:inputType="textMultiLine"
         android:gravity="top"
         android:ems="10"
-        android:layout_below="@+id/titlePage"
+        android:layout_below="@+id/editTitlePage"
         android:layout_alignParentStart="true"
         android:layout_marginTop="30dp"
-        android:id="@+id/pageText"
+        android:id="@+id/editPageText"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true" />
+
+    <Button
+        android:text="^"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="43dp"
+        android:id="@+id/submitEditButton" />
+
+
 </RelativeLayout>
