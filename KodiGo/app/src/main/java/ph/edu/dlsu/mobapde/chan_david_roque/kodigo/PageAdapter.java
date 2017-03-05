@@ -20,9 +20,6 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.PageHolder>{
 
     ArrayList<Page> pages;
 
-    final static int REQUEST_ADD_PAGE = 0;
-    final static String KEY_PAGE = "page";
-
     public PageAdapter(ArrayList<Page> pages){
         this.pages = pages;
     }

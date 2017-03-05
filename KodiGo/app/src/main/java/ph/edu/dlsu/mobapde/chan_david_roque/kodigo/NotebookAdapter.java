@@ -2,6 +2,7 @@ package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -56,7 +57,7 @@ public class NotebookAdapter extends RecyclerView.Adapter<NotebookAdapter.Notebo
         notebookHolder.notebookIcon.setBackgroundColor(notebook.getNotebookColor());
         notebookHolder.notebookName.setTextColor(notebook.getTitleColor());
         notebookHolder.notebookName.setText(notebook.getTitle());
-        notebookHolder.container.setTag(R.id.key_item_notebook_holder, notebookHolder);
+        notebookHolder.container.setTag(R.id.key_item_notebook_position, position);
         notebookHolder.container.setTag(R.id.key_item_notebook, notebook);
 
         notebookHolder.container.setOnLongClickListener(new View.OnLongClickListener() {
@@ -74,11 +75,8 @@ public class NotebookAdapter extends RecyclerView.Adapter<NotebookAdapter.Notebo
             public void onClick(View v) {
                 Log.d("NotebookAdapter", "hi");
                 Notebook n = (Notebook) v.getTag(R.id.key_item_notebook);
-//                v.getContext().startActivity(new Intent(v.getContext(),ViewNotebookActivity.class)
-//                        .putExtra(MainActivity.KEY_TITLE, s.getTitle())
-//                        .putExtra(MainActivity.KEY_LYRICS, s.getLyrics()));
-                v.getContext().startActivity(new Intent(v.getContext(), ViewNotebookActivity.class)
-                        .putExtra(MainActivity.KEY_NOTEBOOK, n));
+                int position = (int) v.getTag(R.id.key_item_notebook_position);
+                onItemClickListener.onItemClick(n, position);
             }
         });
 
@@ -92,5 +90,27 @@ public class NotebookAdapter extends RecyclerView.Adapter<NotebookAdapter.Notebo
     public void addNotebook(Notebook notebook){
         notebooks.add(notebook);
         notifyItemInserted(getItemCount()-1);
+    }
+
+    public void editNotebook(Notebook notebook, int position){
+        notebooks.set(position,notebook);
+        notifyItemChanged(position);
+    }
+
+    public void deleteNotebook(int position){
+
+        notebooks.remove(position);
+        notifyItemRemoved(position);
+
+    }
+
+    private OnItemClickListener onItemClickListener;
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener){
+        this.onItemClickListener = onItemClickListener;
+    }
+
+    public interface OnItemClickListener{
+        public void onItemClick(Notebook notebook, int position);
     }
 }

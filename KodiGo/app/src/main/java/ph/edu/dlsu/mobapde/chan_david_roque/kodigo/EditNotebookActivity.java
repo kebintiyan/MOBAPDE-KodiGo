@@ -1,14 +1,8 @@
 package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.PixelFormat;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Parcelable;
-import android.preference.PreferenceManager;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,61 +10,76 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import static android.app.Activity.RESULT_OK;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_COLOR;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_NOTEBOOK;
+import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_NOTEBOOK_POSITION;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.REQUEST_ADD_COLOR_NOTEBOOK;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.REQUEST_ADD_COLOR_TITLE;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.RESULT_COLOR;
-import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.RESULT_NOTEBOOK_ADDED;
+import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.RESULT_NOTEBOOK_DELETED;
+import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.RESULT_NOTEBOOK_EDITED;
 
-public class AddNotebookActivity extends AppCompatActivity {
+public class EditNotebookActivity extends AppCompatActivity {
 
     EditText notebookName;
-    Button submitButton;
-    Button cancelButton;
+    Button updateButton;
+    Button deleteButton;
     ImageView titleColor;
     ImageView notebookColor;
     RelativeLayout notebookIcon;
+    Notebook n;
+    int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_notebook);
+        setContentView(R.layout.activity_edit_notebook);
+
+        n = (Notebook) getIntent().getExtras().get(KEY_NOTEBOOK);
+        position = (int) getIntent().getExtras().get(KEY_NOTEBOOK_POSITION);
+        getSupportActionBar().setTitle(n.getTitle());
 
         notebookName = (EditText) findViewById(R.id.notebookName);
-        submitButton = (Button) findViewById(R.id.submitButton);
-        cancelButton = (Button) findViewById(R.id.cancelButton);
+        updateButton = (Button) findViewById(R.id.updateButton);
+        deleteButton = (Button) findViewById(R.id.deleteButton);
         notebookColor = (ImageView) findViewById(R.id.notebookColor);
         titleColor = (ImageView) findViewById(R.id.titleColor);
         notebookIcon = (RelativeLayout) findViewById(R.id.notebookIcon);
 
+        notebookName.setText(n.getTitle());
+        notebookName.setTextColor(n.getTitleColor());
+        titleColor.setBackgroundColor(n.getTitleColor());
+        notebookIcon.setBackgroundColor(n.getNotebookColor());
+        notebookColor.setBackgroundColor(n.getNotebookColor());
 
-        submitButton.setOnClickListener(new View.OnClickListener() {
+        updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent result = new Intent();
-                Notebook notebook = new Notebook();
-                notebook.setTitle(notebookName.getText().toString());
+                n.setTitle(notebookName.getText().toString());
                 ColorDrawable color = (ColorDrawable) titleColor.getBackground();
-                notebook.setTitleColor(color.getColor());
+                n.setTitleColor(color.getColor());
                 color = (ColorDrawable) notebookColor.getBackground();
-                notebook.setNotebookColor(color.getColor());
+                n.setNotebookColor(color.getColor());
 
-                result.putExtra(KEY_NOTEBOOK, (Notebook) notebook);
-                setResult(RESULT_NOTEBOOK_ADDED, result);
-                Log.i("AddNotebookActivity", "Notebook created");
+                result.putExtra(KEY_NOTEBOOK, (Notebook) n);
+                result.putExtra(KEY_NOTEBOOK_POSITION, position);
+                setResult(RESULT_NOTEBOOK_EDITED, result);
+                Log.i("EdiNotebookActivity", "Notebook Edited");
                 finish();
 
             }
         });
 
-        cancelButton.setOnClickListener(new View.OnClickListener() {
+        deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent result = new Intent();
+                result.putExtra(KEY_NOTEBOOK_POSITION, position);
+                setResult(RESULT_NOTEBOOK_DELETED, result);
+                Log.i("DeleteNotebookActivity", "Notebook Edited");
                 finish();
             }
         });
@@ -89,18 +98,6 @@ public class AddNotebookActivity extends AppCompatActivity {
             }
         });
 
-
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
     }
 
     public void colorPicker(int requestCode) {
