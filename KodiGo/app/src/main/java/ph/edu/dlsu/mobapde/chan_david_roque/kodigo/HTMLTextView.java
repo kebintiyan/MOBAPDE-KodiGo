@@ -39,10 +39,10 @@ public class HTMLTextView extends TextView {
 
     private Spanned getHTMLText(String text) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            return Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY, new HTMLImageHandler(), new HTMLTagHandler());
+            return Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY, new HTMLImageHandler(), new HTMLTagHandler(getContext()));
         }
         else {
-            return Html.fromHtml(text, new HTMLImageHandler(), new HTMLTagHandler());
+            return Html.fromHtml(text, new HTMLImageHandler(), new HTMLTagHandler(getContext()));
         }
     }
 }
