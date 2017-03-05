@@ -25,7 +25,8 @@
             android:value="@integer/google_play_services_version" />
 
         <activity android:name=".ViewNotebookActivity" />
-        <activity android:name=".ColorpickerActivity"></activity>
+        <activity android:name=".ColorpickerActivity" />
+        <activity android:name=".EditNotebookActivity"></activity>
     </application>
 
 </manifest>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_edit_notebook"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="ph.edu.dlsu.mobapde.chan_david_roque.kodigo.EditNotebookActivity">
+
+    <RelativeLayout
+        android:layout_width="180dp"
+        android:layout_height="220dp"
+
+        android:background="@color/defaultNotebookColor"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/notebookIcon">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="3dp"
+            android:id="@+id/notebookName"
+            android:backgroundTint="@color/defaultTitleColor"
+            android:textCursorDrawable="@null"
+            android:textColor="@color/defaultTitleColor"
+            android:textColorHint="@color/defaultTitleColor"
+
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp"
+            />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/notebookIcon"
+        android:id="@+id/colorPickerPanel"
+        android:layout_centerHorizontal="true"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Notebook Color: "
+            android:id="@+id/notebook_label"
+            android:layout_margin="10dp" />
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@color/defaultNotebookColor"
+            android:id="@+id/notebookColor"
+            android:layout_below="@id/notebook_label"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="7dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Title Color: "
+            android:layout_toRightOf="@id/notebook_label"
+            android:id="@+id/title_label"
+            android:layout_margin="10dp"/>
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@color/defaultTitleColor"
+            android:id="@+id/titleColor"
+            android:layout_below="@id/title_label"
+            android:layout_toRightOf="@id/notebook_label"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="7dp"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/colorPickerPanel"
+        android:layout_centerHorizontal="true">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Update"
+            android:background="@color/colorPrimaryDark"
+            android:textColor="@color/colorIcons"
+            android:id="@+id/updateButton"
+            android:layout_margin="20dp"
+            android:layout_toRightOf="@+id/deleteButton"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Delete"
+            android:id="@id/deleteButton"
+            android:layout_margin="20dp"
+            />
+
+    </RelativeLayout>
+
+</RelativeLayout>

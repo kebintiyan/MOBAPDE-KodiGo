@@ -8,11 +8,20 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
 
 import static android.support.v7.recyclerview.R.styleable.RecyclerView;
+import static java.security.AccessController.getContext;
+import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_NOTEBOOK;
+import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_NOTEBOOK_POSITION;
+import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.REQUEST_ADD_NOTEBOOK;
+import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.REQUEST_EDIT_OR_DELETE_NOTEBOOK;
+import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.RESULT_NOTEBOOK_ADDED;
+import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.RESULT_NOTEBOOK_DELETED;
+import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.RESULT_NOTEBOOK_EDITED;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,8 +29,6 @@ public class MainActivity extends AppCompatActivity {
     FloatingActionButton addNotebookButton;
     NotebookAdapter notebookAdapter;
 
-    final static int REQUEST_ADD_NOTEBOOK = 0;
-    final static String KEY_NOTEBOOK = "notebook";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,13 +62,28 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(new Intent(getBaseContext(), AddNotebookActivity.class), REQUEST_ADD_NOTEBOOK);
             }
         });
+
+        notebookAdapter.setOnItemClickListener(new NotebookAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Notebook notebook, int position) {
+
+                startActivityForResult(new Intent(getBaseContext(), ViewNotebookActivity.class)
+                        .putExtra(KEY_NOTEBOOK, notebook)
+                        .putExtra(KEY_NOTEBOOK_POSITION, position), REQUEST_EDIT_OR_DELETE_NOTEBOOK);
+            }
+        });
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(REQUEST_ADD_NOTEBOOK == requestCode && resultCode == RESULT_OK){
+        Log.i("DELETED", "HINDI");
+        if(REQUEST_ADD_NOTEBOOK == requestCode && resultCode == RESULT_NOTEBOOK_ADDED){
             notebookAdapter.addNotebook((Notebook) data.getExtras().get(KEY_NOTEBOOK));
+        }else if(REQUEST_EDIT_OR_DELETE_NOTEBOOK == requestCode && resultCode == RESULT_NOTEBOOK_EDITED){
+            notebookAdapter.editNotebook((Notebook) data.getExtras().get(KEY_NOTEBOOK), (int) data.getExtras().get(KEY_NOTEBOOK_POSITION));
+        }else if(REQUEST_EDIT_OR_DELETE_NOTEBOOK == requestCode && resultCode == RESULT_NOTEBOOK_DELETED){
+            notebookAdapter.deleteNotebook((int) data.getExtras().get(KEY_NOTEBOOK_POSITION));
         }
     }
 }

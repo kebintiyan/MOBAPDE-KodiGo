@@ -31,6 +31,7 @@ public class ItemTouch{
                 // get the viewHolder's and target's positions in your adapter data, swap them
                 Collections.swap(arrayList, viewHolder.getAdapterPosition(), target.getAdapterPosition());
                 // and notify the adapter that its dataset has changed
+
                 adapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
                 return true;
             }
