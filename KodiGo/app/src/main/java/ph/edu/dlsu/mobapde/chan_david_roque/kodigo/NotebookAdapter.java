@@ -50,33 +50,23 @@ public class NotebookAdapter extends RecyclerView.Adapter<NotebookAdapter.Notebo
     }
 
     @Override
-    public void onBindViewHolder(NotebookHolder notebookHolder, int position) {
-        Notebook notebook = notebooks.get(position);
+    public void onBindViewHolder(NotebookHolder notebookHolder, final int position) {
+        final Notebook notebook = notebooks.get(position);
+
         //notebookHolder.notebookIcon.setText(notebook.getTitle());
         //notebookHolder.ivGenre.setImageResource(notebook.getResourceId());
         notebookHolder.notebookIcon.setBackgroundColor(notebook.getNotebookColor());
         notebookHolder.notebookName.setTextColor(notebook.getTitleColor());
         notebookHolder.notebookName.setText(notebook.getTitle());
-        notebookHolder.container.setTag(R.id.key_item_notebook_position, position);
-        notebookHolder.container.setTag(R.id.key_item_notebook, notebook);
-
-        notebookHolder.container.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-//                int position = ((NotebookHolder)v.getTag(R.id.key_item_holder)).getAdapterPosition();
-//                notebooks.remove(position);
-//                notifyItemRemoved(position);
-                return false;
-            }
-        });
+        notebookHolder.container.setTag(R.id.key_item_notebook_id, notebook.getNotebookID());
+//        notebookHolder.container.setTag(R.id.key_item_notebook, notebook);
 
         notebookHolder.container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("NotebookAdapter", "hi");
-                Notebook n = (Notebook) v.getTag(R.id.key_item_notebook);
-                int position = (int) v.getTag(R.id.key_item_notebook_position);
-                onItemClickListener.onItemClick(n, position);
+                Log.i("AA", "AA");
+                long id = (long) v.getTag(R.id.key_item_notebook_id);
+                onNotebookClickListener.onNotebookClick(id);
             }
         });
 
@@ -92,9 +82,9 @@ public class NotebookAdapter extends RecyclerView.Adapter<NotebookAdapter.Notebo
         notifyItemInserted(getItemCount()-1);
     }
 
-    public void editNotebook(Notebook notebook, int position){
-        notebooks.set(position,notebook);
-        notifyItemChanged(position);
+    public void editNotebook(Notebook notebook){
+        notebooks.set(notebook.getNotebookNumber(), notebook);
+        notifyItemChanged(notebook.getNotebookNumber());
     }
 
     public void deleteNotebook(int position){
@@ -104,13 +94,17 @@ public class NotebookAdapter extends RecyclerView.Adapter<NotebookAdapter.Notebo
 
     }
 
-    private OnItemClickListener onItemClickListener;
+    private OnNotebookClickListener onNotebookClickListener;
 
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener){
-        this.onItemClickListener = onItemClickListener;
+    public interface OnNotebookClickListener{
+        public void onNotebookClick(long notebookId);
     }
 
-    public interface OnItemClickListener{
-        public void onItemClick(Notebook notebook, int position);
+    public OnNotebookClickListener getOnNotebookClickListener() {
+        return onNotebookClickListener;
+    }
+
+    public void setOnNotebookClickListener(OnNotebookClickListener onNotebookClickListener) {
+        this.onNotebookClickListener = onNotebookClickListener;
     }
 }

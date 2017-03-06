@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_COLOR;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_NOTEBOOK;
+import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_NOTEBOOK_ID;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_NOTEBOOK_POSITION;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.REQUEST_ADD_COLOR_NOTEBOOK;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.REQUEST_ADD_COLOR_TITLE;
@@ -29,17 +30,20 @@ public class EditNotebookActivity extends AppCompatActivity {
     ImageView titleColor;
     ImageView notebookColor;
     RelativeLayout notebookIcon;
-    Notebook n;
-    int position;
+    Notebook notebook;
+    long notebookID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_notebook);
 
-        n = (Notebook) getIntent().getExtras().get(KEY_NOTEBOOK);
-        position = (int) getIntent().getExtras().get(KEY_NOTEBOOK_POSITION);
-        getSupportActionBar().setTitle(n.getTitle());
+        final DatabaseOpenHelper dbhelper;
+
+        dbhelper = new DatabaseOpenHelper(getApplicationContext());
+        notebookID = (long) getIntent().getExtras().get(KEY_NOTEBOOK_ID);
+        notebook = dbhelper.queryNotebookByID(notebookID);
+        getSupportActionBar().setTitle(notebook.getTitle());
 
         notebookName = (EditText) findViewById(R.id.notebookName);
         updateButton = (Button) findViewById(R.id.updateButton);
@@ -48,24 +52,24 @@ public class EditNotebookActivity extends AppCompatActivity {
         titleColor = (ImageView) findViewById(R.id.titleColor);
         notebookIcon = (RelativeLayout) findViewById(R.id.notebookIcon);
 
-        notebookName.setText(n.getTitle());
-        notebookName.setTextColor(n.getTitleColor());
-        titleColor.setBackgroundColor(n.getTitleColor());
-        notebookIcon.setBackgroundColor(n.getNotebookColor());
-        notebookColor.setBackgroundColor(n.getNotebookColor());
+        notebookName.setText(notebook.getTitle());
+        notebookName.setTextColor(notebook.getTitleColor());
+        titleColor.setBackgroundColor(notebook.getTitleColor());
+        notebookIcon.setBackgroundColor(notebook.getNotebookColor());
+        notebookColor.setBackgroundColor(notebook.getNotebookColor());
 
         updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent result = new Intent();
-                n.setTitle(notebookName.getText().toString());
+                notebook.setTitle(notebookName.getText().toString());
                 ColorDrawable color = (ColorDrawable) titleColor.getBackground();
-                n.setTitleColor(color.getColor());
+                notebook.setTitleColor(color.getColor());
                 color = (ColorDrawable) notebookColor.getBackground();
-                n.setNotebookColor(color.getColor());
+                notebook.setNotebookColor(color.getColor());
 
-                result.putExtra(KEY_NOTEBOOK, (Notebook) n);
-                result.putExtra(KEY_NOTEBOOK_POSITION, position);
+                dbhelper.updateNotebook(notebook);
+                result.putExtra(KEY_NOTEBOOK_ID, notebookID);
                 setResult(RESULT_NOTEBOOK_EDITED, result);
                 Log.i("EdiNotebookActivity", "Notebook Edited");
                 finish();
@@ -77,9 +81,11 @@ public class EditNotebookActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent result = new Intent();
-                result.putExtra(KEY_NOTEBOOK_POSITION, position);
+
+                dbhelper.deleteNotebook(notebookID);
+                result.putExtra(KEY_NOTEBOOK_POSITION, notebook.getNotebookNumber());
                 setResult(RESULT_NOTEBOOK_DELETED, result);
-                Log.i("DeleteNotebookActivity", "Notebook Edited");
+                Log.i("DeleteNotebookActivity", "Notebook deleted");
                 finish();
             }
         });

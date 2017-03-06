@@ -29,10 +29,15 @@ public class ItemTouch{
             //and in your imlpementaion of
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
                 // get the viewHolder's and target's positions in your adapter data, swap them
+
+
+
                 Collections.swap(arrayList, viewHolder.getAdapterPosition(), target.getAdapterPosition());
                 // and notify the adapter that its dataset has changed
+                onItemMoveListener.onItemMoveClick(arrayList);
 
                 adapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+
                 return true;
             }
 
@@ -54,4 +59,17 @@ public class ItemTouch{
         ith.attachToRecyclerView(recyclerView);
     }
 
+    private OnItemMoveListener onItemMoveListener;
+
+    public interface OnItemMoveListener{
+        public void onItemMoveClick(ArrayList arrayList);
+    }
+
+    public OnItemMoveListener getOnNotebookClickListener() {
+        return onItemMoveListener;
+    }
+
+    public void setOnNotebookClickListener(OnItemMoveListener onItemMoveListener) {
+        this.onItemMoveListener = onItemMoveListener;
+    }
 }

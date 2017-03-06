@@ -13,16 +13,21 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-
 import java.util.ArrayList;
 
+import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_LOAD_PAGES;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_NOTEBOOK;
+import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_NOTEBOOK_ID;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_NOTEBOOK_POSITION;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_PAGE;
+import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_PAGE_ID;
+import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.REQUEST_ADD_NOTEBOOK;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.REQUEST_ADD_PAGE;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.REQUEST_EDIT_OR_DELETE_NOTEBOOK;
+import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.REQUEST_EDIT_PAGE;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.RESULT_NOTEBOOK_DELETED;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.RESULT_NOTEBOOK_EDITED;
+import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.RESULT_PAGE_ADDED;
 
 public class ViewNotebookActivity extends AppCompatActivity {
 
@@ -30,28 +35,37 @@ public class ViewNotebookActivity extends AppCompatActivity {
     FloatingActionButton addPageButton;
     PageAdapter pageAdapter;
     ActionBar actionBar;
-    Notebook n;
-    int position;
+    Notebook notebook;
+    DatabaseOpenHelper dbhelper;
+    ArrayList<Page> pages;
+    ArrayList<Long> pagesID;
+    long notebookID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_notebook);
 
-        n = (Notebook) getIntent().getExtras().get(KEY_NOTEBOOK);
-        position = (int) getIntent().getExtras().get(KEY_NOTEBOOK_POSITION);
-        // Step 1: create recycler view
+        dbhelper = new DatabaseOpenHelper(getApplicationContext());
+        notebookID = (long) getIntent().getExtras().get(KEY_NOTEBOOK_ID);
 
-        Log.i("title", n.getTitle());
+        notebook = dbhelper.queryNotebookByID(notebookID);
+
         actionBar = getSupportActionBar();
-        actionBar.setTitle(n.getTitle());
+        actionBar.setTitle(notebook.getTitle());
 
-        //getActionBar().setTitle(n.getTitle());
-
+        // Step 1: create recycler view
         recyclerView = (RecyclerView) findViewById(R.id.page_recyclerview);
 
-        ArrayList<Page> pages = new ArrayList<>();
+//        pagesID = (ArrayList<Long>) getIntent().getExtras().get(KEY_LOAD_PAGES);
+//        pages = new ArrayList<>();
+//
+//        for(int i=0; i< pagesID.size();i++){
+//            pages.add(dbhelper.queryPageByID(pagesID.get(i)));
+//        }
 
+        notebookID = (long) getIntent().getExtras().get(KEY_NOTEBOOK_ID);
+        pages = dbhelper.queryPagesByNotebookID(notebookID);
         // Step 3: Create our adapter
         pageAdapter = new PageAdapter(pages);
 
@@ -62,6 +76,24 @@ public class ViewNotebookActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(
                 new StaggeredGridLayoutManager(
                         2, StaggeredGridLayoutManager.VERTICAL));
+        addPageButton = (FloatingActionButton) findViewById(R.id.addPageButton);
+
+        addPageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(new Intent(getBaseContext(), AddPageActivity.class)
+                        .putExtra(KEY_NOTEBOOK_ID, notebookID), REQUEST_ADD_PAGE);
+            }
+        });
+
+        pageAdapter.setOnPageClickListener(new PageAdapter.OnPageClickListener() {
+            @Override
+            public void onPageClick(Page page) {
+                Intent i = new Intent(getBaseContext(), ViewPageActivity.class);
+                i.putExtra(KEY_PAGE_ID, page.getPageID());
+                startActivityForResult(i,REQUEST_EDIT_PAGE);
+            }
+        });
 
     }
 
@@ -78,8 +110,7 @@ public class ViewNotebookActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_edit:
                 startActivityForResult(new Intent(getBaseContext(), EditNotebookActivity.class)
-                        .putExtra(KEY_NOTEBOOK, n)
-                        .putExtra(KEY_NOTEBOOK_POSITION, position)
+                        .putExtra(KEY_NOTEBOOK_ID, notebookID)
                         , REQUEST_EDIT_OR_DELETE_NOTEBOOK);
                 return true;
             default:
@@ -90,14 +121,21 @@ public class ViewNotebookActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(REQUEST_ADD_PAGE == requestCode && resultCode == RESULT_OK){
-            pageAdapter.addPage((Page) data.getExtras().get(KEY_PAGE));
-        }
-        else if(REQUEST_EDIT_OR_DELETE_NOTEBOOK == requestCode && resultCode == RESULT_NOTEBOOK_EDITED) {
+
+//        if(REQUEST_ADD_PAGE == requestCode && resultCode == RESULT_OK){
+//            String newPageID = data.getExtras().get("newPage").toString();
+//            Page p = dbhelper.queryPageByID(Integer.parseInt(newPageID));
+//            pageAdapter.addPage(p);
+//        }else if(REQUEST_EDIT_PAGE == requestCode && resultCode == RESULT_OK){
+//
+//            Page p = dbhelper.queryPageByID((int) data.getExtras().get("editedPage"));
+//            Log.i("GOTOEDIT", "PLS" +p.getName());
+//            pageAdapter.editPage(p);
+//        }
+        if(REQUEST_EDIT_OR_DELETE_NOTEBOOK == requestCode && resultCode == RESULT_NOTEBOOK_EDITED) {
             //EDIT
             Intent result = new Intent();
-            result.putExtra(KEY_NOTEBOOK, (Notebook) data.getExtras().get(KEY_NOTEBOOK));
-            result.putExtra(KEY_NOTEBOOK_POSITION, (int) data.getExtras().get(KEY_NOTEBOOK_POSITION));
+            result.putExtra(KEY_NOTEBOOK_ID, (long) data.getExtras().get(KEY_NOTEBOOK_ID));
             setResult(RESULT_NOTEBOOK_EDITED, result);
             finish();
         }
@@ -107,6 +145,12 @@ public class ViewNotebookActivity extends AppCompatActivity {
             result.putExtra(KEY_NOTEBOOK_POSITION, (int) data.getExtras().get(KEY_NOTEBOOK_POSITION));
             setResult(RESULT_NOTEBOOK_DELETED, result);
             finish();
+        }else if(REQUEST_ADD_PAGE == requestCode && resultCode == RESULT_PAGE_ADDED) {
+            Page p = dbhelper.queryPageByID((long) data.getExtras().get(KEY_PAGE_ID));
+            p.setPageNumber(pageAdapter.getItemCount());
+            dbhelper.updatePage(p);
+
+            pageAdapter.addPage(p);
         }
     }
 }

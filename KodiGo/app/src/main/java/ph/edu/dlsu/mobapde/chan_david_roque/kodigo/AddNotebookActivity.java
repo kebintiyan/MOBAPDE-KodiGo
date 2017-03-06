@@ -19,9 +19,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import java.util.ArrayList;
+
 import static android.app.Activity.RESULT_OK;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_COLOR;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_NOTEBOOK;
+import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_NOTEBOOK_ID;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.REQUEST_ADD_COLOR_NOTEBOOK;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.REQUEST_ADD_COLOR_TITLE;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.RESULT_COLOR;
@@ -35,11 +38,13 @@ public class AddNotebookActivity extends AppCompatActivity {
     ImageView titleColor;
     ImageView notebookColor;
     RelativeLayout notebookIcon;
+    DatabaseOpenHelper dbhelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_notebook);
+        dbhelper = new DatabaseOpenHelper(getApplicationContext());
 
         notebookName = (EditText) findViewById(R.id.notebookName);
         submitButton = (Button) findViewById(R.id.submitButton);
@@ -53,14 +58,17 @@ public class AddNotebookActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent result = new Intent();
+
                 Notebook notebook = new Notebook();
                 notebook.setTitle(notebookName.getText().toString());
                 ColorDrawable color = (ColorDrawable) titleColor.getBackground();
                 notebook.setTitleColor(color.getColor());
                 color = (ColorDrawable) notebookColor.getBackground();
                 notebook.setNotebookColor(color.getColor());
-
-                result.putExtra(KEY_NOTEBOOK, (Notebook) notebook);
+                Log.i("AddNotebookActivity", "Notebook created");
+                long notebookId = dbhelper.insertNotebook(notebook);
+                notebook.setNotebookID(notebookId);
+                result.putExtra(KEY_NOTEBOOK_ID, notebookId);
                 setResult(RESULT_NOTEBOOK_ADDED, result);
                 Log.i("AddNotebookActivity", "Notebook created");
                 finish();
@@ -90,17 +98,6 @@ public class AddNotebookActivity extends AppCompatActivity {
         });
 
 
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
     }
 
     public void colorPicker(int requestCode) {
