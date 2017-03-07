@@ -28,7 +28,7 @@ public class AddPageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_page);
         dbhelper = new DatabaseOpenHelper(getApplicationContext());
         notebookID = (long)getIntent().getExtras().get(KEY_NOTEBOOK_ID);
-        pageText = (EditText) findViewById(R.id.page_text);
+        pageText = (EditText) findViewById(R.id.pageText);
         submitButton = (Button) findViewById(R.id.submitButton);
 
 

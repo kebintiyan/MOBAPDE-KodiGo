@@ -14,14 +14,14 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/page_text"/>
+        android:id="@+id/pageText"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="SUBMIT"
         android:id="@+id/submitButton"
-        android:layout_below="@id/page_text"
+        android:layout_below="@id/pageText"
         />
 
 </RelativeLayout>
