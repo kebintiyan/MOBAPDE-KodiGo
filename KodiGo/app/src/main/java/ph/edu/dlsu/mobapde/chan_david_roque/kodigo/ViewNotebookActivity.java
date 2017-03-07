@@ -135,22 +135,22 @@ public class ViewNotebookActivity extends AppCompatActivity {
         if(REQUEST_EDIT_OR_DELETE_NOTEBOOK == requestCode && resultCode == RESULT_NOTEBOOK_EDITED) {
             //EDIT
             Intent result = new Intent();
-            result.putExtra(KEY_NOTEBOOK_ID, (long) data.getExtras().get(KEY_NOTEBOOK_ID));
+//            result.putExtra(KEY_NOTEBOOK_ID, (long) data.getExtras().get(KEY_NOTEBOOK_ID));
             setResult(RESULT_NOTEBOOK_EDITED, result);
             finish();
         }
         else if(REQUEST_EDIT_OR_DELETE_NOTEBOOK == requestCode && resultCode == RESULT_NOTEBOOK_DELETED) {
             //DELETE
             Intent result = new Intent();
-            result.putExtra(KEY_NOTEBOOK_POSITION, (int) data.getExtras().get(KEY_NOTEBOOK_POSITION));
+//            result.putExtra(KEY_NOTEBOOK_POSITION, (int) data.getExtras().get(KEY_NOTEBOOK_POSITION));
             setResult(RESULT_NOTEBOOK_DELETED, result);
             finish();
         }else if(REQUEST_ADD_PAGE == requestCode && resultCode == RESULT_PAGE_ADDED) {
-            Page p = dbhelper.queryPageByID((long) data.getExtras().get(KEY_PAGE_ID));
-            p.setPageNumber(pageAdapter.getItemCount());
-            dbhelper.updatePage(p);
-
-            pageAdapter.addPage(p);
+//            Page p = dbhelper.queryPageByID((long) data.getExtras().get(KEY_PAGE_ID));
+//            p.setPageNumber(pageAdapter.getItemCount());
+//            dbhelper.updatePage(p);
+//
+//            pageAdapter.addPage(p);
         }
     }
 }

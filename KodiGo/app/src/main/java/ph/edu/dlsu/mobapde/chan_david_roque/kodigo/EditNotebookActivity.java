@@ -69,7 +69,7 @@ public class EditNotebookActivity extends AppCompatActivity {
                 notebook.setNotebookColor(color.getColor());
 
                 dbhelper.updateNotebook(notebook);
-                result.putExtra(KEY_NOTEBOOK_ID, notebookID);
+//                result.putExtra(KEY_NOTEBOOK_ID, notebookID);
                 setResult(RESULT_NOTEBOOK_EDITED, result);
                 Log.i("EdiNotebookActivity", "Notebook Edited");
                 finish();
@@ -83,7 +83,7 @@ public class EditNotebookActivity extends AppCompatActivity {
                 Intent result = new Intent();
 
                 dbhelper.deleteNotebook(notebookID);
-                result.putExtra(KEY_NOTEBOOK_POSITION, notebook.getNotebookNumber());
+//                result.putExtra(KEY_NOTEBOOK_POSITION, notebook.getNotebookNumber());
                 setResult(RESULT_NOTEBOOK_DELETED, result);
                 Log.i("DeleteNotebookActivity", "Notebook deleted");
                 finish();

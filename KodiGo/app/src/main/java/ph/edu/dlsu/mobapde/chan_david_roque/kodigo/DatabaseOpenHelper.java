@@ -42,7 +42,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public long insertPage(Page p) {
+    public void insertPage(Page p) {
         SQLiteDatabase db = getWritableDatabase();
 
         ContentValues cv = new ContentValues();
@@ -60,7 +60,8 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
             insertImage(i);
         }
 
-        return db.insert(Page.TABLE_NAME, null, cv);
+        db.insert(Page.TABLE_NAME, null, cv);
+        db.close();
     }
 
     public long insertComment(Comment c) {
