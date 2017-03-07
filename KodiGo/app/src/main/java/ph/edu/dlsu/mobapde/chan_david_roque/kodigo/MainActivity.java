@@ -31,13 +31,14 @@ public class MainActivity extends AppCompatActivity {
         // Step 1: create recycler view
         recyclerView = (RecyclerView) findViewById(R.id.notebook_recyclerview);
 
-        notebooks = dbHelper.queryAllNotebooks();
+//        notebooks = dbHelper.queryAllNotebooks();
 
-        notebookCursorAdapter = new NotebookCursorAdapter(getBaseContext(), dbHelper.queryAllNotebooksAsCursor());
+        notebookCursorAdapter = new NotebookCursorAdapter(getBaseContext(), null);
 
         // Step 4: Attach adapter to UI
         recyclerView.setAdapter(notebookCursorAdapter);
         // Step 5: Attach layout manager to UI
+
         recyclerView.setLayoutManager(
                 new StaggeredGridLayoutManager(
                         2, StaggeredGridLayoutManager.VERTICAL));
@@ -101,12 +102,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        Cursor cursor = dbHelper.queryAllNotebooksAsCursor();
-//        notebookCursorAdapter.swapCursor(cursor);
-//    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Cursor cursor = dbHelper.queryAllNotebooksAsCursor();
+        notebookCursorAdapter.changeCursor(cursor);
+    }
 
 
 }

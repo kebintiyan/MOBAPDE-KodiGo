@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class Notebook{
 
     public static final String TABLE_NAME               = "notebook";
-    public static final String COLUMN_NOTEBOOK_ID       = "notebookID";
+    public static final String COLUMN_NOTEBOOK_ID       = "_id";
     public static final String COLUMN_TITLE             = "title";
     public static final String COLUMN_TITLE_COLOR       = "titleColor";
     public static final String COLUMN_NOTEBOOK_COLOR    = "notebookColor";

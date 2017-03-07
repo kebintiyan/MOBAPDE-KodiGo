@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class Page{
 
     public static final String TABLE_NAME           = "page";
-    public static final String COLUMN_PAGE_ID       = "pageID";
+    public static final String COLUMN_PAGE_ID       = "_id";
     public static final String COLUMN_NOTEBOOK_ID   = "notebookID";
     public static final String COLUMN_NAME          = "name";
     public static final String COLUMN_TEXT          = "text";

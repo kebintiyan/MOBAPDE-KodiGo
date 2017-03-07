@@ -496,8 +496,6 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
     }
 
-
-
     private String getCreateNotebookTableSQL() {
         String sql = "CREATE TABLE " + Notebook.TABLE_NAME + "(" +
                 Notebook.COLUMN_NOTEBOOK_ID     + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
