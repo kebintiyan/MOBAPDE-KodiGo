@@ -1,6 +1,7 @@
 package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
@@ -33,10 +34,11 @@ public class ViewNotebookActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     FloatingActionButton addPageButton;
-    PageAdapter pageAdapter;
+    PageCursorAdapter pageCursorAdapter;
+
     ActionBar actionBar;
     Notebook notebook;
-    DatabaseOpenHelper dbhelper;
+    DatabaseOpenHelper dbHelper;
     ArrayList<Page> pages;
     ArrayList<Long> pagesID;
     long notebookID;
@@ -46,10 +48,10 @@ public class ViewNotebookActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_notebook);
 
-        dbhelper = new DatabaseOpenHelper(getApplicationContext());
+        dbHelper = new DatabaseOpenHelper(getBaseContext());
         notebookID = (long) getIntent().getExtras().get(KEY_NOTEBOOK_ID);
 
-        notebook = dbhelper.queryNotebookByID(notebookID);
+        notebook = dbHelper.queryNotebookByID(notebookID);
 
         actionBar = getSupportActionBar();
         actionBar.setTitle(notebook.getTitle());
@@ -57,25 +59,18 @@ public class ViewNotebookActivity extends AppCompatActivity {
         // Step 1: create recycler view
         recyclerView = (RecyclerView) findViewById(R.id.page_recyclerview);
 
-//        pagesID = (ArrayList<Long>) getIntent().getExtras().get(KEY_LOAD_PAGES);
-//        pages = new ArrayList<>();
-//
-//        for(int i=0; i< pagesID.size();i++){
-//            pages.add(dbHelper.queryPageByID(pagesID.get(i)));
-//        }
-
-        notebookID = (long) getIntent().getExtras().get(KEY_NOTEBOOK_ID);
-        pages = dbhelper.queryPagesByNotebookID(notebookID);
+        pages = dbHelper.queryPagesByNotebookID(notebookID);
         // Step 3: Create our adapter
-        pageAdapter = new PageAdapter(pages);
+        pageCursorAdapter = new PageCursorAdapter(getBaseContext(), null);
 
         // Step 4: Attach adapter to UI
-        recyclerView.setAdapter(pageAdapter);
+        recyclerView.setAdapter(pageCursorAdapter);
 
         // Step 5: Attach layout manager to UI
         recyclerView.setLayoutManager(
                 new StaggeredGridLayoutManager(
                         2, StaggeredGridLayoutManager.VERTICAL));
+
         addPageButton = (FloatingActionButton) findViewById(R.id.addPageButton);
 
         addPageButton.setOnClickListener(new View.OnClickListener() {
@@ -86,11 +81,11 @@ public class ViewNotebookActivity extends AppCompatActivity {
             }
         });
 
-        pageAdapter.setOnPageClickListener(new PageAdapter.OnPageClickListener() {
+        pageCursorAdapter.setOnPageClickListener(new PageCursorAdapter.OnPageClickListener() {
             @Override
-            public void onPageClick(Page page) {
+            public void onPageClick(long pageId) {
                 Intent i = new Intent(getBaseContext(), ViewPageActivity.class);
-                i.putExtra(KEY_PAGE_ID, page.getPageID());
+                i.putExtra(KEY_PAGE_ID, pageId);
                 startActivityForResult(i,REQUEST_EDIT_PAGE);
             }
         });
@@ -152,5 +147,13 @@ public class ViewNotebookActivity extends AppCompatActivity {
 //
 //            pageAdapter.addPage(p);
         }
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Cursor cursor = dbHelper.queryPagesByNotebookIDAsCursor(notebookID);
+        pageCursorAdapter.changeCursor(cursor);
     }
 }

@@ -37,8 +37,8 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.PageHolder>{
         public PageHolder (View itemView) {
             super(itemView);
            // pageIcon = (Button) itemView.findViewById(R.id.pageIcon);
-            pageTitle = (TextView) itemView.findViewById(R.id.pageTitle);
-            pageNumber = (TextView) itemView.findViewById(R.id.pageNumber);
+            pageTitle = (TextView) itemView.findViewById(R.id.pageName);
+            pageNumber = (TextView) itemView.findViewById(R.id.pageText);
             container = itemView.findViewById(R.id.container);
             Log.i("id", ""+container.getId());
         }

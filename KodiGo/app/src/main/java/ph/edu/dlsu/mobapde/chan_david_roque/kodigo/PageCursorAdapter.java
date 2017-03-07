@@ -1,5 +1,6 @@
 package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,54 +16,34 @@ import android.widget.TextView;
 
 public class PageCursorAdapter extends CursorRecyclerViewAdapter<PageCursorAdapter.PageHolder> {
 
+    public PageCursorAdapter(Context context, Cursor cursor) {
+        super(context, cursor);
+    }
+
     @Override
     public void onBindViewHolder(PageHolder viewHolder, Cursor cursor) {
 
         viewHolder.pageName.setText(cursor.getString(cursor.getColumnIndex(Page.COLUMN_NAME)));
         viewHolder.pageText.setText(cursor.getString(cursor.getColumnIndex(Page.COLUMN_TEXT)));
-        viewHolder.container.setTag(R.id.key_item_page_holder, pageHolder);
-        viewHolder.container.setTag(R.id.key_item_page, page);
-
-
-
-        viewHolder.container.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-//                int position = ((PageHolder)v.getTag(R.id.key_item_holder)).getAdapterPosition();
-//                pages.remove(position);
-//                notifyItemRemoved(position);
-                return false;
-            }
-        });
+        int pageId = cursor.getInt(cursor.getColumnIndex(Page.COLUMN_PAGE_ID));
+        viewHolder.container.setTag(pageId);
 
         viewHolder.container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(onPageClickListener != null){
-                    onPageClickListener.onPageClick((Page)v.getTag(R.id.key_item_page));
+                    onPageClickListener.onPageClick(Long.parseLong(v.getTag().toString()));
                 }
 
             }
         });
 
-        viewHolder.notebookIcon.setBackgroundColor(cursor.getInt(cursor.getColumnIndex(Notebook.COLUMN_NOTEBOOK_COLOR)));
-        viewHolder.notebookName.setText(cursor.getString(cursor.getColumnIndex(Notebook.COLUMN_TITLE)));
-        viewHolder.notebookName.setTextColor(cursor.getInt(cursor.getColumnIndex(Notebook.COLUMN_TITLE_COLOR)));
-
-        int noteId = cursor.getInt(cursor.getColumnIndex(Notebook.COLUMN_NOTEBOOK_ID));
-        viewHolder.container.setTag(noteId);
-
-        viewHolder.container.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onNotebookClickListener.onNotebookClick(Long.parseLong(v.getTag().toString()));
-            }
-        });
     }
 
     @Override
     public PageHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return null;
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_page, parent, false);
+        return new PageCursorAdapter.PageHolder(v);
     }
 
     public class PageHolder extends RecyclerView.ViewHolder{
@@ -79,13 +60,13 @@ public class PageCursorAdapter extends CursorRecyclerViewAdapter<PageCursorAdapt
 
         }
     }
-    private PageAdapter.OnPageClickListener onPageClickListener;
+    private PageCursorAdapter.OnPageClickListener onPageClickListener;
 
-    public void setOnPageClickListener(PageAdapter.OnPageClickListener onPageClickListener){
+    public void setOnPageClickListener(PageCursorAdapter.OnPageClickListener onPageClickListener){
         this.onPageClickListener = onPageClickListener;
     }
 
     public interface OnPageClickListener{
-        public void onPageClick(Page page);
+        public void onPageClick(long pageId);
     }
 }
