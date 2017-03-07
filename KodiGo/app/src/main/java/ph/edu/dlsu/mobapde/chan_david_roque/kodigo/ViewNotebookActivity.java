@@ -61,7 +61,7 @@ public class ViewNotebookActivity extends AppCompatActivity {
 //        pages = new ArrayList<>();
 //
 //        for(int i=0; i< pagesID.size();i++){
-//            pages.add(dbhelper.queryPageByID(pagesID.get(i)));
+//            pages.add(dbHelper.queryPageByID(pagesID.get(i)));
 //        }
 
         notebookID = (long) getIntent().getExtras().get(KEY_NOTEBOOK_ID);
@@ -124,11 +124,11 @@ public class ViewNotebookActivity extends AppCompatActivity {
 
 //        if(REQUEST_ADD_PAGE == requestCode && resultCode == RESULT_OK){
 //            String newPageID = data.getExtras().get("newPage").toString();
-//            Page p = dbhelper.queryPageByID(Integer.parseInt(newPageID));
+//            Page p = dbHelper.queryPageByID(Integer.parseInt(newPageID));
 //            pageAdapter.addPage(p);
 //        }else if(REQUEST_EDIT_PAGE == requestCode && resultCode == RESULT_OK){
 //
-//            Page p = dbhelper.queryPageByID((int) data.getExtras().get("editedPage"));
+//            Page p = dbHelper.queryPageByID((int) data.getExtras().get("editedPage"));
 //            Log.i("GOTOEDIT", "PLS" +p.getName());
 //            pageAdapter.editPage(p);
 //        }

@@ -23,8 +23,8 @@ public class LoadPagesActivity extends AppCompatActivity {
 
         pages = new ArrayList<>();
         currNotebookID = (int) getIntent().getExtras().get("currentNotebook");
-       // Notebook notebook = dbhelper.queryNotebookByID(currNotebookID);
-        //pages = dbhelper.queryPagesByNotebookID(notebook.getNotebookID());
+       // Notebook notebook = dbHelper.queryNotebookByID(currNotebookID);
+        //pages = dbHelper.queryPagesByNotebookID(notebook.getNotebookID());
         pagesID = new ArrayList<>();
         pages = dbhelper.queryPagesByNotebookID(currNotebookID);
         for(int i=0; i<pages.size();i++){

@@ -13,8 +13,6 @@ public class KeysCodes {
     final static int REQUEST_ADD_COLOR_TITLE = 6;
     final static int REQUEST_ADD_COLOR_NOTEBOOK = 7;
 
-
-
     final static int RESULT_NOTEBOOK_ADDED = 1;
     final static int RESULT_NOTEBOOK_EDITED = 2;
     final static int RESULT_NOTEBOOK_DELETED = 3;

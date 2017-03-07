@@ -66,11 +66,11 @@ public class AddNotebookActivity extends AppCompatActivity {
                 color = (ColorDrawable) notebookColor.getBackground();
                 notebook.setNotebookColor(color.getColor());
                 Log.i("AddNotebookActivity", "Notebook created");
-                long notebookId = dbhelper.insertNotebook(notebook);
-                notebook.setNotebookID(notebookId);
-                result.putExtra(KEY_NOTEBOOK_ID, notebookId);
-                setResult(RESULT_NOTEBOOK_ADDED, result);
-                Log.i("AddNotebookActivity", "Notebook created");
+                dbhelper.insertNotebook(notebook);
+//                notebook.setNotebookID(notebookId);
+//                result.putExtra(KEY_NOTEBOOK_ID, notebookId);
+//                setResult(RESULT_NOTEBOOK_ADDED, result);
+//                Log.i("AddNotebookActivity", "Notebook created");
                 finish();
 
             }

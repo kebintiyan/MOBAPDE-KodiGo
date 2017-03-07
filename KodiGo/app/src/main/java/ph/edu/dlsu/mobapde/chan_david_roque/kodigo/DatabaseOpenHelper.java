@@ -28,7 +28,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
     /*********** CREATE METHODS ***********/
 
-    public long insertNotebook(Notebook n) {
+    public void insertNotebook(Notebook n) {
         SQLiteDatabase db = getWritableDatabase();
 
         ContentValues cv = new ContentValues();
@@ -38,7 +38,8 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         cv.put(Notebook.COLUMN_NOTEBOOK_NUMBER, getNextNotebookNumber());
         cv.put(Notebook.COLUMN_DATE_CREATED, getCurrentDate());
 
-        return db.insert(Notebook.TABLE_NAME, null, cv);
+        db.insert(Notebook.TABLE_NAME, null, cv);
+        db.close();
     }
 
     public long insertPage(Page p) {
@@ -105,9 +106,11 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                     notebooks.add(n);
                 }
             } finally {
-                c.close();
+
             }
         }
+        c.close();
+        db.close();
         return notebooks;
     }
 

@@ -53,18 +53,14 @@ public class NotebookAdapter extends RecyclerView.Adapter<NotebookAdapter.Notebo
     public void onBindViewHolder(NotebookHolder notebookHolder, final int position) {
         final Notebook notebook = notebooks.get(position);
 
-        //notebookHolder.notebookIcon.setText(notebook.getTitle());
-        //notebookHolder.ivGenre.setImageResource(notebook.getResourceId());
         notebookHolder.notebookIcon.setBackgroundColor(notebook.getNotebookColor());
         notebookHolder.notebookName.setTextColor(notebook.getTitleColor());
         notebookHolder.notebookName.setText(notebook.getTitle());
         notebookHolder.container.setTag(R.id.key_item_notebook_id, notebook.getNotebookID());
-//        notebookHolder.container.setTag(R.id.key_item_notebook, notebook);
 
         notebookHolder.container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("AA", "AA");
                 long id = (long) v.getTag(R.id.key_item_notebook_id);
                 onNotebookClickListener.onNotebookClick(id);
             }
