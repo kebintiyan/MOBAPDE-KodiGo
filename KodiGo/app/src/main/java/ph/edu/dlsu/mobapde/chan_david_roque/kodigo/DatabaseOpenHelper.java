@@ -411,7 +411,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         cv.put(Page.COLUMN_NOTEBOOK_ID, p.getNotebookID());
         cv.put(Page.COLUMN_NAME, p.getName());
         cv.put(Page.COLUMN_TEXT, p.getText());
-        cv.put(Page.COLUMN_PAGE_NUMBER, getNextPageNumber(p.getNotebookID()));
+        cv.put(Page.COLUMN_PAGE_NUMBER, p.getPageNumber());
         cv.put(Page.COLUMN_DATE_CREATED, getCurrentDate());
 
         /*for (Comment c : p.getComments()) {

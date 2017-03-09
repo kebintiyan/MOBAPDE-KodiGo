@@ -1,14 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_view_page"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="ph.edu.dlsu.mobapde.chan_david_roque.kodigo.ViewPageActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="19dp"
+        android:id="@+id/viewTitlePage" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:gravity="top"
+        android:ems="10"
+        android:layout_below="@+id/viewTitlePage"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="30dp"
+        android:id="@+id/viewPageText"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -16,10 +34,10 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="19dp"
         android:id="@+id/editTitlePage"
-        android:text="" />
+        android:visibility="invisible"/>
 
     <EditText
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textMultiLine"
         android:gravity="top"
@@ -29,16 +47,18 @@
         android:layout_marginTop="30dp"
         android:id="@+id/editPageText"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:visibility="invisible"/>
 
-    <Button
-        android:text="^"
+    <android.support.design.widget.FloatingActionButton
+        android:src="@drawable/pencil"
+        app:fabSize="normal"
+        android:id="@+id/toggleEditButton"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="43dp"
-        android:id="@+id/submitEditButton" />
+        app:layout_anchorGravity="bottom|right|end"/>
 
 
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

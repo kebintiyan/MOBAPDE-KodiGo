@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_edit"
-        android:icon="@drawable/pencil"
-        android:title="@string/app_name"
-        app:showAsAction="ifRoom"/>
+        android:title="Edit Notebook"
+        app:showAsAction="collapseActionView"/>
 </menu>

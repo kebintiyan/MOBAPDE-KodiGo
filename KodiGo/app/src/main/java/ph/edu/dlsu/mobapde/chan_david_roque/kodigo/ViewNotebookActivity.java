@@ -2,27 +2,20 @@ package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import java.util.ArrayList;
 
-import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_LOAD_PAGES;
-import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_NOTEBOOK;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_NOTEBOOK_ID;
-import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_NOTEBOOK_POSITION;
-import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_PAGE;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_PAGE_ID;
-import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.REQUEST_ADD_NOTEBOOK;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.REQUEST_ADD_PAGE;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.REQUEST_EDIT_OR_DELETE_NOTEBOOK;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.REQUEST_EDIT_PAGE;
@@ -71,6 +64,10 @@ public class ViewNotebookActivity extends AppCompatActivity {
                 new StaggeredGridLayoutManager(
                         2, StaggeredGridLayoutManager.VERTICAL));
 
+        // Create an `ItemTouchHelper` and attach it to the `RecyclerView`
+        ItemTouch it = new ItemTouch(pageCursorAdapter, pages);
+        it.attachToRecyclerView(recyclerView);
+
         addPageButton = (FloatingActionButton) findViewById(R.id.addPageButton);
 
         addPageButton.setOnClickListener(new View.OnClickListener() {
@@ -90,12 +87,21 @@ public class ViewNotebookActivity extends AppCompatActivity {
             }
         });
 
+        it.setOnNotebookClickListener(new ItemTouch.OnItemMoveListener() {
+            @Override
+            public void onItemMoveClick(ArrayList arrayList) {
+                pages = (ArrayList<Page>) arrayList;
+                refreshPosition();
+
+            }
+        });
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.editbutton, menu);
+        inflater.inflate(R.menu.notebook_menu_bar, menu);
         return true;
     }
 
@@ -155,5 +161,12 @@ public class ViewNotebookActivity extends AppCompatActivity {
         super.onResume();
         Cursor cursor = dbHelper.queryPagesByNotebookIDAsCursor(notebookID);
         pageCursorAdapter.changeCursor(cursor);
+    }
+
+    protected void refreshPosition() {
+        for(int i =0; i< pages.size(); i++){
+            pages.get(i).setPageNumber(i);
+            dbHelper.updatePage(pages.get(i));
+        }
     }
 }

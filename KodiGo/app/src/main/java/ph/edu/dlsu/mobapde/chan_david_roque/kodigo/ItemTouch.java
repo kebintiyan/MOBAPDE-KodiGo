@@ -13,10 +13,10 @@ import java.util.Collections;
 public class ItemTouch{
 
     ItemTouchHelper ith;
-    RecyclerView.Adapter adapter;
+    CursorRecyclerViewAdapter adapter;
     ArrayList arrayList;
 
-    ItemTouch(RecyclerView.Adapter adapter, ArrayList arrayList) {
+    ItemTouch(CursorRecyclerViewAdapter adapter, ArrayList arrayList) {
         this.adapter = adapter;
         this.arrayList = arrayList;
         createItemTouchCallback();
@@ -30,13 +30,11 @@ public class ItemTouch{
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
                 // get the viewHolder's and target's positions in your adapter data, swap them
 
-
-
                 Collections.swap(arrayList, viewHolder.getAdapterPosition(), target.getAdapterPosition());
                 // and notify the adapter that its dataset has changed
-                onItemMoveListener.onItemMoveClick(arrayList);
-
                 adapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+
+                onItemMoveListener.onItemMoveClick(arrayList);
 
                 return true;
             }

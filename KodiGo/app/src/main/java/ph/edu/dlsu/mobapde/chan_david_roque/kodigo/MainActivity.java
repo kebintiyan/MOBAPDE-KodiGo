@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         // Step 1: create recycler view
         recyclerView = (RecyclerView) findViewById(R.id.notebook_recyclerview);
 
-//        notebooks = dbHelper.queryAllNotebooks();
+        notebooks = dbHelper.queryAllNotebooks();
 
         notebookCursorAdapter = new NotebookCursorAdapter(getBaseContext(), null);
 
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         it.setOnNotebookClickListener(new ItemTouch.OnItemMoveListener() {
             @Override
             public void onItemMoveClick(ArrayList arrayList) {
-                ArrayList<Notebook> notebooks = (ArrayList<Notebook>) arrayList;
+                notebooks = (ArrayList<Notebook>) arrayList;
                 refreshPosition();
 
             }
@@ -97,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
     protected void refreshPosition() {
         for(int i =0; i< notebooks.size(); i++){
             notebooks.get(i).setNotebookNumber(i);
-            Log.i("HI", notebooks.get(i).getNotebookNumber()+"");
             dbHelper.updateNotebook(notebooks.get(i));
         }
     }
