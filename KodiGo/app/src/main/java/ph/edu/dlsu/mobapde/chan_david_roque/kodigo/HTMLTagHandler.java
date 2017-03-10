@@ -4,7 +4,10 @@ import android.content.Context;
 import android.text.Editable;
 import android.text.Html;
 import android.text.Spannable;
+import android.text.TextPaint;
+import android.text.style.ClickableSpan;
 import android.util.Log;
+import android.view.View;
 
 import org.xml.sax.XMLReader;
 
@@ -39,17 +42,31 @@ public class HTMLTagHandler implements Html.TagHandler {
 
     private void processComment(boolean opening, Editable output, HashMap<String, String> attributes) {
         int len = output.length();
+
+        ClickableSpan clickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(View widget) {
+
+            }
+
+            /*@Override
+            public void updateDrawState(TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setUnderlineText(false);
+            }*/
+        };
+
         if(opening) {
-            output.setSpan(new StrikethroughSpan(), len, len, Spannable.SPAN_MARK_MARK);
+            output.setSpan(clickableSpan, len, len, Spannable.SPAN_MARK_MARK);
         }
         else {
-            Object obj = getLast(output, StrikethroughSpan.class);
+            Object obj = getLast(output, ClickableSpan.class);
             int where = output.getSpanStart(obj);
 
             output.removeSpan(obj);
 
             if (where != len) {
-                output.setSpan(new StrikethroughSpan(), where, len, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                output.setSpan(clickableSpan, where, len, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
     }
