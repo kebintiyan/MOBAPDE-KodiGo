@@ -7,48 +7,79 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="ph.edu.dlsu.mobapde.chan_david_roque.kodigo.ViewPageActivity">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="19dp"
-        android:id="@+id/viewTitlePage" />
-
-    <TextView
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textMultiLine"
-        android:gravity="top"
-        android:ems="10"
-        android:layout_below="@+id/viewTitlePage"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="30dp"
-        android:id="@+id/viewPageText"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_height="match_parent">
+        <FrameLayout android:id="@+id/my_content"
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1">
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="19dp"
-        android:id="@+id/editTitlePage"
-        android:visibility="invisible"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textMultiLine"
-        android:gravity="top"
-        android:ems="10"
-        android:layout_below="@+id/editTitlePage"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="30dp"
-        android:id="@+id/editPageText"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:visibility="invisible"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/viewTitlePage" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="textMultiLine"
+                    android:id="@+id/viewPageText"
+                    android:layout_below="@id/viewTitlePage"
+                    />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/editTitlePage"
+                    android:visibility="invisible"
+
+                    />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="start"
+                    android:inputType="textMultiLine"
+                    android:id="@+id/editPageText"
+                    android:layout_below="@id/editTitlePage"
+                    android:backgroundTint="@android:color/transparent"
+                    android:visibility="invisible"
+                    />
+                <HorizontalScrollView
+                    android:id="@+id/custom_toolbar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true" />
+            </RelativeLayout>
+
+        </FrameLayout>
+            <LinearLayout android:id="@+id/my_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@color/colorDivider"
+                android:visibility="invisible"
+                >
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="2dp"
+                    android:src="@drawable/pencil"
+                    android:scaleType="fitCenter"/>
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/pencil"
+                    android:layout_margin="2dp"
+                    android:scaleType="fitCenter"/>
+
+            </LinearLayout>
+    </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:src="@drawable/pencil"
@@ -59,6 +90,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_anchorGravity="bottom|right|end"/>
-
 
 </android.support.design.widget.CoordinatorLayout>

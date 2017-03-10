@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_NOTEBOOK_ID;
@@ -25,11 +26,14 @@ public class ViewPageActivity extends AppCompatActivity {
     TextView viewTitlePage;
     TextView viewPageText;
     FloatingActionButton toggleEditButton;
+    LinearLayout toolbar;
     MenuInflater inflater;
     Menu menu;
+    MenuItem saveItem;
     Page page;
     long pageID;
     DatabaseOpenHelper dbhelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,32 +41,28 @@ public class ViewPageActivity extends AppCompatActivity {
 
         dbhelper = new DatabaseOpenHelper(getBaseContext());
 
-        editTitlePage = (EditText) findViewById(R.id.editTitlePage);
-        editPageText = (EditText) findViewById(R.id.editPageText);
-
-        viewTitlePage = (TextView) findViewById(R.id.viewTitlePage);
-        viewPageText = (TextView) findViewById(R.id.viewPageText);
-
-        toggleEditButton = (FloatingActionButton) findViewById(R.id.toggleEditButton);
         pageID = (long) getIntent().getExtras().get(KEY_PAGE_ID);
 
         page = dbhelper.queryPageByID(pageID);
 
+        editTitlePage = (EditText) findViewById(R.id.editTitlePage);
+        editPageText = (EditText) findViewById(R.id.editPageText);
+        editTitlePage.setText(page.getName());
+        editPageText.setText(page.getText());
+
+        viewTitlePage = (TextView) findViewById(R.id.viewTitlePage);
+        viewPageText = (TextView) findViewById(R.id.viewPageText);
         viewTitlePage.setText(page.getName());
         viewPageText.setText(page.getText());
+
+        toolbar = (LinearLayout) findViewById(R.id.my_toolbar);
+
+        toggleEditButton = (FloatingActionButton) findViewById(R.id.toggleEditButton);
 
         toggleEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewTitlePage.setVisibility(View.INVISIBLE);
-                viewPageText.setVisibility(View.INVISIBLE);
-                toggleEditButton.setVisibility(View.INVISIBLE);
-                inflater.inflate(R.menu.page_menu_bar, menu);
-                editTitlePage.setVisibility(View.VISIBLE);
-                editPageText.setVisibility(View.VISIBLE);
-                editTitlePage.setText(page.getName());
-                editPageText.setText(page.getText());
-
+                isEditable(true);
             }
         });
     }
@@ -71,6 +71,9 @@ public class ViewPageActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         inflater = getMenuInflater();
         this.menu = menu;
+        inflater.inflate(R.menu.page_menu_bar, menu);
+        saveItem = menu.findItem(R.id.action_save);
+        saveItem.setVisible(false);
         return true;
     }
 
@@ -78,17 +81,41 @@ public class ViewPageActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
-            case R.id.action_edit:
+            case R.id.action_save:
                 page.setName(editTitlePage.getText().toString());
                 page.setText(editPageText.getText().toString());
                 dbhelper.updatePage(page);
-                Intent result = new Intent();
-
-                setResult(RESULT_PAGE_EDITED, result);
-                finish();
+                isEditable(false);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void isEditable(boolean isEditable){
+
+        int textView, editText;
+
+        if(isEditable){
+            textView = View.INVISIBLE;
+            editText = View.VISIBLE;
+            saveItem.setVisible(true);
+        }else {
+            textView = View.VISIBLE;
+            editText = View.INVISIBLE;
+            viewTitlePage.setText(page.getName());
+            viewPageText.setText(page.getText());
+            saveItem.setVisible(false);
+        }
+
+        viewTitlePage.setVisibility(textView);
+        viewPageText.setVisibility(textView);
+        toggleEditButton.setVisibility(textView);
+
+
+        editTitlePage.setVisibility(editText);
+        editPageText.setVisibility(editText);
+        toolbar.setVisibility(editText);
+
     }
 }
