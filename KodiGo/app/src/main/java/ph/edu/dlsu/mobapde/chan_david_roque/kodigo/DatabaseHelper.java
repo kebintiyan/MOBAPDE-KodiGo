@@ -15,11 +15,11 @@ import java.util.Calendar;
  * Created by kevin on 2/26/2017.
  */
 
-public class DatabaseOpenHelper extends SQLiteOpenHelper {
+public class DatabaseHelper extends SQLiteOpenHelper {
 
     final static String SCHEMA = "kodigo";
 
-    public DatabaseOpenHelper(Context context) {
+    public DatabaseHelper(Context context) {
         super(context, SCHEMA, null, 1);
         this.turnOnForeignKeySupport();
     }
@@ -35,7 +35,6 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         cv.put(Notebook.COLUMN_TITLE, n.getTitle());
         cv.put(Notebook.COLUMN_TITLE_COLOR, n.getTitleColor());
         cv.put(Notebook.COLUMN_NOTEBOOK_COLOR, n.getNotebookColor());
-        cv.put(Notebook.COLUMN_NOTEBOOK_NUMBER, getNextNotebookNumber());
         cv.put(Notebook.COLUMN_DATE_CREATED, getCurrentDate());
 
         db.insert(Notebook.TABLE_NAME, null, cv);
@@ -49,7 +48,6 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         cv.put(Page.COLUMN_NOTEBOOK_ID, p.getNotebookID());
         cv.put(Page.COLUMN_NAME, p.getName());
         cv.put(Page.COLUMN_TEXT, p.getText());
-        cv.put(Page.COLUMN_PAGE_NUMBER, getNextPageNumber(p.getNotebookID()));
         cv.put(Page.COLUMN_DATE_CREATED, getCurrentDate());
 
         for (Comment c : p.getComments()) {
@@ -503,7 +501,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                 Notebook.COLUMN_TITLE           + " TEXT NOT NULL, " +
                 Notebook.COLUMN_TITLE_COLOR     + " TEXT NOT NULL, " +
                 Notebook.COLUMN_NOTEBOOK_COLOR  + " TEXT NOT NULL, " +
-                Notebook.COLUMN_NOTEBOOK_NUMBER + " INTEGER NOT NULL, " +
+                Notebook.COLUMN_NOTEBOOK_NUMBER + " INTEGER NOT NULL AUTOINCREMENT, " +
                 Notebook.COLUMN_DATE_CREATED    + " TEXT NOT NULL); ";
         return sql;
     }
@@ -514,7 +512,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                 Page.COLUMN_NOTEBOOK_ID     + " INTEGER NOT NULL, " +
                 Page.COLUMN_NAME            + " TEXT NOT NULL, " +
                 Page.COLUMN_TEXT            + " TEXT NOT NULL, " +
-                Page.COLUMN_PAGE_NUMBER     + " INTEGER NOT NULL, " +
+                Page.COLUMN_PAGE_NUMBER     + " INTEGER NOT NULL AUTOINCREMENT, " +
                 Page.COLUMN_DATE_CREATED    + " TEXT NOT NULL, " +
                 "FOREIGN KEY (" + Page.COLUMN_NOTEBOOK_ID + ") REFERENCES " +
                     Notebook.TABLE_NAME + "(" + Notebook.COLUMN_NOTEBOOK_ID + ") ON DELETE CASCADE);";
@@ -543,7 +541,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        
     }
 
     /*********** HELPER METHODS ***********/
@@ -555,15 +553,4 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
         return df.format(c.getTime());
     }
-
-    private int getNextNotebookNumber() {
-
-        return 0;
-    }
-
-    private int getNextPageNumber(long notebookID) {
-
-        return 0;
-    }
-
 }

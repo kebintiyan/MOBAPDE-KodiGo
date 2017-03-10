@@ -9,7 +9,7 @@ import android.util.Log;
 import java.util.ArrayList;
 
 public class LoadPagesActivity extends AppCompatActivity {
-    DatabaseOpenHelper dbhelper;
+    DatabaseHelper dbhelper;
     NotebookAdapter notebookAdapter;
     ArrayList<Page> pages;
     ArrayList<Long> pagesID;
@@ -19,7 +19,7 @@ public class LoadPagesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         SQLiteDatabase db = null;
-        dbhelper = new DatabaseOpenHelper(this);
+        dbhelper = new DatabaseHelper(this);
 
         pages = new ArrayList<>();
         currNotebookID = (int) getIntent().getExtras().get("currentNotebook");

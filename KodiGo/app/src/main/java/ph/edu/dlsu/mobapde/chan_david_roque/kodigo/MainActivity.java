@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -21,13 +20,13 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     FloatingActionButton addNotebookButton;
     NotebookCursorAdapter notebookCursorAdapter;
-    DatabaseOpenHelper dbHelper;
+    DatabaseHelper dbHelper;
     ArrayList<Notebook> notebooks;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        dbHelper = new DatabaseOpenHelper(getBaseContext());
+        dbHelper = new DatabaseHelper(getBaseContext());
         // Step 1: create recycler view
         recyclerView = (RecyclerView) findViewById(R.id.notebook_recyclerview);
 

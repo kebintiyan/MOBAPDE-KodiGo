@@ -1,23 +1,17 @@
 package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 
-import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_NOTEBOOK_ID;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_PAGE_ID;
-import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.REQUEST_EDIT_OR_DELETE_NOTEBOOK;
-import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.RESULT_PAGE_EDITED;
 
 public class ViewPageActivity extends AppCompatActivity {
 
@@ -32,14 +26,14 @@ public class ViewPageActivity extends AppCompatActivity {
     MenuItem saveItem;
     Page page;
     long pageID;
-    DatabaseOpenHelper dbhelper;
+    DatabaseHelper dbhelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_page);
 
-        dbhelper = new DatabaseOpenHelper(getBaseContext());
+        dbhelper = new DatabaseHelper(getBaseContext());
 
         pageID = (long) getIntent().getExtras().get(KEY_PAGE_ID);
 

@@ -31,7 +31,7 @@ public class ViewNotebookActivity extends AppCompatActivity {
 
     ActionBar actionBar;
     Notebook notebook;
-    DatabaseOpenHelper dbHelper;
+    DatabaseHelper dbHelper;
     ArrayList<Page> pages;
     ArrayList<Long> pagesID;
     long notebookID;
@@ -41,7 +41,7 @@ public class ViewNotebookActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_notebook);
 
-        dbHelper = new DatabaseOpenHelper(getBaseContext());
+        dbHelper = new DatabaseHelper(getBaseContext());
         notebookID = (long) getIntent().getExtras().get(KEY_NOTEBOOK_ID);
 
         notebook = dbHelper.queryNotebookByID(notebookID);
