@@ -9,17 +9,17 @@ import java.util.ArrayList;
  * Created by USER on 2/25/2017.
  */
 
-public class Notebook implements Parcelable {
+public class Notebook{
 
-    public static final String TABLE_NAME               = " notebook ";
-    public static final String COLUMN_NOTEBOOK_ID       = " notebookID ";
-    public static final String COLUMN_TITLE             = " title ";
-    public static final String COLUMN_TITLE_COLOR       = " titleColor ";
-    public static final String COLUMN_NOTEBOOK_COLOR    = " notebookColor ";
-    public static final String COLUMN_NOTEBOOK_NUMBER   = " notebookNumber ";
-    public static final String COLUMN_DATE_CREATED      = " dateCreated ";
+    public static final String TABLE_NAME               = "notebook";
+    public static final String COLUMN_NOTEBOOK_ID       = "_id";
+    public static final String COLUMN_TITLE             = "title";
+    public static final String COLUMN_TITLE_COLOR       = "titleColor";
+    public static final String COLUMN_NOTEBOOK_COLOR    = "notebookColor";
+    public static final String COLUMN_NOTEBOOK_NUMBER   = "notebookNumber";
+    public static final String COLUMN_DATE_CREATED      = "dateCreated";
 
-    private int notebookID;
+    private long notebookID;
     private String title;
     private int titleColor;
     private int notebookColor;
@@ -33,14 +33,6 @@ public class Notebook implements Parcelable {
         pages = new ArrayList<>();
     }
 
-    protected Notebook(Parcel in) {
-        notebookID = in.readInt();
-        title = in.readString();
-        titleColor = in.readInt();
-        notebookColor = in.readInt();
-        dateCreated = in.readString();
-    }
-
     public Notebook(int notebookID, String title, int titleColor, int notebookColor, String dateCreated){
         this.notebookID = notebookID;
         this.title = title;
@@ -49,23 +41,11 @@ public class Notebook implements Parcelable {
         this.dateCreated = dateCreated;
     }
 
-    public static final Creator<Notebook> CREATOR = new Creator<Notebook>() {
-        @Override
-        public Notebook createFromParcel(Parcel in) {
-            return new Notebook(in);
-        }
-
-        @Override
-        public Notebook[] newArray(int size) {
-            return new Notebook[size];
-        }
-    };
-
-    public int getNotebookID() {
+    public long getNotebookID() {
         return this.notebookID;
     }
 
-    public Notebook setNotebookID(int notebookID) {
+    public Notebook setNotebookID(long notebookID) {
         this.notebookID = notebookID;
         return this;
     }
@@ -124,17 +104,5 @@ public class Notebook implements Parcelable {
         return this;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(notebookID);
-        dest.writeString(title);
-        dest.writeInt(titleColor);
-        dest.writeInt(notebookColor);
-        dest.writeString(dateCreated);
-    }
 }

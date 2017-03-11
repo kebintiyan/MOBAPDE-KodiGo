@@ -9,18 +9,18 @@ import java.util.ArrayList;
  * Created by USER on 2/25/2017.
  */
 
-public class Page implements Parcelable {
+public class Page{
 
-    public static final String TABLE_NAME           = " page ";
-    public static final String COLUMN_PAGE_ID       = " pageID ";
-    public static final String COLUMN_NOTEBOOK_ID   = " notebookID ";
-    public static final String COLUMN_NAME          = " name ";
-    public static final String COLUMN_TEXT          = " text ";
-    public static final String COLUMN_PAGE_NUMBER   = " pageNumber ";
-    public static final String COLUMN_DATE_CREATED  = " dateCreated ";
+    public static final String TABLE_NAME           = "page";
+    public static final String COLUMN_PAGE_ID       = "_id";
+    public static final String COLUMN_NOTEBOOK_ID   = "notebookID";
+    public static final String COLUMN_NAME          = "name";
+    public static final String COLUMN_TEXT          = "text";
+    public static final String COLUMN_PAGE_NUMBER   = "pageNumber";
+    public static final String COLUMN_DATE_CREATED  = "dateCreated";
 
-    private int pageID;
-    private int notebookID;
+    private long pageID;
+    private long notebookID;
     private String name;
     private String text;
     private int pageNumber;
@@ -29,66 +29,29 @@ public class Page implements Parcelable {
     private ArrayList<Image> images;
     private ArrayList<Comment> comments;
 
-    public Page(){
+    private int layoutPosition; // to be set only in onBindViewHolder
 
+    public Page(){
+        name = "Untitled Page";
+        text = "none";
         images = new ArrayList<>();
         comments = new ArrayList<>();
     }
 
-    protected Page(Parcel in) {
-        setPageID(in.readInt());
-        notebookID = in.readInt();
-        name = in.readString();
-        text = in.readString();
-        images = in.readArrayList(null);
-        comments = in.readArrayList(null);
-        pageNumber = in.readInt();
-        setDateCreated(in.readString());
-    }
-
-    public static final Creator<Page> CREATOR = new Creator<Page>() {
-        @Override
-        public Page createFromParcel(Parcel in) {
-            return new Page(in);
-        }
-
-        @Override
-        public Page[] newArray(int size) {
-            return new Page[size];
-        }
-    };
-
-
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(getPageID());
-        dest.writeInt(getNotebookID());
-        dest.writeString(getName());
-        //dest.writeStringArray(getText());
-
-        dest.writeString(getDateCreated());
-    }
-
-    public int getPageID() {
+    public long getPageID() {
         return pageID;
     }
 
-    public Page setPageID(int pageID) {
+    public Page setPageID(long pageID) {
         this.pageID = pageID;
         return this;
     }
 
-    public int getNotebookID() {
+    public long getNotebookID() {
         return notebookID;
     }
 
-    public Page setNotebookID(int notebookID) {
+    public Page setNotebookID(long notebookID) {
         this.notebookID = notebookID;
         return this;
     }
@@ -145,5 +108,12 @@ public class Page implements Parcelable {
     public Page setDateCreated(String dateCreated) {
         this.dateCreated = dateCreated;
         return this;
+    }
+    public int getLayoutPosition() {
+        return layoutPosition;
+    }
+
+    public void setLayoutPosition(int layoutPosition) {
+        this.layoutPosition = layoutPosition;
     }
 }

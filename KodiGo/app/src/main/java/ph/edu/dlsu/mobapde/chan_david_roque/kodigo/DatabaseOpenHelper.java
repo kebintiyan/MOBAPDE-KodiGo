@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,9 +24,11 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         this.turnOnForeignKeySupport();
     }
 
+
+
     /*********** CREATE METHODS ***********/
 
-    public long insertNotebook(Notebook n) {
+    public void insertNotebook(Notebook n) {
         SQLiteDatabase db = getWritableDatabase();
 
         ContentValues cv = new ContentValues();
@@ -35,10 +38,11 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         cv.put(Notebook.COLUMN_NOTEBOOK_NUMBER, getNextNotebookNumber());
         cv.put(Notebook.COLUMN_DATE_CREATED, getCurrentDate());
 
-        return db.insert(Notebook.TABLE_NAME, null, cv);
+        db.insert(Notebook.TABLE_NAME, null, cv);
+        db.close();
     }
 
-    public long insertPage(Page p) {
+    public void insertPage(Page p) {
         SQLiteDatabase db = getWritableDatabase();
 
         ContentValues cv = new ContentValues();
@@ -56,7 +60,8 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
             insertImage(i);
         }
 
-        return db.insert(Page.TABLE_NAME, null, cv);
+        db.insert(Page.TABLE_NAME, null, cv);
+        db.close();
     }
 
     public long insertComment(Comment c) {
@@ -83,34 +88,30 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
     public ArrayList<Notebook> queryAllNotebooks() {
         SQLiteDatabase db = getReadableDatabase();
-
-        Cursor c = db.query(
-                Notebook.TABLE_NAME,
-                null,
-                null,
-                null,
-                null,
-                null,
-                Notebook.COLUMN_NOTEBOOK_NUMBER);
+        String sql = "Select * From " +Notebook.TABLE_NAME + ";";
+        Cursor c = db.rawQuery(sql,null);
 
         ArrayList<Notebook> notebooks = new ArrayList<>();
 
-        try {
-            while(c.moveToNext()) {
-                Notebook n = new Notebook()
-                        .setNotebookID(c.getInt(c.getColumnIndex(Notebook.COLUMN_NOTEBOOK_ID)))
-                        .setTitle(c.getString(c.getColumnIndex(Notebook.COLUMN_TITLE)))
-                        .setTitleColor(c.getInt(c.getColumnIndex(Notebook.COLUMN_TITLE_COLOR)))
-                        .setNotebookColor(c.getInt(c.getColumnIndex(Notebook.COLUMN_NOTEBOOK_COLOR)))
-                        .setNotebookNumber(c.getInt(c.getColumnIndex(Notebook.COLUMN_NOTEBOOK_NUMBER)))
-                        .setDateCreated(c.getString(c.getColumnIndex(Notebook.COLUMN_DATE_CREATED)));
+        if(c.getCount()>0) {
+            try {
+                while (c.moveToNext()) {
+                    Notebook n = new Notebook()
+                            .setNotebookID(c.getInt(c.getColumnIndex(Notebook.COLUMN_NOTEBOOK_ID)))
+                            .setTitle(c.getString(c.getColumnIndex(Notebook.COLUMN_TITLE)))
+                            .setTitleColor(c.getInt(c.getColumnIndex(Notebook.COLUMN_TITLE_COLOR)))
+                            .setNotebookColor(c.getInt(c.getColumnIndex(Notebook.COLUMN_NOTEBOOK_COLOR)))
+                            .setNotebookNumber(c.getInt(c.getColumnIndex(Notebook.COLUMN_NOTEBOOK_NUMBER)))
+                            .setDateCreated(c.getString(c.getColumnIndex(Notebook.COLUMN_DATE_CREATED)));
 
-                notebooks.add(n);
+                    notebooks.add(n);
+                }
+            } finally {
+
             }
-        } finally {
-            c.close();
         }
-
+        c.close();
+        db.close();
         return notebooks;
     }
 
@@ -130,11 +131,11 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
     }
 
 
-    public Notebook queryNotebookByID(int id) {
+    public Notebook queryNotebookByID(long id) {
         SQLiteDatabase db = getReadableDatabase();
 
         String[] selectionArgs = {
-                Integer.toString(id)
+                Long.toString(id)
         };
 
         Cursor c = db.query(
@@ -162,11 +163,11 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         return n;
     }
 
-    public ArrayList<Page> queryPagesByNotebookID(int id) {
+    public ArrayList<Page> queryPagesByNotebookID(long id) {
         SQLiteDatabase db = getReadableDatabase();
 
         String[] selectionArgs = {
-                Integer.toString(id)
+                Long.toString(id)
         };
 
         Cursor c = db.query(
@@ -201,11 +202,11 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         return pages;
     }
 
-    public Cursor queryPagesByNotebookIDAsCursor(int id) {
+    public Cursor queryPagesByNotebookIDAsCursor(long id) {
         SQLiteDatabase db = getReadableDatabase();
 
         String[] selectionArgs = {
-                Integer.toString(id)
+                Long.toString(id)
         };
 
         Cursor c = db.query(
@@ -220,11 +221,11 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         return c;
     }
 
-    public Page queryPageByID(int id) {
+    public Page queryPageByID(long id) {
         SQLiteDatabase db = getReadableDatabase();
 
         String[] selectionArgs = {
-                Integer.toString(id)
+                Long.toString(id)
         };
 
         Cursor c = db.query(
@@ -254,11 +255,11 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         return p;
     }
 
-    public ArrayList<Comment> queryCommentsByPageID(int id) {
+    public ArrayList<Comment> queryCommentsByPageID(long id) {
         SQLiteDatabase db = getReadableDatabase();
 
         String[] selectionArgs = {
-                Integer.toString(id)
+                Long.toString(id)
         };
 
         Cursor c = db.query(
@@ -288,11 +289,11 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         return comments;
     }
 
-    public Comment queryCommentByID(int id) {
+    public Comment queryCommentByID(long id) {
         SQLiteDatabase db = getReadableDatabase();
 
         String[] selectionArgs = {
-                Integer.toString(id)
+                Long.toString(id)
         };
 
         Cursor c = db.query(
@@ -320,11 +321,11 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         return comment;
     }
 
-    public ArrayList<Image> queryImagesByPageID(int id) {
+    public ArrayList<Image> queryImagesByPageID(long id) {
         SQLiteDatabase db = getReadableDatabase();
 
         String[] selectionArgs = {
-                Integer.toString(id)
+                Long.toString(id)
         };
 
         Cursor c = db.query(
@@ -354,11 +355,11 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         return images;
     }
 
-    public Image queryImageByID(int id) {
+    public Image queryImageByID(long id) {
         SQLiteDatabase db = getReadableDatabase();
 
         String[] selectionArgs = {
-                Integer.toString(id)
+                Long.toString(id)
         };
 
         Cursor c = db.query(
@@ -389,28 +390,28 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
     /*********** UPDATE METHODS ***********/
 
-    public int updateNotebook(Notebook n) {
+    public long updateNotebook(Notebook n) {
         SQLiteDatabase db = getWritableDatabase();
 
         ContentValues cv = new ContentValues();
         cv.put(Notebook.COLUMN_TITLE, n.getTitle());
         cv.put(Notebook.COLUMN_TITLE_COLOR, n.getTitleColor());
         cv.put(Notebook.COLUMN_NOTEBOOK_COLOR, n.getNotebookColor());
-        cv.put(Notebook.COLUMN_NOTEBOOK_NUMBER, getNextNotebookNumber());
+        cv.put(Notebook.COLUMN_NOTEBOOK_NUMBER, n.getNotebookNumber());
         cv.put(Notebook.COLUMN_DATE_CREATED, getCurrentDate());
 
         return db.update(Notebook.TABLE_NAME, cv, Notebook.COLUMN_NOTEBOOK_ID + " = ? ",
-                new String[]{Integer.toString(n.getNotebookID())});
+                new String[]{Long.toString(n.getNotebookID())});
     }
 
-    public int updatePage(Page p) {
+    public long updatePage(Page p) {
         SQLiteDatabase db = getWritableDatabase();
 
         ContentValues cv = new ContentValues();
         cv.put(Page.COLUMN_NOTEBOOK_ID, p.getNotebookID());
         cv.put(Page.COLUMN_NAME, p.getName());
         cv.put(Page.COLUMN_TEXT, p.getText());
-        cv.put(Page.COLUMN_PAGE_NUMBER, getNextPageNumber(p.getNotebookID()));
+        cv.put(Page.COLUMN_PAGE_NUMBER, p.getPageNumber());
         cv.put(Page.COLUMN_DATE_CREATED, getCurrentDate());
 
         /*for (Comment c : p.getComments()) {
@@ -422,10 +423,10 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         }*/
 
         return db.update(Page.TABLE_NAME, cv, Page.COLUMN_PAGE_ID + " = ? ",
-                new String[]{Integer.toString(p.getPageID())});
+                new String[]{Long.toString(p.getPageID())});
     }
 
-    public int updateComment(Comment c) {
+    public long updateComment(Comment c) {
         SQLiteDatabase db = getWritableDatabase();
 
         ContentValues cv = new ContentValues();
@@ -436,7 +437,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                 new String[]{Integer.toString(c.getCommentID())});
     }
 
-    public int updateImage(Image i) {
+    public long updateImage(Image i) {
         SQLiteDatabase db = getWritableDatabase();
 
         ContentValues cv = new ContentValues();
@@ -449,32 +450,32 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
     /*********** DELETE METHODS ***********/
 
-    public int deleteNotebook(int id) {
+    public long deleteNotebook(long id) {
         SQLiteDatabase db = getWritableDatabase();
 
         return db.delete(Notebook.TABLE_NAME, Notebook.COLUMN_NOTEBOOK_ID + " = ? ",
-                new String[]{Integer.toString(id)});
+                new String[]{Long.toString(id)});
     }
 
-    public int deletePage(int id) {
+    public long deletePage(long id) {
         SQLiteDatabase db = getWritableDatabase();
 
         return db.delete(Page.TABLE_NAME, Page.COLUMN_PAGE_ID + " = ? ",
-                new String[]{Integer.toString(id)});
+                new String[]{Long.toString(id)});
     }
 
-    public int deleteComment(int id) {
+    public long deleteComment(long id) {
         SQLiteDatabase db = getWritableDatabase();
 
         return db.delete(Comment.TABLE_NAME, Comment.COLUMN_COMMENT_ID+ " = ? ",
-                new String[]{Integer.toString(id)});
+                new String[]{Long.toString(id)});
     }
 
-    public int deleteImage(int id) {
+    public long deleteImage(long id) {
         SQLiteDatabase db = getWritableDatabase();
 
         return db.delete(Comment.TABLE_NAME, Image.COLUMN_IMAGE_ID + " = ? ",
-                new String[]{Integer.toString(id)});
+                new String[]{Long.toString(id)});
     }
 
     /*********** INITIALIZE DATABASE METHODS ***********/
@@ -491,6 +492,9 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         db.execSQL(getCreatePageTableSQL());
         db.execSQL(getCreateCommentTableSQL());
         db.execSQL(getCreateImageTableSQL());
+
+        Log.i("TEST", "DB Created");
+
     }
 
     private String getCreateNotebookTableSQL() {
@@ -557,7 +561,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         return 0;
     }
 
-    private int getNextPageNumber(int notebookID) {
+    private int getNextPageNumber(long notebookID) {
 
         return 0;
     }

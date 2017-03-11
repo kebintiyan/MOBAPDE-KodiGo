@@ -19,6 +19,8 @@ import com.jrummyapps.android.colorpicker.ColorPanelView;
 import com.jrummyapps.android.colorpicker.ColorPickerView;
 
 import static android.app.Activity.RESULT_OK;
+import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_COLOR;
+import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.RESULT_COLOR;
 
 public class ColorpickerActivity extends AppCompatActivity implements ColorPickerView.OnColorChangedListener, View.OnClickListener {
 
@@ -67,8 +69,8 @@ public class ColorpickerActivity extends AppCompatActivity implements ColorPicke
             case R.id.okButton:
 
                 Intent result = new Intent();
-                result.putExtra(AddNotebookActivity.KEY_COLOR, colorPickerView.getColor());
-                setResult(RESULT_OK, result);
+                result.putExtra(KEY_COLOR, colorPickerView.getColor());
+                setResult(RESULT_COLOR, result);
 
                 finish();
                 break;
