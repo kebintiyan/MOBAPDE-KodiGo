@@ -18,6 +18,7 @@ public class Page{
     public static final String COLUMN_TEXT          = "text";
     public static final String COLUMN_PAGE_NUMBER   = "pageNumber";
     public static final String COLUMN_DATE_CREATED  = "dateCreated";
+    public static final String TRIGGER_ON_CREATE    = "create_page";
 
     private long pageID;
     private long notebookID;
