@@ -11,14 +11,14 @@
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/page_recyclerview">
+        android:id="@+id/page_recyclerview"
+        android:layout_gravity="center">
     </android.support.v7.widget.RecyclerView>
-
 
     <android.support.design.widget.FloatingActionButton
         android:src="@drawable/pencil"
         app:fabSize="normal"
-        android:id="@+id/addNotebookButton"
+        android:id="@+id/addPageButton"
         android:layout_gravity="bottom|right"
         android:layout_margin="16dp"
         android:layout_width="wrap_content"

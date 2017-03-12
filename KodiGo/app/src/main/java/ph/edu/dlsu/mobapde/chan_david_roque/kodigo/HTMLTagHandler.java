@@ -22,10 +22,10 @@ import static android.content.ContentValues.TAG;
 
 public class HTMLTagHandler implements Html.TagHandler {
 
-    DatabaseOpenHelper db;
+    DatabaseHelper db;
 
     public HTMLTagHandler(Context context) {
-        db = new DatabaseOpenHelper(context);
+        db = new DatabaseHelper(context);
     }
 
     @Override

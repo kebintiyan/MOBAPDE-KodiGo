@@ -6,10 +6,10 @@ package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 
 public class Image {
 
-    public static final String TABLE_NAME       = " image ";
-    public static final String COLUMN_IMAGE_ID  = " imageID ";
-    public static final String COLUMN_PAGE_ID   = " pageID ";
-    public static final String COLUMN_URL       = " url";
+    public static final String TABLE_NAME       = "image";
+    public static final String COLUMN_IMAGE_ID  = "_id";
+    public static final String COLUMN_PAGE_ID   = "pageID";
+    public static final String COLUMN_URL       = "url";
 
     private int imageID;
     private int pageID;

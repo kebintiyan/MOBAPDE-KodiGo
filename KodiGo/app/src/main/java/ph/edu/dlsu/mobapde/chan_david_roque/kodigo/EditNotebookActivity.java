@@ -16,60 +16,91 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_COLOR;
+import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_NOTEBOOK_ID;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.REQUEST_ADD_COLOR_NOTEBOOK;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.REQUEST_ADD_COLOR_TITLE;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.RESULT_COLOR;
+import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.RESULT_NOTEBOOK_DELETED;
+import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.RESULT_NOTEBOOK_EDITED;
 
-public class AddNotebookActivity extends AppCompatActivity {
+public class EditNotebookActivity extends AppCompatActivity {
 
     EditText notebookName;
-    Button submitButton;
-    Button cancelButton;
+    Button updateButton;
+    Button deleteButton;
     ImageView titleColor;
     ImageView notebookColor;
     RelativeLayout notebookIcon;
-    DatabaseHelper dbhelper;
+    Notebook notebook;
+    long notebookID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_notebook);
+        setContentView(R.layout.activity_edit_notebook);
+
+        final DatabaseHelper dbhelper;
+
         dbhelper = new DatabaseHelper(getApplicationContext());
+        notebookID = (long) getIntent().getExtras().get(KEY_NOTEBOOK_ID);
+        notebook = dbhelper.queryNotebookByID(notebookID);
+        getSupportActionBar().setTitle(notebook.getTitle());
 
         notebookName = (EditText) findViewById(R.id.notebookName);
-        submitButton = (Button) findViewById(R.id.submitButton);
-        cancelButton = (Button) findViewById(R.id.cancelButton);
+        updateButton = (Button) findViewById(R.id.updateButton);
+        deleteButton = (Button) findViewById(R.id.deleteButton);
         notebookColor = (ImageView) findViewById(R.id.notebookColor);
         titleColor = (ImageView) findViewById(R.id.titleColor);
         notebookIcon = (RelativeLayout) findViewById(R.id.notebookIcon);
 
+        notebookName.setText(notebook.getTitle());
+        notebookName.setTextColor(notebook.getTitleColor());
+        titleColor.setBackgroundColor(notebook.getTitleColor());
+        notebookIcon.setBackgroundColor(notebook.getNotebookColor());
+        notebookColor.setBackgroundColor(notebook.getNotebookColor());
 
-        submitButton.setOnClickListener(new View.OnClickListener() {
+        updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent result = new Intent();
-
-                Notebook notebook = new Notebook();
                 notebook.setTitle(notebookName.getText().toString());
                 ColorDrawable color = (ColorDrawable) titleColor.getBackground();
                 notebook.setTitleColor(color.getColor());
                 color = (ColorDrawable) notebookColor.getBackground();
                 notebook.setNotebookColor(color.getColor());
-                Log.i("AddNotebookActivity", "Notebook created");
-                dbhelper.insertNotebook(notebook);
-//                notebook.setNotebookID(notebookId);
-//                result.putExtra(KEY_NOTEBOOK_ID, notebookId);
-//                setResult(RESULT_NOTEBOOK_ADDED, result);
-//                Log.i("AddNotebookActivity", "Notebook created");
+
+                dbhelper.updateNotebook(notebook);
+//                result.putExtra(KEY_NOTEBOOK_ID, notebookID);
+                setResult(RESULT_NOTEBOOK_EDITED, result);
+                Log.i("EdiNotebookActivity", "Notebook Edited");
                 finish();
 
             }
         });
 
-        cancelButton.setOnClickListener(new View.OnClickListener() {
+        deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showOnCancelConfirmDialog();
+
+                MaterialDialog dialog = new MaterialDialog.Builder(v.getContext())
+                        .title("Delete Notebook")
+                        .content("Are you sure you want to delete?")
+                        .positiveText("Yes")
+                        .negativeText("No")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                Intent result = new Intent();
+
+                                dbhelper.deleteNotebook(notebookID);
+                                //result.putExtra(KEY_NOTEBOOK_POSITION, notebook.getNotebookNumber());
+                                setResult(RESULT_NOTEBOOK_DELETED, result);
+                                Log.i("DeleteNotebookActivity", "Notebook deleted");
+                                finish();
+                            }
+                        })
+                        .show();
+
             }
         });
 
@@ -86,7 +117,6 @@ public class AddNotebookActivity extends AppCompatActivity {
                 colorPicker(REQUEST_ADD_COLOR_TITLE);
             }
         });
-
 
     }
 
@@ -105,26 +135,5 @@ public class AddNotebookActivity extends AppCompatActivity {
             notebookColor.setBackgroundColor((Integer) data.getExtras().get(KEY_COLOR));
             notebookIcon.setBackgroundColor((Integer) data.getExtras().get(KEY_COLOR));
         }
-    }
-
-    @Override
-    public void onBackPressed()
-    {
-        showOnCancelConfirmDialog();
-    }
-
-    protected void showOnCancelConfirmDialog() {
-        new MaterialDialog.Builder(this)
-                .title("Add Notebook")
-                .content("Are you sure you want to cancel adding a notebook?")
-                .positiveText("Yes")
-                .negativeText("No")
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        finish();
-                    }
-                })
-                .show();
     }
 }

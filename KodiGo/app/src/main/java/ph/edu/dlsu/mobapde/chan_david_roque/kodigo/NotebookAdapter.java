@@ -2,6 +2,7 @@ package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -49,51 +50,22 @@ public class NotebookAdapter extends RecyclerView.Adapter<NotebookAdapter.Notebo
     }
 
     @Override
-    public void onBindViewHolder(NotebookHolder notebookHolder, int position) {
-        Notebook notebook = notebooks.get(position);
-        //notebookHolder.notebookIcon.setText(notebook.getTitle());
-        //notebookHolder.ivGenre.setImageResource(notebook.getResourceId());
+    public void onBindViewHolder(NotebookHolder notebookHolder, final int position) {
+        final Notebook notebook = notebooks.get(position);
+
         notebookHolder.notebookIcon.setBackgroundColor(notebook.getNotebookColor());
         notebookHolder.notebookName.setTextColor(notebook.getTitleColor());
         notebookHolder.notebookName.setText(notebook.getTitle());
-        notebookHolder.container.setTag(R.id.key_item_notebook_holder, notebookHolder);
-        notebookHolder.container.setTag(R.id.key_item_notebook, notebook);
-
-        notebookHolder.container.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-//                int position = ((NotebookHolder)v.getTag(R.id.key_item_holder)).getAdapterPosition();
-//                notebooks.remove(position);
-//                notifyItemRemoved(position);
-                return false;
-            }
-        });
+        notebookHolder.container.setTag(R.id.key_item_notebook_id, notebook.getNotebookID());
 
         notebookHolder.container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("NotebookAdapter", "hi");
-                Notebook n = (Notebook) v.getTag(R.id.key_item_notebook);
-//                v.getContext().startActivity(new Intent(v.getContext(),ViewNotebookActivity.class)
-//                        .putExtra(MainActivity.KEY_TITLE, s.getTitle())
-//                        .putExtra(MainActivity.KEY_LYRICS, s.getLyrics()));
-                v.getContext().startActivity(new Intent(v.getContext(), ViewNotebookActivity.class)
-                        .putExtra(MainActivity.KEY_NOTEBOOK, n));
+                long id = (long) v.getTag(R.id.key_item_notebook_id);
+                onNotebookClickListener.onNotebookClick(id);
             }
         });
 
-        notebookHolder.notebookIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("NotebookAdapter", "hi");
-                Notebook n = (Notebook) v.getTag(R.id.key_item_notebook);
-//                v.getContext().startActivity(new Intent(v.getContext(),ViewNotebookActivity.class)
-//                        .putExtra(MainActivity.KEY_TITLE, s.getTitle())
-//                        .putExtra(MainActivity.KEY_LYRICS, s.getLyrics()));
-                v.getContext().startActivity(new Intent(v.getContext(), ViewNotebookActivity.class)
-                        .putExtra(MainActivity.KEY_NOTEBOOK, n));
-            }
-        });
     }
 
     @Override
@@ -104,5 +76,31 @@ public class NotebookAdapter extends RecyclerView.Adapter<NotebookAdapter.Notebo
     public void addNotebook(Notebook notebook){
         notebooks.add(notebook);
         notifyItemInserted(getItemCount()-1);
+    }
+
+    public void editNotebook(Notebook notebook){
+        notebooks.set(notebook.getNotebookNumber(), notebook);
+        notifyItemChanged(notebook.getNotebookNumber());
+    }
+
+    public void deleteNotebook(int position){
+
+        notebooks.remove(position);
+        notifyItemRemoved(position);
+
+    }
+
+    private OnNotebookClickListener onNotebookClickListener;
+
+    public interface OnNotebookClickListener{
+        public void onNotebookClick(long notebookId);
+    }
+
+    public OnNotebookClickListener getOnNotebookClickListener() {
+        return onNotebookClickListener;
+    }
+
+    public void setOnNotebookClickListener(OnNotebookClickListener onNotebookClickListener) {
+        this.onNotebookClickListener = onNotebookClickListener;
     }
 }

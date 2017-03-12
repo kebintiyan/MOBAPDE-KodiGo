@@ -6,10 +6,10 @@ package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 
 public class Comment {
 
-    public static final String TABLE_NAME           = " comment ";
-    public static final String COLUMN_COMMENT_ID    = " commentID ";
-    public static final String COLUMN_PAGE_ID       = " pageID ";
-    public static final String COLUMN_COMMENT       = " comment ";
+    public static final String TABLE_NAME           = "comment";
+    public static final String COLUMN_COMMENT_ID    = "_id";
+    public static final String COLUMN_PAGE_ID       = "pageID";
+    public static final String COLUMN_COMMENT       = "comment";
 
     private int commentID;
     private int pageID;

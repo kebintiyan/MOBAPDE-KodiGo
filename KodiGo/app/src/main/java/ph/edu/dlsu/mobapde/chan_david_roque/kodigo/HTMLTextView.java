@@ -1,11 +1,8 @@
 package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 
 import android.content.Context;
-import android.graphics.Canvas;
 import android.os.Build;
 import android.text.Html;
-import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.Spanned;
 import android.util.AttributeSet;
 import android.widget.TextView;
@@ -14,7 +11,7 @@ import android.widget.TextView;
  * Created by kevin on 2/27/2017.
  */
 
-public class HTMLTextView extends TextView {
+public class HTMLTextView extends android.support.v7.widget.AppCompatTextView {
 
     public HTMLTextView(Context context) {
         super(context);
@@ -26,10 +23,6 @@ public class HTMLTextView extends TextView {
 
     public HTMLTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-    }
-
-    public HTMLTextView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
     }
 
     @Override
