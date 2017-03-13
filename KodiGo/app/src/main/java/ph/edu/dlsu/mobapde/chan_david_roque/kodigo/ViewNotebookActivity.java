@@ -35,6 +35,7 @@ public class ViewNotebookActivity extends AppCompatActivity {
     ArrayList<Page> pages;
     ArrayList<Long> pagesID;
     long notebookID;
+    ItemTouch it;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +66,7 @@ public class ViewNotebookActivity extends AppCompatActivity {
                         2, StaggeredGridLayoutManager.VERTICAL));
 
         // Create an `ItemTouchHelper` and attach it to the `RecyclerView`
-        ItemTouch it = new ItemTouch(pageCursorAdapter, pages);
+        it = new ItemTouch(pageCursorAdapter, pages);
         it.attachToRecyclerView(recyclerView);
 
         addPageButton = (FloatingActionButton) findViewById(R.id.addPageButton);
@@ -87,7 +88,7 @@ public class ViewNotebookActivity extends AppCompatActivity {
             }
         });
 
-        it.setOnNotebookClickListener(new ItemTouch.OnItemMoveListener() {
+        it.setOnItemMoveListener(new ItemTouch.OnItemMoveListener() {
             @Override
             public void onItemMoveClick(ArrayList arrayList) {
                 pages = (ArrayList<Page>) arrayList;
@@ -159,8 +160,11 @@ public class ViewNotebookActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        pages = dbHelper.queryPagesByNotebookID(notebookID);
         Cursor cursor = dbHelper.queryPagesByNotebookIDAsCursor(notebookID);
+        it.setArrayList(pages);
         pageCursorAdapter.changeCursor(cursor);
+
     }
 
     protected void refreshPosition() {

@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -52,7 +53,6 @@ public class AddNotebookActivity extends AppCompatActivity {
         notebookColor = (ImageView) findViewById(R.id.notebookColor);
         titleColor = (ImageView) findViewById(R.id.titleColor);
         notebookIcon = (RelativeLayout) findViewById(R.id.notebookIcon);
-
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -9,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import java.util.ArrayList;
 
@@ -23,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
     NotebookCursorAdapter notebookCursorAdapter;
     DatabaseOpenHelper dbHelper;
     ArrayList<Notebook> notebooks;
+    ItemTouch it;
+    View view;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
                         2, StaggeredGridLayoutManager.VERTICAL));
 
         // Create an `ItemTouchHelper` and attach it to the `RecyclerView`
-        ItemTouch it = new ItemTouch(notebookCursorAdapter, notebooks);
+        it = new ItemTouch(notebookCursorAdapter, notebooks);
         it.attachToRecyclerView(recyclerView);
 
         addNotebookButton = (FloatingActionButton) findViewById(R.id.addNotebookButton);
@@ -64,14 +68,32 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        it.setOnNotebookClickListener(new ItemTouch.OnItemMoveListener() {
+        notebookCursorAdapter.setOnNotebookLongClickListener(new NotebookCursorAdapter.OnNotebookLongClickListener() {
             @Override
-            public void onItemMoveClick(ArrayList arrayList) {
-                notebooks = (ArrayList<Notebook>) arrayList;
-                refreshPosition();
-
+            public void onNotebookLongClick(View v) {
+                view = v;
+                v.setAnimation(AnimationUtils.loadAnimation(v.getContext(), R.anim.shake));
             }
         });
+
+        notebookCursorAdapter.setOnNotebookReleaseListener(new NotebookCursorAdapter.OnNotebookReleaseListener() {
+            @Override
+            public void onNotebookRelease(View v) {
+                v.setAnimation(null);
+            }
+        });
+
+        it.setOnItemMoveListener(new ItemTouch.OnItemMoveListener() {
+            @Override
+            public void onItemMoveClick(ArrayList arrayList) {
+
+                notebooks = (ArrayList<Notebook>) arrayList;
+                refreshPosition();
+                view.setAnimation(null);
+                notebookCursorAdapter.isLongPressed= false;
+            }
+        });
+
     }
 
     @Override
@@ -104,7 +126,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        notebooks = dbHelper.queryAllNotebooks();
         Cursor cursor = dbHelper.queryAllNotebooksAsCursor();
+        it.setArrayList(notebooks);
         notebookCursorAdapter.changeCursor(cursor);
     }
 
