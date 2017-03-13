@@ -3,11 +3,13 @@ package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 import android.content.Intent;
 import android.database.Cursor;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -49,6 +51,7 @@ public class ViewNotebookActivity extends AppCompatActivity {
 
         actionBar = getSupportActionBar();
         actionBar.setTitle(notebook.getTitle());
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         // Step 1: create recycler view
         recyclerView = (RecyclerView) findViewById(R.id.page_recyclerview);
@@ -74,8 +77,14 @@ public class ViewNotebookActivity extends AppCompatActivity {
         addPageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(new Intent(getBaseContext(), AddPageActivity.class)
-                        .putExtra(KEY_NOTEBOOK_ID, notebookID), REQUEST_ADD_PAGE);
+                Page p = new Page();
+                p.setName("Untitled");
+                p.setNotebookID(notebookID);
+                dbHelper.insertPage(p);
+                Intent i = new Intent(getBaseContext(), ViewPageActivity.class);
+                pageCursorAdapter.getCursor().getColumnIndex(Page.COLUMN_PAGE_ID);
+                i.putExtra(KEY_PAGE_ID, pageId);
+                startActivityForResult(i,REQUEST_EDIT_PAGE);
             }
         });
 
@@ -110,10 +119,13 @@ public class ViewNotebookActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
+
             case R.id.action_edit:
                 startActivityForResult(new Intent(getBaseContext(), EditNotebookActivity.class)
                         .putExtra(KEY_NOTEBOOK_ID, notebookID)
                         , REQUEST_EDIT_OR_DELETE_NOTEBOOK);
+                return true;
+            case android.R.id.home:finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

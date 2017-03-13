@@ -16,7 +16,7 @@
     </android.support.v7.widget.RecyclerView>
 
     <android.support.design.widget.FloatingActionButton
-        android:src="@drawable/pencil"
+        android:src="@drawable/ic_edit_white_24px"
         app:fabSize="normal"
         android:id="@+id/addPageButton"
         android:layout_gravity="bottom|right"

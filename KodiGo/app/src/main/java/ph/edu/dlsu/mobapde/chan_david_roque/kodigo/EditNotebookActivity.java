@@ -3,9 +3,11 @@ package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Parcelable;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,6 +20,7 @@ import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_NOTEBOOK
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_NOTEBOOK_POSITION;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.REQUEST_ADD_COLOR_NOTEBOOK;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.REQUEST_ADD_COLOR_TITLE;
+import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.REQUEST_EDIT_OR_DELETE_NOTEBOOK;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.RESULT_COLOR;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.RESULT_NOTEBOOK_DELETED;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.RESULT_NOTEBOOK_EDITED;
@@ -31,6 +34,7 @@ public class EditNotebookActivity extends AppCompatActivity {
     ImageView notebookColor;
     RelativeLayout notebookIcon;
     Notebook notebook;
+    DatabaseOpenHelper dbhelper;
     long notebookID;
 
     @Override
@@ -38,7 +42,7 @@ public class EditNotebookActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_notebook);
 
-        final DatabaseOpenHelper dbhelper;
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         dbhelper = new DatabaseOpenHelper(getApplicationContext());
         notebookID = (long) getIntent().getExtras().get(KEY_NOTEBOOK_ID);
@@ -120,6 +124,17 @@ public class EditNotebookActivity extends AppCompatActivity {
         else if(REQUEST_ADD_COLOR_NOTEBOOK == requestCode && resultCode == RESULT_COLOR){
             notebookColor.setBackgroundColor((Integer) data.getExtras().get(KEY_COLOR));
             notebookIcon.setBackgroundColor((Integer) data.getExtras().get(KEY_COLOR));
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case android.R.id.home:finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }

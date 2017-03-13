@@ -2,6 +2,7 @@ package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,7 +41,7 @@ public class ViewPageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_page);
 
         dbhelper = new DatabaseOpenHelper(getBaseContext());
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         pageID = (long) getIntent().getExtras().get(KEY_PAGE_ID);
 
         page = dbhelper.queryPageByID(pageID);
@@ -86,6 +87,8 @@ public class ViewPageActivity extends AppCompatActivity {
                 page.setText(editPageText.getText().toString());
                 dbhelper.updatePage(page);
                 isEditable(false);
+                return true;
+            case android.R.id.home:finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

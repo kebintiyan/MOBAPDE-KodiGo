@@ -134,7 +134,7 @@
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:src="@drawable/pencil"
+        android:src="@drawable/ic_edit_white_24px"
         app:fabSize="normal"
         android:id="@+id/toggleEditButton"
         android:layout_gravity="bottom|right"

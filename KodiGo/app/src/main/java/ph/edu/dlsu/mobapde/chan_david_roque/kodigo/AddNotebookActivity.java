@@ -8,10 +8,12 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -28,6 +30,7 @@ import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_NOTEBOOK
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_NOTEBOOK_ID;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.REQUEST_ADD_COLOR_NOTEBOOK;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.REQUEST_ADD_COLOR_TITLE;
+import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.REQUEST_EDIT_OR_DELETE_NOTEBOOK;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.RESULT_COLOR;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.RESULT_NOTEBOOK_ADDED;
 
@@ -35,7 +38,6 @@ public class AddNotebookActivity extends AppCompatActivity {
 
     EditText notebookName;
     Button submitButton;
-    Button cancelButton;
     ImageView titleColor;
     ImageView notebookColor;
     RelativeLayout notebookIcon;
@@ -44,12 +46,12 @@ public class AddNotebookActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_add_notebook);
         dbhelper = new DatabaseOpenHelper(getApplicationContext());
 
         notebookName = (EditText) findViewById(R.id.notebookName);
         submitButton = (Button) findViewById(R.id.submitButton);
-        cancelButton = (Button) findViewById(R.id.cancelButton);
         notebookColor = (ImageView) findViewById(R.id.notebookColor);
         titleColor = (ImageView) findViewById(R.id.titleColor);
         notebookIcon = (RelativeLayout) findViewById(R.id.notebookIcon);
@@ -76,12 +78,6 @@ public class AddNotebookActivity extends AppCompatActivity {
             }
         });
 
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
 
         notebookColor.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -98,6 +94,17 @@ public class AddNotebookActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case android.R.id.home:finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     public void colorPicker(int requestCode) {
