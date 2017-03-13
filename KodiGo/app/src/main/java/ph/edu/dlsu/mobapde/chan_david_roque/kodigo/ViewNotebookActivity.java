@@ -33,7 +33,7 @@ public class ViewNotebookActivity extends AppCompatActivity {
 
     ActionBar actionBar;
     Notebook notebook;
-    DatabaseOpenHelper dbHelper;
+    DatabaseHelper dbHelper;
     ArrayList<Page> pages;
     ArrayList<Long> pagesID;
     long notebookID;
@@ -44,7 +44,7 @@ public class ViewNotebookActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_notebook);
 
-        dbHelper = new DatabaseOpenHelper(getBaseContext());
+        dbHelper = new DatabaseHelper(getBaseContext());
         notebookID = (long) getIntent().getExtras().get(KEY_NOTEBOOK_ID);
 
         notebook = dbHelper.queryNotebookByID(notebookID);
@@ -80,10 +80,10 @@ public class ViewNotebookActivity extends AppCompatActivity {
                 Page p = new Page();
                 p.setName("Untitled");
                 p.setNotebookID(notebookID);
-                dbHelper.insertPage(p);
+
                 Intent i = new Intent(getBaseContext(), ViewPageActivity.class);
                 pageCursorAdapter.getCursor().getColumnIndex(Page.COLUMN_PAGE_ID);
-                i.putExtra(KEY_PAGE_ID, pageId);
+                i.putExtra(KEY_PAGE_ID, dbHelper.insertPage(p));
                 startActivityForResult(i,REQUEST_EDIT_PAGE);
             }
         });

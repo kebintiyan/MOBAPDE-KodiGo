@@ -18,6 +18,7 @@ public class Notebook{
     public static final String COLUMN_NOTEBOOK_COLOR    = "notebookColor";
     public static final String COLUMN_NOTEBOOK_NUMBER   = "notebookNumber";
     public static final String COLUMN_DATE_CREATED      = "dateCreated";
+    public static final String TRIGGER_ON_CREATE        = "create_notebook";
 
     private long notebookID;
     private String title;

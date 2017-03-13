@@ -2,8 +2,7 @@ package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Parcelable;
-import android.support.v4.app.NavUtils;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,10 +13,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_COLOR;
-import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_NOTEBOOK;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_NOTEBOOK_ID;
-import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_NOTEBOOK_POSITION;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.REQUEST_ADD_COLOR_NOTEBOOK;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.REQUEST_ADD_COLOR_TITLE;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.REQUEST_EDIT_OR_DELETE_NOTEBOOK;
@@ -34,7 +34,7 @@ public class EditNotebookActivity extends AppCompatActivity {
     ImageView notebookColor;
     RelativeLayout notebookIcon;
     Notebook notebook;
-    DatabaseOpenHelper dbhelper;
+    DatabaseHelper dbHelper;
     long notebookID;
 
     @Override
@@ -44,9 +44,9 @@ public class EditNotebookActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        dbhelper = new DatabaseOpenHelper(getApplicationContext());
+        dbHelper = new DatabaseHelper(getApplicationContext());
         notebookID = (long) getIntent().getExtras().get(KEY_NOTEBOOK_ID);
-        notebook = dbhelper.queryNotebookByID(notebookID);
+        notebook = dbHelper.queryNotebookByID(notebookID);
         getSupportActionBar().setTitle(notebook.getTitle());
 
         notebookName = (EditText) findViewById(R.id.notebookName);
@@ -72,7 +72,7 @@ public class EditNotebookActivity extends AppCompatActivity {
                 color = (ColorDrawable) notebookColor.getBackground();
                 notebook.setNotebookColor(color.getColor());
 
-                dbhelper.updateNotebook(notebook);
+                dbHelper.updateNotebook(notebook);
 //                result.putExtra(KEY_NOTEBOOK_ID, notebookID);
                 setResult(RESULT_NOTEBOOK_EDITED, result);
                 Log.i("EdiNotebookActivity", "Notebook Edited");
@@ -84,13 +84,26 @@ public class EditNotebookActivity extends AppCompatActivity {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent result = new Intent();
 
-                dbhelper.deleteNotebook(notebookID);
-//                result.putExtra(KEY_NOTEBOOK_POSITION, notebook.getNotebookNumber());
-                setResult(RESULT_NOTEBOOK_DELETED, result);
-                Log.i("DeleteNotebookActivity", "Notebook deleted");
-                finish();
+                MaterialDialog dialog = new MaterialDialog.Builder(v.getContext())
+                        .title("Delete Notebook")
+                        .content("Are you sure you want to delete?")
+                        .positiveText("Yes")
+                        .negativeText("No")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                Intent result = new Intent();
+
+                                dbHelper.deleteNotebook(notebookID);
+                                //result.putExtra(KEY_NOTEBOOK_POSITION, notebook.getNotebookNumber());
+                                setResult(RESULT_NOTEBOOK_DELETED, result);
+                                Log.i("DeleteNotebookActivity", "Notebook deleted");
+                                finish();
+                            }
+                        })
+                        .show();
+
             }
         });
 
