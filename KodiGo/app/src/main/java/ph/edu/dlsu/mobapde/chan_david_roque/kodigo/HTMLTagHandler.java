@@ -9,6 +9,8 @@ import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.View;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+
 import org.xml.sax.XMLReader;
 
 import java.lang.reflect.Field;
@@ -22,31 +24,39 @@ import static android.content.ContentValues.TAG;
 
 public class HTMLTagHandler implements Html.TagHandler {
 
-    DatabaseHelper db;
+    private final static String TAG_COMMENT = "comment";
+    private final static String TAG_IMAGE = "image";
+
+    DatabaseHelper dbHelper;
 
     public HTMLTagHandler(Context context) {
-        db = new DatabaseHelper(context);
+        dbHelper = new DatabaseHelper(context);
     }
 
     @Override
     public void handleTag(boolean opening, String tag, Editable output, XMLReader xmlReader) {
-        HashMap<String, String> attributes = getAttributes(xmlReader);
 
-        if ("comment".equalsIgnoreCase(tag)) {
-            processComment(opening, output, attributes);
+        if(tag.indexOf(TAG_COMMENT) == 0) {
+            String id = tag.substring(TAG_COMMENT.length() + 1);
+            processComment(opening, output, id);
         }
-        else if ("image".equalsIgnoreCase(tag)) {
-            processImage(opening, output, attributes);
+        else if (tag.indexOf(TAG_IMAGE) == 0) {
+            String id = tag.substring(TAG_IMAGE.length() + 1);
+            processImage(opening, output, id);
         }
     }
 
-    private void processComment(boolean opening, Editable output, HashMap<String, String> attributes) {
+    private void processComment(boolean opening, Editable output, String commentID) {
         int len = output.length();
 
+        final String content = dbHelper.queryCommentByID(Long.parseLong(commentID)).getComment();
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(View widget) {
-
+                new MaterialDialog.Builder(widget.getContext())
+                        .title("Comment")
+                        .content(content)
+                        .show();
             }
 
             /*@Override
@@ -71,8 +81,8 @@ public class HTMLTagHandler implements Html.TagHandler {
         }
     }
 
-    private void processImage(boolean opening, Editable output, HashMap<String, String> attributes) {
-        Image image = db.queryImageByID(Integer.parseInt(attributes.get("id")));
+    private void processImage(boolean opening, Editable output, String imageID) {
+        Image image = dbHelper.queryImageByID(Integer.parseInt(imageID));
 
 
 
@@ -105,32 +115,5 @@ public class HTMLTagHandler implements Html.TagHandler {
             }
             return null;
         }
-    }
-
-    private HashMap<String, String> getAttributes(final XMLReader xmlReader) {
-        HashMap<String, String> attributes = new HashMap<>();
-
-        try {
-            Field elementField = xmlReader.getClass().getDeclaredField("theNewElement");
-            elementField.setAccessible(true);
-            Object element = elementField.get(xmlReader);
-            Field attsField = element.getClass().getDeclaredField("theAtts");
-            attsField.setAccessible(true);
-            Object atts = attsField.get(element);
-            Field dataField = atts.getClass().getDeclaredField("data");
-            dataField.setAccessible(true);
-            String[] data = (String[])dataField.get(atts);
-            Field lengthField = atts.getClass().getDeclaredField("length");
-            lengthField.setAccessible(true);
-            int len = (Integer)lengthField.get(atts);
-
-            for(int i = 0; i < len; i++)
-                attributes.put(data[i * 5 + 1], data[i * 5 + 4]);
-        }
-        catch (Exception e) {
-            Log.d(TAG, "Exception: " + e);
-        }
-
-        return attributes;
     }
 }

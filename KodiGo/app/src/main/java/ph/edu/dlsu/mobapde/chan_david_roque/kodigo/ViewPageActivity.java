@@ -18,7 +18,7 @@ public class ViewPageActivity extends AppCompatActivity {
     EditText editTitlePage;
     EditText editPageText;
     TextView viewTitlePage;
-    TextView viewPageText;
+    HTMLTextView viewPageText;
     FloatingActionButton toggleEditButton;
     LinearLayout toolbar;
     MenuInflater inflater;
@@ -45,7 +45,7 @@ public class ViewPageActivity extends AppCompatActivity {
         editPageText.setText(page.getText());
 
         viewTitlePage = (TextView) findViewById(R.id.viewTitlePage);
-        viewPageText = (TextView) findViewById(R.id.viewPageText);
+        viewPageText = (HTMLTextView) findViewById(R.id.viewPageText);
         viewTitlePage.setText(page.getName());
         viewPageText.setText(page.getText());
 

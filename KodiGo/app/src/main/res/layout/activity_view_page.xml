@@ -25,12 +25,13 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/viewTitlePage" />
 
-                <TextView
+                <ph.edu.dlsu.mobapde.chan_david_roque.kodigo.HTMLTextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:inputType="textMultiLine"
                     android:id="@+id/viewPageText"
                     android:layout_below="@id/viewTitlePage"
+                    android:clickable="true"
                     />
 
                 <EditText
