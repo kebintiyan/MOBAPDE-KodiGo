@@ -8,6 +8,22 @@
     android:layout_height="match_parent"
     tools:context="ph.edu.dlsu.mobapde.chan_david_roque.kodigo.MainActivity">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_no_pages"
+            android:gravity="center_horizontal"
+            android:text="No pages yet. Try writing one now!"
+            android:textSize="30sp"
+            android:textColor="@color/colorDivider"
+            android:layout_centerInParent="true"
+            />
+    </RelativeLayout>
+
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -144,10 +144,34 @@ public class EditNotebookActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
-            case android.R.id.home:finish();
+            case android.R.id.home:
+
+                showOnCancelConfirmDialog();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+
+        showOnCancelConfirmDialog();
+    }
+
+    public void showOnCancelConfirmDialog() {
+        MaterialDialog dialog = new MaterialDialog.Builder(this)
+                .title("Discard Changes")
+                .content("Are you sure you want to discard your changes?")
+                .positiveText("Yes")
+                .negativeText("No")
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        finish();
+                    }
+                })
+                .show();
     }
 }

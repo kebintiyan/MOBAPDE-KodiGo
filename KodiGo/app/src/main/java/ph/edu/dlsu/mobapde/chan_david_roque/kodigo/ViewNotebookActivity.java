@@ -14,6 +14,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
+
 import java.util.ArrayList;
 
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_NOTEBOOK_ID;
@@ -39,6 +41,8 @@ public class ViewNotebookActivity extends AppCompatActivity {
     long notebookID;
     ItemTouch it;
 
+    TextView tvNoPages;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +50,8 @@ public class ViewNotebookActivity extends AppCompatActivity {
 
         dbHelper = new DatabaseHelper(getBaseContext());
         notebookID = (long) getIntent().getExtras().get(KEY_NOTEBOOK_ID);
+
+        tvNoPages = (TextView) findViewById(R.id.tv_no_pages);
 
         notebook = dbHelper.queryNotebookByID(notebookID);
 
@@ -176,6 +182,13 @@ public class ViewNotebookActivity extends AppCompatActivity {
         Cursor cursor = dbHelper.queryPagesByNotebookIDAsCursor(notebookID);
         it.setArrayList(pages);
         pageCursorAdapter.changeCursor(cursor);
+
+        if (pages.size() == 0) {
+            tvNoPages.setVisibility(View.VISIBLE);
+        }
+        else {
+            tvNoPages.setVisibility(View.INVISIBLE);
+        }
 
     }
 
