@@ -3,6 +3,7 @@ package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -86,13 +87,13 @@ public class NotebookCursorAdapter extends CursorRecyclerViewAdapter<NotebookCur
 
     public class NotebookHolder extends RecyclerView.ViewHolder{
         //Button notebookIcon;
-        RelativeLayout notebookIcon;
+        CardView notebookIcon;
         TextView notebookName;
         View container;
         public NotebookHolder (View itemView) {
             super(itemView);
             //notebookIcon = (Button) itemView.findViewById(R.id.notebookIcon);
-            notebookIcon = (RelativeLayout) itemView.findViewById(R.id.notebookIcon);
+            notebookIcon = (CardView) itemView.findViewById(R.id.notebookIcon);
             notebookName = (TextView) itemView.findViewById(R.id.notebookName);
             container = itemView.findViewById(R.id.container);
 

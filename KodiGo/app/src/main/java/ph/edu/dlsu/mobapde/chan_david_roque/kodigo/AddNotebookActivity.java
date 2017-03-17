@@ -5,6 +5,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,7 +30,7 @@ public class AddNotebookActivity extends AppCompatActivity {
     Button submitButton;
     ImageView titleColor;
     ImageView notebookColor;
-    RelativeLayout notebookIcon;
+    CardView notebookIcon;
     DatabaseHelper dbhelper;
 
     @Override
@@ -43,7 +44,7 @@ public class AddNotebookActivity extends AppCompatActivity {
         submitButton = (Button) findViewById(R.id.submitButton);
         notebookColor = (ImageView) findViewById(R.id.notebookColor);
         titleColor = (ImageView) findViewById(R.id.titleColor);
-        notebookIcon = (RelativeLayout) findViewById(R.id.notebookIcon);
+        notebookIcon = (CardView) findViewById(R.id.notebookIcon);
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
