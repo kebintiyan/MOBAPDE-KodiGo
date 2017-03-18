@@ -146,7 +146,7 @@ public class ViewPageActivity extends AppCompatActivity {
             case 3:
                 return "Start your notes here...";
             default:
-                return "Let's get started...";
+                return "How about something creative...";
         }
     }
 }
