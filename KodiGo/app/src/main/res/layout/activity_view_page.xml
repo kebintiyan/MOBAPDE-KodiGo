@@ -23,7 +23,14 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/viewTitlePage" />
+                    android:id="@+id/viewTitlePage"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="20sp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:gravity="center"
+                    />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -31,6 +38,11 @@
                     android:inputType="textMultiLine"
                     android:id="@+id/viewPageText"
                     android:layout_below="@id/viewTitlePage"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="16sp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
                     />
 
                 <EditText
@@ -38,7 +50,12 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/editTitlePage"
                     android:visibility="invisible"
-
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="20sp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:gravity="center"
                     />
 
                 <EditText
@@ -50,6 +67,11 @@
                     android:layout_below="@id/editTitlePage"
                     android:backgroundTint="@android:color/transparent"
                     android:visibility="invisible"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="16sp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
                     />
                 <HorizontalScrollView
                     android:id="@+id/custom_toolbar"
