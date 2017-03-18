@@ -7,9 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -21,7 +21,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_COLOR;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.REQUEST_ADD_COLOR_NOTEBOOK;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.REQUEST_ADD_COLOR_TITLE;
-import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.REQUEST_EDIT_OR_DELETE_NOTEBOOK;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.RESULT_COLOR;
 
 public class AddNotebookActivity extends AppCompatActivity {
@@ -46,27 +45,6 @@ public class AddNotebookActivity extends AppCompatActivity {
         titleColor = (ImageView) findViewById(R.id.titleColor);
         notebookIcon = (CardView) findViewById(R.id.notebookIcon);
 
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent result = new Intent();
-
-                Notebook notebook = new Notebook();
-                notebook.setTitle(notebookName.getText().toString());
-                ColorDrawable color = (ColorDrawable) titleColor.getBackground();
-                notebook.setTitleColor(color.getColor());
-                color = (ColorDrawable) notebookColor.getBackground();
-                notebook.setNotebookColor(color.getColor());
-                Log.i("AddNotebookActivity", "Notebook created");
-                dbhelper.insertNotebook(notebook);
-//                notebook.setNotebookID(notebookId);
-//                result.putExtra(KEY_NOTEBOOK_ID, notebookId);
-//                setResult(RESULT_NOTEBOOK_ADDED, result);
-//                Log.i("AddNotebookActivity", "Notebook created");
-                finish();
-
-            }
-        });
 
 
         notebookColor.setOnClickListener(new View.OnClickListener(){
@@ -92,6 +70,17 @@ public class AddNotebookActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home: showOnCancelConfirmDialog();
                 return true;
+            case R.id.action_submit:
+                Notebook notebook = new Notebook();
+                notebook.setTitle(notebookName.getText().toString());
+                ColorDrawable color = (ColorDrawable) titleColor.getBackground();
+                notebook.setTitleColor(color.getColor());
+                color = (ColorDrawable) notebookColor.getBackground();
+                notebook.setNotebookColor(color.getColor());
+                Log.i("AddNotebookActivity", "Notebook created");
+                dbhelper.insertNotebook(notebook);
+                finish();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -100,6 +89,7 @@ public class AddNotebookActivity extends AppCompatActivity {
     public void colorPicker(int requestCode) {
         startActivityForResult(new Intent(getBaseContext(), ColorpickerActivity.class), requestCode);
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -133,5 +123,11 @@ public class AddNotebookActivity extends AppCompatActivity {
                     }
                 })
                 .show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.check_menu, menu);
+        return true;
     }
 }

@@ -85,30 +85,4 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/colorPickerPanel"
-        android:layout_centerHorizontal="true">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Update"
-            android:background="@color/colorPrimaryDark"
-            android:textColor="@color/colorIcons"
-            android:id="@+id/updateButton"
-            android:layout_margin="20dp"
-            android:layout_toRightOf="@+id/deleteButton"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Delete"
-            android:id="@id/deleteButton"
-            android:layout_margin="20dp"
-            />
-
-    </RelativeLayout>
-
 </RelativeLayout>
