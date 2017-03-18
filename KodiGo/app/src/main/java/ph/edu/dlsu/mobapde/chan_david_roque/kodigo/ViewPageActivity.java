@@ -13,6 +13,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.Random;
+
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_EDITABLE;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_PAGE_ID;
 
@@ -52,6 +54,7 @@ public class ViewPageActivity extends AppCompatActivity {
         editPageText = (EditText) findViewById(R.id.editPageText);
         editTitlePage.setText(page.getName());
         editPageText.setText(page.getText());
+        editPageText.setHint(getRandomHint());
 
         viewTitlePage = (TextView) findViewById(R.id.viewTitlePage);
         viewPageText = (TextView) findViewById(R.id.viewPageText);
@@ -128,5 +131,22 @@ public class ViewPageActivity extends AppCompatActivity {
         editPageText.setVisibility(editText);
         toolbar.setVisibility(editText);
 
+    }
+
+    public String getRandomHint() {
+        Random rand = new Random();
+
+        switch(rand.nextInt(4)) {
+            case 0:
+                return "What's on your mind?";
+            case 1:
+                return "Start being productive here...";
+            case 2:
+                return "Start writing here...";
+            case 3:
+                return "Start your notes here...";
+            default:
+                return "Let's get started...";
+        }
     }
 }
