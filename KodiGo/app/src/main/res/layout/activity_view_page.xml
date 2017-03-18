@@ -65,7 +65,7 @@
                 <LinearLayout android:id="@+id/my_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/colorDivider"
+                    android:background="@color/colorToolbar"
                     android:visibility="invisible"
                     >
                     <ImageView
@@ -89,6 +89,12 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="match_parent"
+                        android:src="@drawable/ic_format_color_text_white_24px"
+                        android:layout_margin="2dp"
+                        android:scaleType="fitCenter"/>
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="match_parent"
                         android:src="@drawable/ic_photo_camera_white_24px"
                         android:layout_margin="2dp"
                         android:scaleType="fitCenter"/>
@@ -101,33 +107,33 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="match_parent"
-                        android:src="@drawable/ic_format_color_text_white_24px"
+                        android:src="@drawable/ic_comment_white_24px"
                         android:layout_margin="2dp"
                         android:scaleType="fitCenter"/>
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="match_parent"
-                        android:layout_margin="2dp"
-                        android:src="@drawable/ic_format_align_left_white_24px"
-                        android:scaleType="fitCenter"/>
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/ic_format_align_justify_white_24px"
-                        android:layout_margin="2dp"
-                        android:scaleType="fitCenter"/>
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="match_parent"
-                        android:layout_margin="2dp"
-                        android:src="@drawable/ic_format_list_bulleted_white_24px"
-                        android:scaleType="fitCenter"/>
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/ic_format_list_numbered_white_24px"
-                        android:layout_margin="2dp"
-                        android:scaleType="fitCenter"/>
+                    <!--<ImageView-->
+                        <!--android:layout_width="40dp"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:layout_margin="2dp"-->
+                        <!--android:src="@drawable/ic_format_align_left_white_24px"-->
+                        <!--android:scaleType="fitCenter"/>-->
+                    <!--<ImageView-->
+                        <!--android:layout_width="40dp"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:src="@drawable/ic_format_align_justify_white_24px"-->
+                        <!--android:layout_margin="2dp"-->
+                        <!--android:scaleType="fitCenter"/>-->
+                    <!--<ImageView-->
+                        <!--android:layout_width="40dp"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:layout_margin="2dp"-->
+                        <!--android:src="@drawable/ic_format_list_bulleted_white_24px"-->
+                        <!--android:scaleType="fitCenter"/>-->
+                    <!--<ImageView-->
+                        <!--android:layout_width="40dp"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:src="@drawable/ic_format_list_numbered_white_24px"-->
+                        <!--android:layout_margin="2dp"-->
+                        <!--android:scaleType="fitCenter"/>-->
 
                 </LinearLayout>
             </HorizontalScrollView>

@@ -2,6 +2,7 @@ package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
@@ -14,8 +15,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+
 import java.util.ArrayList;
 
+import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_EDITABLE;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_NOTEBOOK_ID;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_PAGE_ID;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.REQUEST_ADD_PAGE;
@@ -79,11 +85,14 @@ public class ViewNotebookActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Page p = new Page();
                 p.setName("Untitled");
+                p.setText("");
                 p.setNotebookID(notebookID);
 
                 Intent i = new Intent(getBaseContext(), ViewPageActivity.class);
-                pageCursorAdapter.getCursor().getColumnIndex(Page.COLUMN_PAGE_ID);
-                i.putExtra(KEY_PAGE_ID, dbHelper.insertPage(p));
+                long pageId = dbHelper.insertPage(p);
+                Log.i("PAGEID: ", pageId+"");
+                i.putExtra(KEY_PAGE_ID, pageId);
+                i.putExtra(KEY_EDITABLE, true);
                 startActivityForResult(i,REQUEST_EDIT_PAGE);
             }
         });
@@ -93,6 +102,7 @@ public class ViewNotebookActivity extends AppCompatActivity {
             public void onPageClick(long pageId) {
                 Intent i = new Intent(getBaseContext(), ViewPageActivity.class);
                 i.putExtra(KEY_PAGE_ID, pageId);
+                i.putExtra(KEY_EDITABLE, false);
                 startActivityForResult(i,REQUEST_EDIT_PAGE);
             }
         });
@@ -125,6 +135,25 @@ public class ViewNotebookActivity extends AppCompatActivity {
                         .putExtra(KEY_NOTEBOOK_ID, notebookID)
                         , REQUEST_EDIT_OR_DELETE_NOTEBOOK);
                 return true;
+            case R.id.action_delete:
+                MaterialDialog dialog = new MaterialDialog.Builder(this)
+                        .title("Delete Notebook")
+                        .content("Are you sure you want to delete?")
+                        .positiveText("Yes")
+                        .negativeText("No")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                Intent result = new Intent();
+
+                                dbHelper.deleteNotebook(notebookID);
+                                //result.putExtra(KEY_NOTEBOOK_POSITION, notebook.getNotebookNumber());
+                                setResult(RESULT_NOTEBOOK_DELETED, result);
+                                Log.i("DeleteNotebookActivity", "Notebook deleted");
+                                finish();
+                            }
+                        })
+                        .show(); return true;
             case android.R.id.home:finish();
                 return true;
             default:

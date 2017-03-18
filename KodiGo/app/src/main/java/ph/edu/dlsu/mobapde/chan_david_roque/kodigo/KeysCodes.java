@@ -27,6 +27,7 @@ public class KeysCodes {
     final static String KEY_COLOR = "color";
     final static String KEY_PAGE = "page";
     final static String KEY_PAGE_ID = "pageId";
+    final static String KEY_EDITABLE = "editable";
 
     final static String KEY_LOAD_NOTEBOOKS = "loadnotebooks";
     final static String KEY_LOAD_PAGES = "loadpages";

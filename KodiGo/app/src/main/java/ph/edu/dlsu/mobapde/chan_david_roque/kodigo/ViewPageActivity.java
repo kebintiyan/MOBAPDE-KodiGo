@@ -4,6 +4,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -12,6 +13,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_EDITABLE;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_PAGE_ID;
 
 public class ViewPageActivity extends AppCompatActivity {
@@ -20,6 +22,7 @@ public class ViewPageActivity extends AppCompatActivity {
     EditText editPageText;
     TextView viewTitlePage;
     TextView viewPageText;
+    boolean isEditable;
     FloatingActionButton toggleEditButton;
     LinearLayout toolbar;
     MenuInflater inflater;
@@ -37,7 +40,11 @@ public class ViewPageActivity extends AppCompatActivity {
         dbHelper = new DatabaseHelper(getBaseContext());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        isEditable = (boolean) getIntent().getExtras().get(KEY_EDITABLE);
         pageID = (long) getIntent().getExtras().get(KEY_PAGE_ID);
+
+        Log.i("AAA", isEditable+"");
+
 
         page = dbHelper.queryPageByID(pageID);
 
@@ -58,10 +65,12 @@ public class ViewPageActivity extends AppCompatActivity {
         toggleEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isEditable(true);
+                toggleEdit(true);
             }
         });
+
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -70,6 +79,7 @@ public class ViewPageActivity extends AppCompatActivity {
         inflater.inflate(R.menu.page_menu_bar, menu);
         saveItem = menu.findItem(R.id.action_save);
         saveItem.setVisible(false);
+        toggleEdit(isEditable);
         return true;
     }
 
@@ -81,19 +91,22 @@ public class ViewPageActivity extends AppCompatActivity {
                 page.setName(editTitlePage.getText().toString());
                 page.setText(editPageText.getText().toString());
                 dbHelper.updatePage(page);
-                isEditable(false);
+                toggleEdit(false);
                 return true;
-            case android.R.id.home:finish();
+            case android.R.id.home: if(isEditable)
+                                        toggleEdit(false);
+                                    else
+                                        finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    public void isEditable(boolean isEditable){
+    public void toggleEdit(boolean isEditable){
 
         int textView, editText;
-
+        this.isEditable = isEditable;
         if(isEditable){
             textView = View.INVISIBLE;
             editText = View.VISIBLE;
