@@ -1,8 +1,10 @@
 package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
@@ -116,6 +118,16 @@ public class ViewNotebookActivity extends AppCompatActivity {
             public void onItemMoveClick(ArrayList arrayList) {
                 pages = (ArrayList<Page>) arrayList;
                 refreshPosition();
+
+            }
+        });
+
+        it.setOnItemLongClickListener(new ItemTouch.OnItemLongClickListener() {
+            @Override
+            public void onItemLongClick(CursorRecyclerViewAdapter adapter) {
+
+                Vibrator v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
+                v.vibrate(500);
 
             }
         });

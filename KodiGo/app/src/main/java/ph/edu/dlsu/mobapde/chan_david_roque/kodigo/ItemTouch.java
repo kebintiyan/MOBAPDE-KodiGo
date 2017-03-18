@@ -30,6 +30,14 @@ public class ItemTouch{
         return new ItemTouchHelper.Callback() {
 
 
+            @Override
+            public boolean isLongPressDragEnabled() {
+
+                onItemLongClickListener.onItemLongClick(adapter);
+
+                return super.isLongPressDragEnabled();
+            }
+
             //and in your imlpementaion of
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
                 // get the viewHolder's and target's positions in your adapter data, swap them

@@ -1,7 +1,9 @@
 package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Vibrator;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -96,6 +98,15 @@ public class MainActivity extends AppCompatActivity {
                 refreshPosition();
                 view.setAnimation(null);
                 notebookCursorAdapter.isLongPressed= false;
+            }
+        });
+
+        it.setOnItemLongClickListener(new ItemTouch.OnItemLongClickListener() {
+            @Override
+            public void onItemLongClick(CursorRecyclerViewAdapter adapter) {
+
+                Vibrator v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
+                v.vibrate(500);
             }
         });
 
