@@ -122,9 +122,13 @@ public class ViewPageActivity extends AppCompatActivity {
             editText = View.VISIBLE;
             saveItem.setVisible(true);
 
-            InputMethodManager imm = (InputMethodManager)
+            editTitlePage.requestFocus();
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+
+            /*InputMethodManager imm = (InputMethodManager)
                     getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.showSoftInput(editTitlePage, InputMethodManager.SHOW_IMPLICIT);
+            imm.showSoftInput(editTitlePage, InputMethodManager.SHOW_IMPLICIT);*/
         }
         else {
             textView = View.VISIBLE;
