@@ -111,11 +111,8 @@ public class ViewPageActivity extends AppCompatActivity {
                 toggleEdit(false);
                 return true;
             case R.id.action_delete:
-<<<<<<< HEAD
                 clearFocus();
-                dbHelper.deletePage(pageID);
-                finish();
-=======
+
                 new MaterialDialog.Builder(this)
                         .title("Confirm Delete")
                         .content("Are you sure you want to delete this page?")
@@ -129,7 +126,6 @@ public class ViewPageActivity extends AppCompatActivity {
                             }
                         })
                         .show();
->>>>>>> 7187ba729c8f7a381ff6f7909575ac9e801643e7
                 return true;
             case android.R.id.home:
                 clearFocus();
