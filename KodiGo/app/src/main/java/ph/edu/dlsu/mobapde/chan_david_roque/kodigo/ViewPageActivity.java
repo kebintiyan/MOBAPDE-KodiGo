@@ -1,5 +1,7 @@
 package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 
+import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -9,9 +11,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.util.Random;
 
@@ -103,10 +109,12 @@ public class ViewPageActivity extends AppCompatActivity {
                 dbHelper.deletePage(pageID);
                 finish();
                 return true;
-            case android.R.id.home: if(isEditable)
-                                        toggleEdit(false);
-                                    else
-                                        finish();
+            case android.R.id.home:
+                if(isEditable) {
+                    showOnCancelConfirmDialog();
+                }
+                else
+                    finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -122,6 +130,10 @@ public class ViewPageActivity extends AppCompatActivity {
             editText = View.VISIBLE;
             saveItem.setVisible(true);
             deletePage.setVisible(false);
+
+            editTitlePage.requestFocus();
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
         }else {
             textView = View.VISIBLE;
             editText = View.INVISIBLE;
@@ -140,6 +152,31 @@ public class ViewPageActivity extends AppCompatActivity {
         editPageText.setVisibility(editText);
         toolbar.setVisibility(editText);
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isEditable) {
+            showOnCancelConfirmDialog();
+        }
+        else {
+            super.onBackPressed();
+        }
+    }
+
+    public void showOnCancelConfirmDialog() {
+        MaterialDialog dialog = new MaterialDialog.Builder(this)
+                .title("Discard Changes")
+                .content("Are you sure you want to discard your changes?")
+                .positiveText("Yes")
+                .negativeText("No")
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        toggleEdit(false);
+                    }
+                })
+                .show();
     }
 
     public String getRandomHint() {
