@@ -94,10 +94,11 @@ public class ViewNotebookActivity extends AppCompatActivity {
                 p.setText("");
                 p.setNotebookID(notebookID);
 
-                Intent i = new Intent(getBaseContext(), ViewPageActivity.class);
+                Intent i = new Intent(getBaseContext(), ViewPageSlideActivity.class);
                 long pageId = dbHelper.insertPage(p);
                 Log.i("PAGEID: ", pageId+"");
                 i.putExtra(KEY_PAGE_ID, pageId);
+                i.putExtra(KEY_NOTEBOOK_ID, notebookID);
                 i.putExtra(KEY_EDITABLE, true);
                 startActivityForResult(i,REQUEST_EDIT_PAGE);
             }
@@ -106,8 +107,9 @@ public class ViewNotebookActivity extends AppCompatActivity {
         pageCursorAdapter.setOnPageClickListener(new PageCursorAdapter.OnPageClickListener() {
             @Override
             public void onPageClick(long pageId) {
-                Intent i = new Intent(getBaseContext(), ViewPageActivity.class);
+                Intent i = new Intent(getBaseContext(), ViewPageSlideActivity.class);
                 i.putExtra(KEY_PAGE_ID, pageId);
+                i.putExtra(KEY_NOTEBOOK_ID, notebookID);
                 i.putExtra(KEY_EDITABLE, false);
                 startActivityForResult(i,REQUEST_EDIT_PAGE);
             }
