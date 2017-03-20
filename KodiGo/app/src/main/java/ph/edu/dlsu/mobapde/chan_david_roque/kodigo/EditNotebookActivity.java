@@ -46,7 +46,7 @@ public class EditNotebookActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Edit Notebook");
-        
+
         dbHelper = new DatabaseHelper(getApplicationContext());
         notebookID = (long) getIntent().getExtras().get(KEY_NOTEBOOK_ID);
         notebook = dbHelper.queryNotebookByID(notebookID);

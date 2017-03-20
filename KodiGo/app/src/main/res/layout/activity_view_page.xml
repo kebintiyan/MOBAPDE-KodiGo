@@ -11,159 +11,157 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <RelativeLayout
+        <FrameLayout android:id="@+id/my_content"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
-            <TextView
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/viewTitlePage"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="20sp"
-                android:layout_marginTop="15dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:gravity="center"
-                />
+                android:layout_height="match_parent">
 
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/viewTitlePage">
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:inputType="textMultiLine"
-                    android:id="@+id/viewPageText"
-                    android:layout_below="@id/viewTitlePage"
-                    android:textColor="@color/colorPrimaryText"
-                    android:textSize="16sp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/viewTitlePage"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="20sp"
                     android:layout_marginTop="15dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
+                    android:gravity="center"
                     />
-            </ScrollView>
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/editTitlePage"
-                android:visibility="invisible"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="20sp"
-                android:layout_marginTop="15dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:gravity="center"
-                android:selectAllOnFocus="true"
-                />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="start"
-                android:inputType="textMultiLine"
-                android:id="@+id/editPageText"
-                android:layout_below="@id/editTitlePage"
-                android:backgroundTint="@android:color/transparent"
-                android:visibility="invisible"
-                android:textColor="@color/colorPrimaryText"
-                android:textSize="16sp"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                />
-            <HorizontalScrollView
-                android:id="@+id/custom_toolbar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true" />
-        </RelativeLayout>
-
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fillViewport="true"
-                android:visibility="invisible"
-                android:id="@+id/my_toolbar">
-                <LinearLayout
+                <ScrollView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/colorToolbar"
+                    android:layout_below="@id/viewTitlePage"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp">
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/viewPageText"
+                        android:textColor="@color/colorPrimaryText"
+                        android:textSize="16sp"
+                        />
+                </ScrollView>
 
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/editTitlePage"
+                    android:visibility="gone"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="20sp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
                     android:gravity="center"
-                    >
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="match_parent"
-                        android:layout_margin="4dp"
-                        android:src="@drawable/ic_format_bold_white_24px"
-                        android:scaleType="fitCenter"/>
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/ic_format_italic_white_24px"
-                        android:layout_margin="4dp"
-                        android:scaleType="fitCenter"/>
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="match_parent"
-                        android:layout_margin="4dp"
-                        android:src="@drawable/ic_format_underlined_white_24px"
-                        android:scaleType="fitCenter"/>
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/ic_format_color_text_white_24px"
-                        android:layout_margin="4dp"
-                        android:scaleType="fitCenter"/>
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/ic_photo_camera_white_24px"
-                        android:layout_margin="2dp"
-                        android:scaleType="fitCenter"/>
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="match_parent"
-                        android:layout_margin="4dp"
-                        android:src="@drawable/ic_photo_library_white_24px"
-                        android:scaleType="fitCenter"/>
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/ic_comment_white_24px"
-                        android:layout_margin="4dp"
-                        android:scaleType="fitCenter"/>
-                    <!--<ImageView-->
-                        <!--android:layout_width="40dp"-->
-                        <!--android:layout_height="match_parent"-->
-                        <!--android:layout_margin="2dp"-->
-                        <!--android:src="@drawable/ic_format_align_left_white_24px"-->
-                        <!--android:scaleType="fitCenter"/>-->
-                    <!--<ImageView-->
-                        <!--android:layout_width="40dp"-->
-                        <!--android:layout_height="match_parent"-->
-                        <!--android:src="@drawable/ic_format_align_justify_white_24px"-->
-                        <!--android:layout_margin="2dp"-->
-                        <!--android:scaleType="fitCenter"/>-->
-                    <!--<ImageView-->
-                        <!--android:layout_width="40dp"-->
-                        <!--android:layout_height="match_parent"-->
-                        <!--android:layout_margin="2dp"-->
-                        <!--android:src="@drawable/ic_format_list_bulleted_white_24px"-->
-                        <!--android:scaleType="fitCenter"/>-->
-                    <!--<ImageView-->
-                        <!--android:layout_width="40dp"-->
-                        <!--android:layout_height="match_parent"-->
-                        <!--android:src="@drawable/ic_format_list_numbered_white_24px"-->
-                        <!--android:layout_margin="2dp"-->
-                        <!--android:scaleType="fitCenter"/>-->
+                    android:selectAllOnFocus="true"
+                    />
 
-                </LinearLayout>
-            </HorizontalScrollView>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="start"
+                    android:inputType="textMultiLine"
+                    android:id="@+id/editPageText"
+                    android:layout_below="@id/editTitlePage"
+                    android:backgroundTint="@android:color/transparent"
+                    android:visibility="gone"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="16sp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    />
+            </RelativeLayout>
+
+        </FrameLayout>
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
+            android:visibility="gone"
+            android:id="@+id/my_toolbar">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorToolbar"
+
+                android:gravity="center"
+                >
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="4dp"
+                    android:src="@drawable/ic_format_bold_white_24px"
+                    android:scaleType="fitCenter"/>
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_format_italic_white_24px"
+                    android:layout_margin="4dp"
+                    android:scaleType="fitCenter"/>
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="4dp"
+                    android:src="@drawable/ic_format_underlined_white_24px"
+                    android:scaleType="fitCenter"/>
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_format_color_text_white_24px"
+                    android:layout_margin="4dp"
+                    android:scaleType="fitCenter"/>
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_photo_camera_white_24px"
+                    android:layout_margin="2dp"
+                    android:scaleType="fitCenter"/>
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="4dp"
+                    android:src="@drawable/ic_photo_library_white_24px"
+                    android:scaleType="fitCenter"/>
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_comment_white_24px"
+                    android:layout_margin="4dp"
+                    android:scaleType="fitCenter"/>
+                <!--<ImageView-->
+                    <!--android:layout_width="40dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_margin="2dp"-->
+                    <!--android:src="@drawable/ic_format_align_left_white_24px"-->
+                    <!--android:scaleType="fitCenter"/>-->
+                <!--<ImageView-->
+                    <!--android:layout_width="40dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:src="@drawable/ic_format_align_justify_white_24px"-->
+                    <!--android:layout_margin="2dp"-->
+                    <!--android:scaleType="fitCenter"/>-->
+                <!--<ImageView-->
+                    <!--android:layout_width="40dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_margin="2dp"-->
+                    <!--android:src="@drawable/ic_format_list_bulleted_white_24px"-->
+                    <!--android:scaleType="fitCenter"/>-->
+                <!--<ImageView-->
+                    <!--android:layout_width="40dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:src="@drawable/ic_format_list_numbered_white_24px"-->
+                    <!--android:layout_margin="2dp"-->
+                    <!--android:scaleType="fitCenter"/>-->
+
+            </LinearLayout>
+        </HorizontalScrollView>
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton

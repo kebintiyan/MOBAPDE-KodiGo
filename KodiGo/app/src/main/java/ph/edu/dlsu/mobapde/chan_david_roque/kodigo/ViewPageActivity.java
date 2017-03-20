@@ -148,17 +148,16 @@ public class ViewPageActivity extends AppCompatActivity {
 
         clearFocus();
         if(isEditable){
-            textView = View.INVISIBLE;
+            textView = View.GONE;
             editText = View.VISIBLE;
             saveItem.setVisible(true);
             deletePage.setVisible(false);
 
-            editTitlePage.requestFocus();
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+
+
         }else {
             textView = View.VISIBLE;
-            editText = View.INVISIBLE;
+            editText = View.GONE;
             viewTitlePage.setText(page.getName());
             viewPageText.setText(page.getText());
             saveItem.setVisible(false);
@@ -173,6 +172,14 @@ public class ViewPageActivity extends AppCompatActivity {
         editTitlePage.setVisibility(editText);
         editPageText.setVisibility(editText);
         toolbar.setVisibility(editText);
+
+        if (isEditable) {
+            editPageText.requestFocus();
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+
+            editPageText.setSelection(editPageText.getText().toString().length());
+        }
 
     }
 
@@ -198,7 +205,7 @@ public class ViewPageActivity extends AppCompatActivity {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        toggleEdit(false);
+                        finish();
                     }
                 })
                 .show();
