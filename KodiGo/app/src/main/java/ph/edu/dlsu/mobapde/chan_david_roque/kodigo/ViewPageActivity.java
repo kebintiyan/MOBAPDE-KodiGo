@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -35,7 +36,7 @@ public class ViewPageActivity extends AppCompatActivity {
     TextView viewPageText;
     boolean isEditable;
     FloatingActionButton toggleEditButton;
-    LinearLayout toolbar;
+    HorizontalScrollView toolbar;
     MenuInflater inflater;
     Menu menu;
     MenuItem saveItem;
@@ -74,7 +75,7 @@ public class ViewPageActivity extends AppCompatActivity {
         viewPageText.setText(page.getText());
 
 
-        toolbar = (LinearLayout) findViewById(R.id.my_toolbar);
+        toolbar = (HorizontalScrollView) findViewById(R.id.my_toolbar);
 
         toggleEditButton = (FloatingActionButton) findViewById(R.id.toggleEditButton);
 

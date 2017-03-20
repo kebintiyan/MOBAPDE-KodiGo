@@ -37,8 +37,12 @@ public class AddNotebookActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_add_notebook);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Add Notebook");
+
+
         dbhelper = new DatabaseHelper(getApplicationContext());
 
         notebookName = (EditText) findViewById(R.id.notebookName);

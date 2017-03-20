@@ -46,7 +46,7 @@ public class NotebookCursorAdapter extends CursorRecyclerViewAdapter<NotebookCur
             }
         });
 
-        viewHolder.container.setOnTouchListener(new View.OnTouchListener() {
+        /*viewHolder.container.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
@@ -64,7 +64,7 @@ public class NotebookCursorAdapter extends CursorRecyclerViewAdapter<NotebookCur
                 }
                 return false;
             }
-        });
+        });*/
 
         viewHolder.container.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
