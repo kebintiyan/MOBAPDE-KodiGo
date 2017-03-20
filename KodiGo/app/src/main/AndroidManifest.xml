@@ -22,8 +22,6 @@
         <activity android:name=".EditNotebookActivity"/>
         <activity android:name=".ViewPageActivity"
             android:windowSoftInputMode="adjustResize"/>
-        <activity android:name=".LoadPagesActivity" />
-        <activity android:name=".AddPageActivity"/>
 
 
     </application>
