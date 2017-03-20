@@ -152,8 +152,8 @@ public class ViewNotebookActivity extends AppCompatActivity {
                         , REQUEST_EDIT_OR_DELETE_NOTEBOOK);
                 return true;
             case R.id.action_delete:
-                MaterialDialog dialog = new MaterialDialog.Builder(this)
-                        .title("Delete Notebook")
+                new MaterialDialog.Builder(this)
+                        .title("Confirm Delete")
                         .content("Are you sure you want to delete this notebook?")
                         .positiveText("Yes")
                         .negativeText("No")
