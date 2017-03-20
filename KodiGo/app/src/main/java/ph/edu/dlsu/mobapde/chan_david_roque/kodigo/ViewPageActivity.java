@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -49,6 +50,7 @@ public class ViewPageActivity extends AppCompatActivity {
         dbHelper = new DatabaseHelper(getBaseContext());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        getSupportActionBar().setTitle("");
         isEditable = (boolean) getIntent().getExtras().get(KEY_EDITABLE);
         pageID = (long) getIntent().getExtras().get(KEY_PAGE_ID);
 
@@ -63,10 +65,12 @@ public class ViewPageActivity extends AppCompatActivity {
         editPageText.setText(page.getText());
         editPageText.setHint(getRandomHint());
 
+
         viewTitlePage = (TextView) findViewById(R.id.viewTitlePage);
         viewPageText = (TextView) findViewById(R.id.viewPageText);
         viewTitlePage.setText(page.getName());
         viewPageText.setText(page.getText());
+
 
         toolbar = (LinearLayout) findViewById(R.id.my_toolbar);
 
@@ -105,11 +109,12 @@ public class ViewPageActivity extends AppCompatActivity {
                 toggleEdit(false);
                 return true;
             case R.id.action_delete:
-
+                clearFocus();
                 dbHelper.deletePage(pageID);
                 finish();
                 return true;
             case android.R.id.home:
+                clearFocus();
                 if(isEditable) {
                     showOnCancelConfirmDialog();
                 }
@@ -125,6 +130,8 @@ public class ViewPageActivity extends AppCompatActivity {
 
         int textView, editText;
         this.isEditable = isEditable;
+
+        clearFocus();
         if(isEditable){
             textView = View.INVISIBLE;
             editText = View.VISIBLE;
@@ -156,7 +163,9 @@ public class ViewPageActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        clearFocus();
         if (isEditable) {
+
             showOnCancelConfirmDialog();
         }
         else {
@@ -165,6 +174,7 @@ public class ViewPageActivity extends AppCompatActivity {
     }
 
     public void showOnCancelConfirmDialog() {
+        clearFocus();
         MaterialDialog dialog = new MaterialDialog.Builder(this)
                 .title("Discard Changes")
                 .content("Are you sure you want to discard your changes?")
@@ -177,6 +187,14 @@ public class ViewPageActivity extends AppCompatActivity {
                     }
                 })
                 .show();
+    }
+
+    public void clearFocus() {
+        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        if(getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
     }
 
     public String getRandomHint() {

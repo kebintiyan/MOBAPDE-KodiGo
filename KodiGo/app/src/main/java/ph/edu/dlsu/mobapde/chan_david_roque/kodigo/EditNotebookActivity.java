@@ -1,5 +1,6 @@
 package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -77,6 +79,7 @@ public class EditNotebookActivity extends AppCompatActivity {
     }
 
     public void colorPicker(int requestCode) {
+        clearFocus();
         startActivityForResult(new Intent(getBaseContext(), ColorpickerActivity.class), requestCode);
     }
 
@@ -133,6 +136,7 @@ public class EditNotebookActivity extends AppCompatActivity {
     }
 
     public void showOnCancelConfirmDialog() {
+        clearFocus();
         MaterialDialog dialog = new MaterialDialog.Builder(this)
                 .title("Discard Changes")
                 .content("Are you sure you want to discard your changes?")
@@ -145,5 +149,12 @@ public class EditNotebookActivity extends AppCompatActivity {
                     }
                 })
                 .show();
+    }
+    public void clearFocus() {
+        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        if(getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
     }
 }

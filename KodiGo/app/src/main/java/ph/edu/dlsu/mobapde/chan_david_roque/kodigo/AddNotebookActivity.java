@@ -81,6 +81,7 @@ public class AddNotebookActivity extends AppCompatActivity {
                 notebook.setNotebookColor(color.getColor());
                 Log.i("AddNotebookActivity", "Notebook created");
                 dbhelper.insertNotebook(notebook);
+                clearFocus();
                 finish();
                 return true;
             default:
@@ -89,6 +90,7 @@ public class AddNotebookActivity extends AppCompatActivity {
     }
 
     public void colorPicker(int requestCode) {
+        clearFocus();
         startActivityForResult(new Intent(getBaseContext(), ColorpickerActivity.class), requestCode);
     }
 
@@ -113,6 +115,8 @@ public class AddNotebookActivity extends AppCompatActivity {
     }
 
     protected void showOnCancelConfirmDialog() {
+        clearFocus();
+
         new MaterialDialog.Builder(this)
                 .title("Add Notebook")
                 .content("Are you sure you want to cancel adding a notebook?")
@@ -125,6 +129,7 @@ public class AddNotebookActivity extends AppCompatActivity {
                     }
                 })
                 .show();
+
     }
 
     @Override
@@ -139,5 +144,13 @@ public class AddNotebookActivity extends AppCompatActivity {
         notebookName.requestFocus();
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+    }
+
+    public void clearFocus() {
+        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        if(getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
     }
 }
