@@ -1,5 +1,7 @@
 package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 
+import android.animation.AnimatorInflater;
+import android.animation.StateListAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -78,8 +80,11 @@ public class MainActivity extends AppCompatActivity {
         notebookCursorAdapter.setOnNotebookLongClickListener(new NotebookCursorAdapter.OnNotebookLongClickListener() {
             @Override
             public void onNotebookLongClick(View v) {
-                view = v;
-                v.setAnimation(AnimationUtils.loadAnimation(v.getContext(), R.anim.shake));
+//                StateListAnimator stateListAnimator = AnimatorInflater
+//                        .loadStateListAnimator(v.getContext(), R.anim.elevate);
+//                v.setStateListAnimator(stateListAnimator);
+
+                //v.setAnimation(AnimationUtils.loadAnimation(v.getContext(), R.anim.shake));
             }
         });
 
@@ -95,9 +100,9 @@ public class MainActivity extends AppCompatActivity {
             public void onItemMoveClick(ArrayList arrayList) {
 
                 notebooks = (ArrayList<Notebook>) arrayList;
-                refreshPosition();
-                view.setAnimation(null);
                 notebookCursorAdapter.isLongPressed= false;
+                refreshPosition();
+                //view.setAnimation(null);
             }
         });
 

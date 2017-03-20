@@ -30,6 +30,7 @@ public class ViewPageActivity extends AppCompatActivity {
     MenuInflater inflater;
     Menu menu;
     MenuItem saveItem;
+    MenuItem deletePage;
     Page page;
     long pageID;
     DatabaseHelper dbHelper;
@@ -82,6 +83,7 @@ public class ViewPageActivity extends AppCompatActivity {
         inflater.inflate(R.menu.page_menu_bar, menu);
         saveItem = menu.findItem(R.id.action_save);
         saveItem.setVisible(false);
+        deletePage = menu.findItem(R.id.action_delete);
         toggleEdit(isEditable);
         return true;
     }
@@ -95,6 +97,11 @@ public class ViewPageActivity extends AppCompatActivity {
                 page.setText(editPageText.getText().toString());
                 dbHelper.updatePage(page);
                 toggleEdit(false);
+                return true;
+            case R.id.action_delete:
+
+                dbHelper.deletePage(pageID);
+                finish();
                 return true;
             case android.R.id.home: if(isEditable)
                                         toggleEdit(false);
@@ -114,12 +121,14 @@ public class ViewPageActivity extends AppCompatActivity {
             textView = View.INVISIBLE;
             editText = View.VISIBLE;
             saveItem.setVisible(true);
+            deletePage.setVisible(false);
         }else {
             textView = View.VISIBLE;
             editText = View.INVISIBLE;
             viewTitlePage.setText(page.getName());
             viewPageText.setText(page.getText());
             saveItem.setVisible(false);
+            deletePage.setVisible(true);
         }
 
         viewTitlePage.setVisibility(textView);

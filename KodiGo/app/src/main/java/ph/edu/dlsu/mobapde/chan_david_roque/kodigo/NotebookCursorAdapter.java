@@ -54,6 +54,7 @@ public class NotebookCursorAdapter extends CursorRecyclerViewAdapter<NotebookCur
                 switch (event.getAction())
                 {
                     case MotionEvent.ACTION_UP:
+                        Log.i("IAMHERE", "HEREIAM");
                         if(isLongPressed) {
                             v.setAnimation(null);
                             isLongPressed = false;

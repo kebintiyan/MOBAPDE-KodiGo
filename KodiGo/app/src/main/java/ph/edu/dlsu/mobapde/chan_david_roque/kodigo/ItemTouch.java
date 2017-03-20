@@ -48,7 +48,7 @@ public class ItemTouch{
 
                 onItemMoveListener.onItemMoveClick(arrayList);
 
-                return true;
+                return false;
             }
 
             @Override
@@ -59,6 +59,7 @@ public class ItemTouch{
             //defines the enabled move directions in each state (idle, swiping, dragging).
             @Override
             public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+
                 return makeFlag(ItemTouchHelper.ACTION_STATE_DRAG,
                         ItemTouchHelper.DOWN | ItemTouchHelper.UP | ItemTouchHelper.START | ItemTouchHelper.END);
             }
