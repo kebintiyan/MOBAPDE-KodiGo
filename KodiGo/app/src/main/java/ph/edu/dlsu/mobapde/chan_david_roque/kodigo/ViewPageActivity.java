@@ -1,6 +1,7 @@
 package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
@@ -23,6 +24,7 @@ import java.util.Random;
 
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_EDITABLE;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_PAGE_ID;
+import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.RESULT_NOTEBOOK_DELETED;
 
 public class ViewPageActivity extends AppCompatActivity {
 
@@ -105,9 +107,19 @@ public class ViewPageActivity extends AppCompatActivity {
                 toggleEdit(false);
                 return true;
             case R.id.action_delete:
-
-                dbHelper.deletePage(pageID);
-                finish();
+                new MaterialDialog.Builder(this)
+                        .title("Confirm Delete")
+                        .content("Are you sure you want to delete this page?")
+                        .positiveText("Yes")
+                        .negativeText("No")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                dbHelper.deletePage(pageID);
+                                finish();
+                            }
+                        })
+                        .show();
                 return true;
             case android.R.id.home:
                 if(isEditable) {
