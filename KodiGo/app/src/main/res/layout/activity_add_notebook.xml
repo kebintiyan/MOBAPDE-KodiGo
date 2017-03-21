@@ -12,37 +12,46 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="ph.edu.dlsu.mobapde.chan_david_roque.kodigo.AddNotebookActivity">
 
-    <RelativeLayout
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:layout_width="180dp"
         android:layout_height="220dp"
 
-        android:background="@color/defaultNotebookColor"
+        card_view:cardBackgroundColor="@color/defaultNotebookColor"
         android:layout_centerHorizontal="true"
         android:id="@+id/notebookIcon">
 
-        <EditText
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="3dp"
-            android:id="@+id/notebookName"
-            android:backgroundTint="@color/defaultTitleColor"
-            android:textCursorDrawable="@null"
-            android:textColor="@color/defaultTitleColor"
-            android:textColorHint="@color/defaultTitleColor"
+            android:layout_height="match_parent">
 
-            android:gravity="center"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="10dp"
-            />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:id="@+id/notebookName"
+                android:backgroundTint="@color/defaultTitleColor"
+                android:textCursorDrawable="@null"
+                android:textColor="@color/defaultTitleColor"
+                android:textColorHint="@color/defaultTitleColor"
+                android:text="Untitled"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="10dp"
+                android:selectAllOnFocus="true"
+                />
 
-    </RelativeLayout>
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
 
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/notebookIcon"
         android:id="@+id/colorPickerPanel"
         android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
         >
 
         <TextView
@@ -58,6 +67,7 @@
             android:background="@color/defaultNotebookColor"
             android:id="@+id/notebookColor"
             android:layout_below="@id/notebook_label"
+            android:layout_alignStart="@id/notebook_label"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="7dp"/>
 
@@ -75,35 +85,9 @@
             android:background="@color/defaultTitleColor"
             android:id="@+id/titleColor"
             android:layout_below="@id/title_label"
-            android:layout_toRightOf="@id/notebook_label"
+            android:layout_alignStart="@id/title_label"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="7dp"/>
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/colorPickerPanel"
-        android:layout_centerHorizontal="true">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Submit"
-            android:background="@color/colorPrimaryDark"
-            android:textColor="@color/colorIcons"
-            android:id="@+id/submitButton"
-            android:layout_margin="20dp"
-            android:layout_toRightOf="@+id/cancelButton"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Cancel"
-            android:id="@id/cancelButton"
-            android:layout_margin="20dp"
-            />
 
     </RelativeLayout>
 

@@ -1,13 +1,22 @@
 package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 
+import android.animation.AnimatorInflater;
+import android.animation.StateListAnimator;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Vibrator;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -22,13 +31,20 @@ public class MainActivity extends AppCompatActivity {
     NotebookCursorAdapter notebookCursorAdapter;
     DatabaseHelper dbHelper;
     ArrayList<Notebook> notebooks;
+    ItemTouch it;
+    View view;
+    TextView tvNoNotebooks;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        getSupportActionBar().setTitle("All Notebooks");
         dbHelper = new DatabaseHelper(getBaseContext());
         // Step 1: create recycler view
         recyclerView = (RecyclerView) findViewById(R.id.notebook_recyclerview);
+        tvNoNotebooks = (TextView) findViewById(R.id.tv_no_notebooks);
 
         notebooks = dbHelper.queryAllNotebooks();
 
@@ -43,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
                         2, StaggeredGridLayoutManager.VERTICAL));
 
         // Create an `ItemTouchHelper` and attach it to the `RecyclerView`
-        ItemTouch it = new ItemTouch(notebookCursorAdapter, notebooks);
+        it = new ItemTouch(notebookCursorAdapter, notebooks);
         it.attachToRecyclerView(recyclerView);
 
         addNotebookButton = (FloatingActionButton) findViewById(R.id.addNotebookButton);
@@ -63,14 +79,44 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        it.setOnNotebookClickListener(new ItemTouch.OnItemMoveListener() {
+        notebookCursorAdapter.setOnNotebookLongClickListener(new NotebookCursorAdapter.OnNotebookLongClickListener() {
             @Override
-            public void onItemMoveClick(ArrayList arrayList) {
-                notebooks = (ArrayList<Notebook>) arrayList;
-                refreshPosition();
+            public void onNotebookLongClick(View v) {
+//                StateListAnimator stateListAnimator = AnimatorInflater
+//                        .loadStateListAnimator(v.getContext(), R.anim.elevate);
+//                v.setStateListAnimator(stateListAnimator);
 
+                //v.setAnimation(AnimationUtils.loadAnimation(v.getContext(), R.anim.shake));
             }
         });
+
+        notebookCursorAdapter.setOnNotebookReleaseListener(new NotebookCursorAdapter.OnNotebookReleaseListener() {
+            @Override
+            public void onNotebookRelease(View v) {
+                v.setAnimation(null);
+            }
+        });
+
+        it.setOnItemMoveListener(new ItemTouch.OnItemMoveListener() {
+            @Override
+            public void onItemMoveClick(ArrayList arrayList) {
+
+                notebooks = (ArrayList<Notebook>) arrayList;
+                notebookCursorAdapter.isLongPressed= false;
+                refreshPosition();
+                //view.setAnimation(null);
+            }
+        });
+
+        it.setOnItemLongClickListener(new ItemTouch.OnItemLongClickListener() {
+            @Override
+            public void onItemLongClick(CursorRecyclerViewAdapter adapter) {
+
+                Vibrator v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
+                v.vibrate(500);
+            }
+        });
+
     }
 
     @Override
@@ -103,8 +149,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        notebooks = dbHelper.queryAllNotebooks();
         Cursor cursor = dbHelper.queryAllNotebooksAsCursor();
+        it.setArrayList(notebooks);
         notebookCursorAdapter.changeCursor(cursor);
+
+        if (notebooks.size() == 0) {
+            tvNoNotebooks.setVisibility(View.VISIBLE);
+        }
+        else {
+            tvNoNotebooks.setVisibility(View.INVISIBLE);
+        }
+
     }
 
 

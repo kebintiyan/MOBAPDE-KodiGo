@@ -8,14 +8,31 @@
     android:layout_height="match_parent"
     tools:context="ph.edu.dlsu.mobapde.chan_david_roque.kodigo.MainActivity">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_no_notebooks"
+            android:gravity="center_horizontal"
+            android:text="No notebooks yet. Try adding one now!"
+            android:textSize="30sp"
+            android:textColor="@color/colorDivider"
+            android:layout_centerInParent="true"
+            />
+    </RelativeLayout>
+
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/notebook_recyclerview">
+        android:id="@+id/notebook_recyclerview"
+        android:layout_marginTop="10dp">
     </android.support.v7.widget.RecyclerView>
 
     <android.support.design.widget.FloatingActionButton
-        android:src="@drawable/plus"
+        android:src="@drawable/ic_add_white_24px"
         app:fabSize="normal"
         android:id="@+id/addNotebookButton"
         android:layout_gravity="bottom|right"

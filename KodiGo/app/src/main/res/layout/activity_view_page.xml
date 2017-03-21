@@ -13,7 +13,7 @@
         android:layout_height="match_parent">
         <FrameLayout android:id="@+id/my_content"
             android:layout_width="match_parent"
-            android:layout_height="0dip"
+            android:layout_height="0dp"
             android:layout_weight="1">
 
             <RelativeLayout
@@ -23,23 +23,44 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/viewTitlePage" />
+                    android:id="@+id/viewTitlePage"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="20sp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:gravity="center"
+                    />
 
-                <ph.edu.dlsu.mobapde.chan_david_roque.kodigo.HTMLTextView
+                <ScrollView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:inputType="textMultiLine"
-                    android:id="@+id/viewPageText"
                     android:layout_below="@id/viewTitlePage"
-                    android:clickable="true"
-                    />
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp">
+                    <ph.edu.dlsu.mobapde.chan_david_roque.kodigo.HTMLTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/viewPageText"
+                        android:textColor="@color/colorPrimaryText"
+                        android:textSize="16sp"
+                        android:clickable="true"
+                        />
+                </ScrollView>
 
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/editTitlePage"
-                    android:visibility="invisible"
-
+                    android:visibility="gone"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="20sp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:gravity="center"
+                    android:selectAllOnFocus="true"
                     />
 
                 <EditText
@@ -50,40 +71,102 @@
                     android:id="@+id/editPageText"
                     android:layout_below="@id/editTitlePage"
                     android:backgroundTint="@android:color/transparent"
-                    android:visibility="invisible"
+                    android:visibility="gone"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="16sp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
                     />
-                <HorizontalScrollView
-                    android:id="@+id/custom_toolbar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true" />
             </RelativeLayout>
 
         </FrameLayout>
-            <LinearLayout android:id="@+id/my_toolbar"
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
+            android:visibility="gone"
+            android:id="@+id/my_toolbar">
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:background="@color/colorDivider"
-                android:visibility="invisible"
+                android:layout_height="match_parent"
+                android:background="@color/colorToolbar"
+
+                android:gravity="center"
                 >
                 <ImageView
                     android:layout_width="40dp"
                     android:layout_height="match_parent"
-                    android:layout_margin="2dp"
-                    android:src="@drawable/pencil"
+                    android:layout_margin="4dp"
+                    android:src="@drawable/ic_format_bold_white_24px"
                     android:scaleType="fitCenter"/>
                 <ImageView
                     android:layout_width="40dp"
                     android:layout_height="match_parent"
-                    android:src="@drawable/pencil"
+                    android:src="@drawable/ic_format_italic_white_24px"
+                    android:layout_margin="4dp"
+                    android:scaleType="fitCenter"/>
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="4dp"
+                    android:src="@drawable/ic_format_underlined_white_24px"
+                    android:scaleType="fitCenter"/>
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_format_color_text_white_24px"
+                    android:layout_margin="4dp"
+                    android:scaleType="fitCenter"/>
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_photo_camera_white_24px"
                     android:layout_margin="2dp"
                     android:scaleType="fitCenter"/>
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="4dp"
+                    android:src="@drawable/ic_photo_library_white_24px"
+                    android:scaleType="fitCenter"/>
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_comment_white_24px"
+                    android:layout_margin="4dp"
+                    android:scaleType="fitCenter"/>
+                <!--<ImageView-->
+                    <!--android:layout_width="40dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_margin="2dp"-->
+                    <!--android:src="@drawable/ic_format_align_left_white_24px"-->
+                    <!--android:scaleType="fitCenter"/>-->
+                <!--<ImageView-->
+                    <!--android:layout_width="40dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:src="@drawable/ic_format_align_justify_white_24px"-->
+                    <!--android:layout_margin="2dp"-->
+                    <!--android:scaleType="fitCenter"/>-->
+                <!--<ImageView-->
+                    <!--android:layout_width="40dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_margin="2dp"-->
+                    <!--android:src="@drawable/ic_format_list_bulleted_white_24px"-->
+                    <!--android:scaleType="fitCenter"/>-->
+                <!--<ImageView-->
+                    <!--android:layout_width="40dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:src="@drawable/ic_format_list_numbered_white_24px"-->
+                    <!--android:layout_margin="2dp"-->
+                    <!--android:scaleType="fitCenter"/>-->
 
             </LinearLayout>
+        </HorizontalScrollView>
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:src="@drawable/pencil"
+        android:src="@drawable/ic_edit_white_24px"
         app:fabSize="normal"
         android:id="@+id/toggleEditButton"
         android:layout_gravity="bottom|right"

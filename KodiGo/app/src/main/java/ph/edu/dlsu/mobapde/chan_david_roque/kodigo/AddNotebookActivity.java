@@ -1,12 +1,17 @@
 package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -23,55 +28,28 @@ import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.RESULT_COLOR
 public class AddNotebookActivity extends AppCompatActivity {
 
     EditText notebookName;
-    Button submitButton;
-    Button cancelButton;
     ImageView titleColor;
     ImageView notebookColor;
-    RelativeLayout notebookIcon;
+    CardView notebookIcon;
     DatabaseHelper dbhelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_notebook);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Add Notebook");
+
+
         dbhelper = new DatabaseHelper(getApplicationContext());
 
         notebookName = (EditText) findViewById(R.id.notebookName);
-        submitButton = (Button) findViewById(R.id.submitButton);
-        cancelButton = (Button) findViewById(R.id.cancelButton);
         notebookColor = (ImageView) findViewById(R.id.notebookColor);
         titleColor = (ImageView) findViewById(R.id.titleColor);
-        notebookIcon = (RelativeLayout) findViewById(R.id.notebookIcon);
+        notebookIcon = (CardView) findViewById(R.id.notebookIcon);
 
 
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent result = new Intent();
-
-                Notebook notebook = new Notebook();
-                notebook.setTitle(notebookName.getText().toString());
-                ColorDrawable color = (ColorDrawable) titleColor.getBackground();
-                notebook.setTitleColor(color.getColor());
-                color = (ColorDrawable) notebookColor.getBackground();
-                notebook.setNotebookColor(color.getColor());
-                Log.i("AddNotebookActivity", "Notebook created");
-                dbhelper.insertNotebook(notebook);
-//                notebook.setNotebookID(notebookId);
-//                result.putExtra(KEY_NOTEBOOK_ID, notebookId);
-//                setResult(RESULT_NOTEBOOK_ADDED, result);
-//                Log.i("AddNotebookActivity", "Notebook created");
-                finish();
-
-            }
-        });
-
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showOnCancelConfirmDialog();
-            }
-        });
 
         notebookColor.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -90,9 +68,34 @@ public class AddNotebookActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case android.R.id.home: showOnCancelConfirmDialog();
+                return true;
+            case R.id.action_submit:
+                Notebook notebook = new Notebook();
+                notebook.setTitle(notebookName.getText().toString());
+                ColorDrawable color = (ColorDrawable) titleColor.getBackground();
+                notebook.setTitleColor(color.getColor());
+                color = (ColorDrawable) notebookColor.getBackground();
+                notebook.setNotebookColor(color.getColor());
+                Log.i("AddNotebookActivity", "Notebook created");
+                dbhelper.insertNotebook(notebook);
+                clearFocus();
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     public void colorPicker(int requestCode) {
+        clearFocus();
         startActivityForResult(new Intent(getBaseContext(), ColorpickerActivity.class), requestCode);
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -114,6 +117,8 @@ public class AddNotebookActivity extends AppCompatActivity {
     }
 
     protected void showOnCancelConfirmDialog() {
+        clearFocus();
+
         new MaterialDialog.Builder(this)
                 .title("Add Notebook")
                 .content("Are you sure you want to cancel adding a notebook?")
@@ -126,5 +131,28 @@ public class AddNotebookActivity extends AppCompatActivity {
                     }
                 })
                 .show();
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.check_menu, menu);
+        return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        notebookName.requestFocus();
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+    }
+
+    public void clearFocus() {
+        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        if(getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
     }
 }

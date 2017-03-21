@@ -2,6 +2,7 @@ package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,6 +19,7 @@ public class ItemTouch{
 
     ItemTouch(CursorRecyclerViewAdapter adapter, ArrayList arrayList) {
         this.adapter = adapter;
+
         this.arrayList = arrayList;
         createItemTouchCallback();
         ith = new ItemTouchHelper(createItemTouchCallback());
@@ -26,6 +28,16 @@ public class ItemTouch{
 
     ItemTouchHelper.Callback createItemTouchCallback() {
         return new ItemTouchHelper.Callback() {
+
+
+            @Override
+            public boolean isLongPressDragEnabled() {
+
+                onItemLongClickListener.onItemLongClick(adapter);
+
+                return super.isLongPressDragEnabled();
+            }
+
             //and in your imlpementaion of
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
                 // get the viewHolder's and target's positions in your adapter data, swap them
@@ -36,7 +48,7 @@ public class ItemTouch{
 
                 onItemMoveListener.onItemMoveClick(arrayList);
 
-                return true;
+                return false;
             }
 
             @Override
@@ -47,6 +59,7 @@ public class ItemTouch{
             //defines the enabled move directions in each state (idle, swiping, dragging).
             @Override
             public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+
                 return makeFlag(ItemTouchHelper.ACTION_STATE_DRAG,
                         ItemTouchHelper.DOWN | ItemTouchHelper.UP | ItemTouchHelper.START | ItemTouchHelper.END);
             }
@@ -63,11 +76,21 @@ public class ItemTouch{
         public void onItemMoveClick(ArrayList arrayList);
     }
 
-    public OnItemMoveListener getOnNotebookClickListener() {
-        return onItemMoveListener;
+    public void setOnItemMoveListener(OnItemMoveListener onItemMoveListener) {
+        this.onItemMoveListener = onItemMoveListener;
     }
 
-    public void setOnNotebookClickListener(OnItemMoveListener onItemMoveListener) {
-        this.onItemMoveListener = onItemMoveListener;
+    private OnItemLongClickListener onItemLongClickListener;
+
+    public interface OnItemLongClickListener{
+        public void onItemLongClick(CursorRecyclerViewAdapter adapter);
+    }
+
+    public void setOnItemLongClickListener(OnItemLongClickListener onItemLongClickListener) {
+        this.onItemLongClickListener = onItemLongClickListener;
+    }
+
+    public void setArrayList(ArrayList arrayList) {
+        this.arrayList = arrayList;
     }
 }

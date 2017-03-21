@@ -5,11 +5,15 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.R.id.notebookColor;
 
 /**
  * Created by kevin on 2/26/2017.
@@ -517,8 +521,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(getCreateOnCreateNotebookTrigger());
         db.execSQL(getCreateOnCreatePageTrigger());
 
-        Log.i("TEST", "DB Created");
-
+        insertDefaultNotebook(db);
     }
 
     private String getCreateNotebookTableSQL() {
@@ -591,6 +594,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 " END;";
 
         return sql;
+    }
+
+    public long insertDefaultNotebook(SQLiteDatabase db) {
+
+
+        Notebook n = new Notebook()
+                .setNotebookColor(Color.parseColor("#e8ead7"))
+                .setTitleColor(Color.parseColor("#2d2d2d"))
+                .setTitle("Default");
+
+
+        ContentValues cv = new ContentValues();
+        cv.put(Notebook.COLUMN_TITLE, n.getTitle());
+        cv.put(Notebook.COLUMN_TITLE_COLOR, n.getTitleColor());
+        cv.put(Notebook.COLUMN_NOTEBOOK_COLOR, n.getNotebookColor());
+        //cv.put(Notebook.COLUMN_NOTEBOOK_NUMBER, 0);
+        cv.put(Notebook.COLUMN_DATE_CREATED, getCurrentDate());
+
+        long result = db.insert(Notebook.TABLE_NAME, null, cv);
+
+        return result;
     }
 
     @Override

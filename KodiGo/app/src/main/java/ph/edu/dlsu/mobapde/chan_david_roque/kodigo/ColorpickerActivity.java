@@ -10,6 +10,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,13 +22,14 @@ import com.jrummyapps.android.colorpicker.ColorPickerView;
 
 import static android.app.Activity.RESULT_OK;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_COLOR;
+import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_NOTEBOOK_ID;
+import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.REQUEST_EDIT_OR_DELETE_NOTEBOOK;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.RESULT_COLOR;
 
-public class ColorpickerActivity extends AppCompatActivity implements ColorPickerView.OnColorChangedListener, View.OnClickListener {
+public class ColorpickerActivity extends AppCompatActivity implements ColorPickerView.OnColorChangedListener {
 
     EditText notebookName;
     Button submitButton;
-    Button cancelButton;
     ColorPickerView colorPickerView;
     ColorPanelView newColorPanelView;
 
@@ -35,7 +38,7 @@ public class ColorpickerActivity extends AppCompatActivity implements ColorPicke
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_colorpicker);
         getWindow().setFormat(PixelFormat.RGBA_8888);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         int initialColor = prefs.getInt("color_3", 0xFF000000);
 
@@ -43,8 +46,6 @@ public class ColorpickerActivity extends AppCompatActivity implements ColorPicke
         ColorPanelView colorPanelView = (ColorPanelView) findViewById(R.id.cpv_color_panel_old);
         newColorPanelView = (ColorPanelView) findViewById(R.id.cpv_color_panel_new);
 
-        Button btnOK = (Button) findViewById(R.id.okButton);
-        Button btnCancel = (Button) findViewById(R.id.cancelButton);
 
         ((LinearLayout) colorPanelView.getParent())
                 .setPadding(colorPickerView.getPaddingLeft(), 0, colorPickerView.getPaddingRight(), 0);
@@ -53,9 +54,13 @@ public class ColorpickerActivity extends AppCompatActivity implements ColorPicke
         colorPickerView.setColor(initialColor, true);
         colorPanelView.setColor(initialColor);
 
-        btnOK.setOnClickListener(this);
-        btnCancel.setOnClickListener(this);
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.check_menu, menu);
+        return true;
     }
 
 
@@ -64,20 +69,20 @@ public class ColorpickerActivity extends AppCompatActivity implements ColorPicke
         newColorPanelView.setColor(colorPickerView.getColor());
     }
 
-    @Override public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.okButton:
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
 
-                Intent result = new Intent();
+            case android.R.id.home:finish();
+                return true;
+            case R.id.action_submit: Intent result = new Intent();
                 result.putExtra(KEY_COLOR, colorPickerView.getColor());
                 setResult(RESULT_COLOR, result);
-
                 finish();
-                break;
-            case R.id.cancelButton:
-                finish();
-                break;
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
-
 }
