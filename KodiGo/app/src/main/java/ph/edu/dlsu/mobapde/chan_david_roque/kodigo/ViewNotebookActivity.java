@@ -205,9 +205,9 @@ public class ViewNotebookActivity extends AppCompatActivity {
             setResult(RESULT_NOTEBOOK_DELETED, result);
             finish();
         }else if(REQUEST_ADD_PAGE == requestCode && resultCode == RESULT_PAGE_ADDED) {
-//            Page p = dbhelper.queryPageByID((long) data.getExtras().get(KEY_PAGE_ID));
+//            Page p = dbHelper.queryPageByID((long) data.getExtras().get(KEY_PAGE_ID));
 //            p.setPageNumber(pageAdapter.getItemCount());
-//            dbhelper.updatePage(p);
+//            dbHelper.updatePage(p);
 //
 //            pageAdapter.addPage(p);
         }

@@ -45,7 +45,6 @@
                         android:id="@+id/viewPageText"
                         android:textColor="@color/colorPrimaryText"
                         android:textSize="16sp"
-                        android:clickable="true"
                         />
                 </ScrollView>
 
@@ -61,6 +60,7 @@
                     android:layout_marginRight="20dp"
                     android:gravity="center"
                     android:selectAllOnFocus="true"
+                    android:maxLength="24"
                     />
 
                 <EditText

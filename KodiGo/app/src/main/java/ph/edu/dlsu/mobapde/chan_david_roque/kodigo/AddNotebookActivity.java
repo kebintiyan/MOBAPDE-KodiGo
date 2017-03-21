@@ -12,10 +12,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -31,7 +29,7 @@ public class AddNotebookActivity extends AppCompatActivity {
     ImageView titleColor;
     ImageView notebookColor;
     CardView notebookIcon;
-    DatabaseHelper dbhelper;
+    DatabaseHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +40,7 @@ public class AddNotebookActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Add Notebook");
 
 
-        dbhelper = new DatabaseHelper(getApplicationContext());
+        dbHelper = new DatabaseHelper(getApplicationContext());
 
         notebookName = (EditText) findViewById(R.id.notebookName);
         notebookColor = (ImageView) findViewById(R.id.notebookColor);
@@ -82,7 +80,7 @@ public class AddNotebookActivity extends AppCompatActivity {
                 color = (ColorDrawable) notebookColor.getBackground();
                 notebook.setNotebookColor(color.getColor());
                 Log.i("AddNotebookActivity", "Notebook created");
-                dbhelper.insertNotebook(notebook);
+                dbHelper.insertNotebook(notebook);
                 clearFocus();
                 finish();
                 return true;

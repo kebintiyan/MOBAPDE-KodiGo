@@ -31,10 +31,11 @@
                 android:textCursorDrawable="@null"
                 android:textColor="@color/defaultTitleColor"
                 android:textColorHint="@color/defaultTitleColor"
-
                 android:gravity="center"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="10dp"
+                android:maxLines="8"
+                android:maxLength="32"
                 />
 
         </RelativeLayout>
