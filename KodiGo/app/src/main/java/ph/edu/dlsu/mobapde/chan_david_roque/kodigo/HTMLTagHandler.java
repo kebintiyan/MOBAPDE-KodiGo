@@ -1,11 +1,14 @@
 package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.Html;
 import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
+import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.View;
 
@@ -83,23 +86,22 @@ public class HTMLTagHandler implements Html.TagHandler {
 
     private void processImage(boolean opening, Editable output, String imageID) {
         Image image = dbHelper.queryImageByID(Integer.parseInt(imageID));
-
-
-
-        /*int len = output.length();
+        Drawable d = Drawable.createFromPath(image.getUrl());
+        
+        int len = output.length();
         if(opening) {
-            output.setSpan(new StrikethroughSpan(), len, len, Spannable.SPAN_MARK_MARK);
+            output.setSpan(new ImageSpan(d), len, len, Spannable.SPAN_MARK_MARK);
         }
         else {
-            Object obj = getLast(output, StrikethroughSpan.class);
+            Object obj = getLast(output, ImageSpan.class);
             int where = output.getSpanStart(obj);
 
             output.removeSpan(obj);
 
             if (where != len) {
-                output.setSpan(new StrikethroughSpan(), where, len, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                output.setSpan(new ImageSpan(d), where, len, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
-        }*/
+        }
     }
 
     private Object getLast(Editable text, Class kind) {
