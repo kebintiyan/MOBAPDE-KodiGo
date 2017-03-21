@@ -46,7 +46,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <TextView
+                    <!--<TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/viewTitlePage"
@@ -56,15 +56,12 @@
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"
                         android:gravity="center"
-                        />
+                        />-->
 
                     <ScrollView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_below="@id/viewTitlePage"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp">
+                        android:layout_margin="20dp">
                         <ph.edu.dlsu.mobapde.chan_david_roque.kodigo.HTMLTextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -74,7 +71,7 @@
                             />
                     </ScrollView>
 
-                    <EditText
+                    <!--<EditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/editTitlePage"
@@ -87,7 +84,7 @@
                         android:gravity="center"
                         android:selectAllOnFocus="true"
                         android:maxLength="24"
-                        />
+                        />-->
 
                     <EditText
                         android:layout_width="match_parent"
@@ -95,14 +92,11 @@
                         android:gravity="start"
                         android:inputType="textMultiLine"
                         android:id="@+id/editPageText"
-                        android:layout_below="@id/editTitlePage"
                         android:backgroundTint="@android:color/transparent"
                         android:visibility="gone"
                         android:textColor="@color/colorPrimaryText"
                         android:textSize="16sp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
+                        android:layout_margin="20dp"
                         />
                 </RelativeLayout>
 

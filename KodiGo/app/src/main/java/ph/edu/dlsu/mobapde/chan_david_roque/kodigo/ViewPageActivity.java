@@ -34,9 +34,9 @@ import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.RESULT_NOTEB
 public class ViewPageActivity extends AppCompatActivity {
 
     TextView toolbarTitle;
-    EditText editTitlePage;
+//    EditText editTitlePage;
     EditText editPageText;
-    TextView viewTitlePage;
+//    TextView viewTitlePage;
     HTMLTextView viewPageText;
 
     boolean isEditable;
@@ -76,7 +76,7 @@ public class ViewPageActivity extends AppCompatActivity {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
             case R.id.action_save:
-                page.setName(editTitlePage.getText().toString());
+//                page.setName(editTitlePage.getText().toString());
                 page.setText(editPageText.getText().toString());
                 dbHelper.updatePage(page);
                 toggleEdit(false);
@@ -129,18 +129,18 @@ public class ViewPageActivity extends AppCompatActivity {
         }else {
             textView = View.VISIBLE;
             editText = View.GONE;
-            viewTitlePage.setText(page.getName());
+//            viewTitlePage.setText(page.getName());
             viewPageText.setText(page.getText());
             saveItem.setVisible(false);
             deletePage.setVisible(true);
         }
 
-        viewTitlePage.setVisibility(textView);
+//        viewTitlePage.setVisibility(textView);
         viewPageText.setVisibility(textView);
         toggleEditButton.setVisibility(textView);
 
 
-        editTitlePage.setVisibility(editText);
+//        editTitlePage.setVisibility(editText);
         editPageText.setVisibility(editText);
         toolbar.setVisibility(editText);
 
@@ -208,21 +208,21 @@ public class ViewPageActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        editTitlePage       = (EditText)                findViewById(R.id.editTitlePage);
+//        editTitlePage       = (EditText)                findViewById(R.id.editTitlePage);
         editPageText        = (EditText)                findViewById(R.id.editPageText);
-        viewTitlePage       = (TextView)                findViewById(R.id.viewTitlePage);
+//        viewTitlePage       = (TextView)                findViewById(R.id.viewTitlePage);
         viewPageText        = (HTMLTextView)            findViewById(R.id.viewPageText);
         toolbar             = (HorizontalScrollView)    findViewById(R.id.my_toolbar);
         toggleEditButton    = (FloatingActionButton)    findViewById(R.id.toggleEditButton);
         toolbarTitle        = (TextView)                findViewById(R.id.toolbarTitle);
 
-        editTitlePage.setText(page.getName());
+//        editTitlePage.setText(page.getName());
         editPageText.setText(page.getText());
         editPageText.setHint(getRandomHint());
 
 
 
-        viewTitlePage.setText(page.getName());
+//        viewTitlePage.setText(page.getName());
         viewPageText.setText(page.getText());
 
         toggleEditButton.setOnClickListener(new View.OnClickListener() {
