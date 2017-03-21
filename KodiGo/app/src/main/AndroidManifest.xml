@@ -21,7 +21,9 @@
         <activity android:name=".ColorpickerActivity" />
         <activity android:name=".EditNotebookActivity"/>
         <activity android:name=".ViewPageActivity"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/ClickableTitleTheme"
+            />
 
 
     </application>

@@ -87,7 +87,7 @@ public class HTMLTagHandler implements Html.TagHandler {
     private void processImage(boolean opening, Editable output, String imageID) {
         Image image = dbHelper.queryImageByID(Integer.parseInt(imageID));
         Drawable d = Drawable.createFromPath(image.getUrl());
-        
+
         int len = output.length();
         if(opening) {
             output.setSpan(new ImageSpan(d), len, len, Spannable.SPAN_MARK_MARK);

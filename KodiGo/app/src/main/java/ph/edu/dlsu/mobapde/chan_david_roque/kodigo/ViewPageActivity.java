@@ -7,6 +7,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,6 +20,7 @@ import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -30,19 +33,18 @@ import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.RESULT_NOTEB
 
 public class ViewPageActivity extends AppCompatActivity {
 
+    TextView toolbarTitle;
     EditText editTitlePage;
     EditText editPageText;
     TextView viewTitlePage;
     HTMLTextView viewPageText;
+
     boolean isEditable;
     FloatingActionButton toggleEditButton;
     HorizontalScrollView toolbar;
-    MenuInflater inflater;
-    Menu menu;
     MenuItem saveItem;
     MenuItem deletePage;
     Page page;
-    long pageID;
     DatabaseHelper dbHelper;
 
     @Override
@@ -50,50 +52,18 @@ public class ViewPageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_page);
 
-        dbHelper = new DatabaseHelper(getBaseContext());
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        dbHelper    = new DatabaseHelper(getBaseContext());
+        isEditable  = (boolean) getIntent().getExtras().get(KEY_EDITABLE);
+        page        = dbHelper.queryPageByID((long) getIntent().getExtras().get(KEY_PAGE_ID));
 
-        getSupportActionBar().setTitle("");
-        isEditable = (boolean) getIntent().getExtras().get(KEY_EDITABLE);
-        pageID = (long) getIntent().getExtras().get(KEY_PAGE_ID);
-
-        Log.i("AAA", isEditable+"");
-
-
-        page = dbHelper.queryPageByID(pageID);
-
-        editTitlePage = (EditText) findViewById(R.id.editTitlePage);
-        editPageText = (EditText) findViewById(R.id.editPageText);
-        editTitlePage.setText(page.getName());
-        editPageText.setText(page.getText());
-        editPageText.setHint(getRandomHint());
-
-
-        viewTitlePage = (TextView) findViewById(R.id.viewTitlePage);
-        viewPageText = (HTMLTextView) findViewById(R.id.viewPageText);
-        viewTitlePage.setText(page.getName());
-        viewPageText.setText(page.getText());
-
-
-        toolbar = (HorizontalScrollView) findViewById(R.id.my_toolbar);
-
-        toggleEditButton = (FloatingActionButton) findViewById(R.id.toggleEditButton);
-
-        toggleEditButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleEdit(true);
-            }
-        });
-
+        initViews();
+        initActionBar();
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        inflater = getMenuInflater();
-        this.menu = menu;
-        inflater.inflate(R.menu.page_menu_bar, menu);
+        getMenuInflater().inflate(R.menu.page_menu_bar, menu);
         saveItem = menu.findItem(R.id.action_save);
         saveItem.setVisible(false);
         deletePage = menu.findItem(R.id.action_delete);
@@ -122,7 +92,7 @@ public class ViewPageActivity extends AppCompatActivity {
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                dbHelper.deletePage(pageID);
+                                dbHelper.deletePage(page.getPageID());
                                 finish();
                             }
                         })
@@ -137,6 +107,7 @@ public class ViewPageActivity extends AppCompatActivity {
                     finish();
                 return true;
             default:
+                Log.i("CLICK", "HERE");
                 return super.onOptionsItemSelected(item);
         }
     }
@@ -234,5 +205,67 @@ public class ViewPageActivity extends AppCompatActivity {
             default:
                 return "How about something creative...";
         }
+    }
+
+    private void initViews() {
+        editTitlePage       = (EditText)                findViewById(R.id.editTitlePage);
+        editPageText        = (EditText)                findViewById(R.id.editPageText);
+        viewTitlePage       = (TextView)                findViewById(R.id.viewTitlePage);
+        viewPageText        = (HTMLTextView)            findViewById(R.id.viewPageText);
+        toolbar             = (HorizontalScrollView)    findViewById(R.id.my_toolbar);
+        toggleEditButton    = (FloatingActionButton)    findViewById(R.id.toggleEditButton);
+        toolbarTitle        = (TextView)                findViewById(R.id.toolbarTitle);
+
+        editTitlePage.setText(page.getName());
+        editPageText.setText(page.getText());
+        editPageText.setHint(getRandomHint());
+
+
+
+        viewTitlePage.setText(page.getName());
+        viewPageText.setText(page.getText());
+
+        toggleEditButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleEdit(true);
+            }
+        });
+    }
+
+    private void initActionBar() {
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        toolbarTitle.setText(page.getName());
+        toolbarTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showEditTitleDialog();
+            }
+        });
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        //getSupportActionBar().setTitle(page.getName());
+
+
+    }
+
+    private void showEditTitleDialog() {
+        new MaterialDialog.Builder(this)
+                .title("Edit Title")
+                .inputRange(1, 24)
+                .input("Page title", page.getName(), false, new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(MaterialDialog dialog, CharSequence input) {
+                        if (!page.getName().equals(input + "")) {
+                            page.setName(input + "");
+                            dbHelper.updatePage(page);
+                            toolbarTitle.setText(page.getName());
+                        }
+
+
+                    }
+                })
+                .show();
     }
 }

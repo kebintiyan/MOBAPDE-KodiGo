@@ -30,8 +30,6 @@ import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.RESULT_NOTEB
 public class EditNotebookActivity extends AppCompatActivity {
 
     EditText notebookName;
-    Button updateButton;
-    Button deleteButton;
     ImageView titleColor;
     ImageView notebookColor;
     CardView notebookIcon;
