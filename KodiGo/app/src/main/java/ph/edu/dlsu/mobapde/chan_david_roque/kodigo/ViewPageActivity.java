@@ -101,7 +101,10 @@ public class ViewPageActivity extends AppCompatActivity {
             case android.R.id.home:
                 clearFocus();
                 if(isEditable) {
-                    showOnCancelConfirmDialog();
+                    if (!page.getText().equals(editPageText.getText().toString()))
+                        showOnCancelConfirmDialog();
+                    else
+                        finish();
                 }
                 else
                     finish();
@@ -245,9 +248,6 @@ public class ViewPageActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        //getSupportActionBar().setTitle(page.getName());
-
-
     }
 
     private void showEditTitleDialog() {
@@ -262,8 +262,6 @@ public class ViewPageActivity extends AppCompatActivity {
                             dbHelper.updatePage(page);
                             toolbarTitle.setText(page.getName());
                         }
-
-
                     }
                 })
                 .show();

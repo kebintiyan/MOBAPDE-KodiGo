@@ -105,10 +105,21 @@ public class EditNotebookActivity extends AppCompatActivity {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
             case android.R.id.home:
+                int titleColorValue = ((ColorDrawable) titleColor.getBackground()).getColor();
+                int notebookColorValue = ((ColorDrawable) notebookColor.getBackground()).getColor();
 
-                showOnCancelConfirmDialog();
+                if (!notebook.getTitle().equals(notebookName.getText().toString()) ||
+                        notebook.getTitleColor() != titleColorValue ||
+                        notebook.getNotebookColor() != notebookColorValue)
+                    showOnCancelConfirmDialog();
+                else
+                    finish();
+
                 return true;
             case R.id.action_submit:
+                if (!validateInput())
+                    return true;
+
                 Intent result = new Intent();
                 notebook.setTitle(notebookName.getText().toString());
                 ColorDrawable color = (ColorDrawable) titleColor.getBackground();
@@ -119,11 +130,21 @@ public class EditNotebookActivity extends AppCompatActivity {
                 dbHelper.updateNotebook(notebook);
 //                result.putExtra(KEY_NOTEBOOK_ID, notebookID);
                 setResult(RESULT_NOTEBOOK_EDITED, result);
-                Log.i("EdiNotebookActivity", "Notebook Edited");
                 finish();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private boolean validateInput() {
+        String name = notebookName.getText().toString();
+        if(name.length() == 0)
+        {
+            notebookName.setError("You cannot have an empty title.");
+            return false;
+        }
+        return true;
     }
 
     @Override

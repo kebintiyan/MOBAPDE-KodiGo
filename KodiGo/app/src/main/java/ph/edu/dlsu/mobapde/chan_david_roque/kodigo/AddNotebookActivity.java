@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -70,9 +71,13 @@ public class AddNotebookActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
-            case android.R.id.home: showOnCancelConfirmDialog();
+            case android.R.id.home:
+                showOnCancelConfirmDialog();
                 return true;
             case R.id.action_submit:
+                if (!validateInput())
+                    return true;
+
                 Notebook notebook = new Notebook();
                 notebook.setTitle(notebookName.getText().toString());
                 ColorDrawable color = (ColorDrawable) titleColor.getBackground();
@@ -94,6 +99,16 @@ public class AddNotebookActivity extends AppCompatActivity {
         startActivityForResult(new Intent(getBaseContext(), ColorpickerActivity.class), requestCode);
     }
 
+
+    private boolean validateInput() {
+        String name = notebookName.getText().toString();
+        if(name.length() == 0)
+        {
+            notebookName.setError("You cannot have an empty title.");
+            return false;
+        }
+        return true;
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
