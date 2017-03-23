@@ -38,6 +38,16 @@ public class PageCursorAdapter extends CursorRecyclerViewAdapter<PageCursorAdapt
             }
         });
 
+        viewHolder.pageText.setTag(pageId);
+        viewHolder.pageText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(onPageClickListener != null){
+                    onPageClickListener.onPageClick(Long.parseLong(v.getTag().toString()));
+                }
+            }
+        });
+
     }
 
     @Override
@@ -49,13 +59,13 @@ public class PageCursorAdapter extends CursorRecyclerViewAdapter<PageCursorAdapt
     public class PageHolder extends RecyclerView.ViewHolder{
         //Button pageIcon;
         TextView pageName;
-        TextView pageText;
+        HTMLTextView pageText;
         View container;
         public PageHolder (View itemView) {
             super(itemView);
             // pageIcon = (Button) itemView.findViewById(R.id.pageIcon);
             pageName = (TextView) itemView.findViewById(R.id.pageName);
-            pageText = (TextView) itemView.findViewById(R.id.pageText);
+            pageText = (HTMLTextView) itemView.findViewById(R.id.pageText);
             container = itemView.findViewById(R.id.container);
 
         }

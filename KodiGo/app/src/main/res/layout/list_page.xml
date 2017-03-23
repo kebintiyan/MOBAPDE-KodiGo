@@ -49,7 +49,7 @@
                 android:layout_centerHorizontal="true"
                 android:textColor="@color/colorPrimaryText"/>
 
-            <TextView
+            <ph.edu.dlsu.mobapde.chan_david_roque.kodigo.HTMLTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/pageText"
@@ -61,6 +61,7 @@
                 android:textColor="@color/colorSecondaryText"
                 android:ellipsize="end"
                 android:maxLines="6"
+                android:clickable="true"
                 />
 
         </RelativeLayout>

@@ -2,13 +2,20 @@ package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.text.InputType;
+import android.text.Spannable;
+import android.text.Spanned;
+import android.text.style.StyleSpan;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,6 +25,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,9 +42,7 @@ import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.RESULT_NOTEB
 public class ViewPageActivity extends AppCompatActivity {
 
     TextView toolbarTitle;
-//    EditText editTitlePage;
     EditText editPageText;
-//    TextView viewTitlePage;
     HTMLTextView viewPageText;
 
     boolean isEditable;
@@ -46,6 +52,11 @@ public class ViewPageActivity extends AppCompatActivity {
     MenuItem deletePage;
     Page page;
     DatabaseHelper dbHelper;
+
+    // Icons
+    ImageView iconBold;
+    ImageView iconItalic;
+    ImageView iconUnderline;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,10 +87,7 @@ public class ViewPageActivity extends AppCompatActivity {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
             case R.id.action_save:
-//                page.setName(editTitlePage.getText().toString());
-                page.setText(editPageText.getText().toString());
-                dbHelper.updatePage(page);
-                toggleEdit(false);
+                save();
                 return true;
             case R.id.action_delete:
                 clearFocus();
@@ -132,18 +140,14 @@ public class ViewPageActivity extends AppCompatActivity {
         }else {
             textView = View.VISIBLE;
             editText = View.GONE;
-//            viewTitlePage.setText(page.getName());
             viewPageText.setText(page.getText());
             saveItem.setVisible(false);
             deletePage.setVisible(true);
         }
 
-//        viewTitlePage.setVisibility(textView);
         viewPageText.setVisibility(textView);
         toggleEditButton.setVisibility(textView);
 
-
-//        editTitlePage.setVisibility(editText);
         editPageText.setVisibility(editText);
         toolbar.setVisibility(editText);
 
@@ -211,27 +215,80 @@ public class ViewPageActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-//        editTitlePage       = (EditText)                findViewById(R.id.editTitlePage);
         editPageText        = (EditText)                findViewById(R.id.editPageText);
-//        viewTitlePage       = (TextView)                findViewById(R.id.viewTitlePage);
         viewPageText        = (HTMLTextView)            findViewById(R.id.viewPageText);
         toolbar             = (HorizontalScrollView)    findViewById(R.id.my_toolbar);
         toggleEditButton    = (FloatingActionButton)    findViewById(R.id.toggleEditButton);
         toolbarTitle        = (TextView)                findViewById(R.id.toolbarTitle);
 
-//        editTitlePage.setText(page.getName());
-        editPageText.setText(page.getText());
+
+        Spanned pageText;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            pageText = Html.fromHtml(page.getText(), Html.FROM_HTML_MODE_LEGACY, new HTMLImageHandler(), new HTMLTagHandler(getBaseContext()));
+        }
+        else {
+            pageText = Html.fromHtml(page.getText(), new HTMLImageHandler(), new HTMLTagHandler(getBaseContext()));
+        }
+
+        editPageText.setText(pageText);
         editPageText.setHint(getRandomHint());
 
 
-
-//        viewTitlePage.setText(page.getName());
         viewPageText.setText(page.getText());
 
         toggleEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 toggleEdit(true);
+            }
+        });
+
+        // Icons
+        iconBold = (ImageView) findViewById(R.id.icon_bold);
+        iconBold.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int selectionStart = editPageText.getSelectionStart();
+                int selectionEnd = editPageText.getSelectionEnd();
+
+                Spannable spanText = Spannable.Factory.getInstance().newSpannable(editPageText.getText());
+                spanText.setSpan(new StyleSpan(Typeface.BOLD), selectionStart, selectionEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                editPageText.setText(spanText);
+
+
+                editPageText.setSelection(selectionStart, selectionEnd);
+            }
+        });
+
+        iconItalic = (ImageView) findViewById(R.id.icon_italic);
+        iconItalic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int selectionStart = editPageText.getSelectionStart();
+                int selectionEnd = editPageText.getSelectionEnd();
+
+                Spannable spanText = Spannable.Factory.getInstance().newSpannable(editPageText.getText());
+                spanText.setSpan(new StyleSpan(Typeface.ITALIC), selectionStart, selectionEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                editPageText.setText(spanText);
+
+
+                editPageText.setSelection(selectionStart, selectionEnd);
+            }
+        });
+
+        iconUnderline = (ImageView) findViewById(R.id.icon_underline);
+        iconUnderline.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int selectionStart = editPageText.getSelectionStart();
+                int selectionEnd = editPageText.getSelectionEnd();
+
+                Spannable spanText = Spannable.Factory.getInstance().newSpannable(editPageText.getText());
+                spanText.setSpan(new UnderlineSpan(), selectionStart, selectionEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                editPageText.setText(spanText);
+
+
+                editPageText.setSelection(selectionStart, selectionEnd);
             }
         });
     }
@@ -265,5 +322,19 @@ public class ViewPageActivity extends AppCompatActivity {
                     }
                 })
                 .show();
+    }
+
+    private void save() {
+        String text;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            text = Html.toHtml(editPageText.getText(), Html.FROM_HTML_MODE_LEGACY);
+        }
+        else {
+            text = Html.toHtml(editPageText.getText());
+        }
+
+        page.setText(text);
+        dbHelper.updatePage(page);
+        toggleEdit(false);
     }
 }
