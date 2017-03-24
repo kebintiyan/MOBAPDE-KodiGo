@@ -13,7 +13,9 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.InputType;
 import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
@@ -251,12 +253,35 @@ public class ViewPageActivity extends AppCompatActivity {
                 int selectionStart = editPageText.getSelectionStart();
                 int selectionEnd = editPageText.getSelectionEnd();
 
-                Spannable spanText = Spannable.Factory.getInstance().newSpannable(editPageText.getText());
-                spanText.setSpan(new StyleSpan(Typeface.BOLD), selectionStart, selectionEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                editPageText.setText(spanText);
+                Spannable ss = editPageText.getText();
+                StyleSpan [] spans = ss.getSpans(selectionStart,
+                        selectionEnd, StyleSpan.class);
 
+
+                boolean hasSpan = false;
+
+                for(int i = 0; i < spans.length; i++){
+                    if (spans[i].getStyle() == Typeface.BOLD) {
+                        hasSpan = true;
+                    }
+                        //ss.removeSpan(spans[i]);
+                }
+
+                if (!hasSpan) {
+                    Spannable spanText = Spannable.Factory.getInstance().newSpannable(editPageText.getText());
+                    spanText.setSpan(new StyleSpan(Typeface.BOLD), selectionStart, selectionEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    editPageText.setText(spanText);
+
+
+                }
+                else {
+                    StyleSpanRemover spanRemover = new StyleSpanRemover();
+                    spanRemover.RemoveStyle(ss ,selectionStart, selectionEnd, Typeface.BOLD);
+                    editPageText.setText(ss);
+                }
 
                 editPageText.setSelection(selectionStart, selectionEnd);
+
             }
         });
 
@@ -267,10 +292,32 @@ public class ViewPageActivity extends AppCompatActivity {
                 int selectionStart = editPageText.getSelectionStart();
                 int selectionEnd = editPageText.getSelectionEnd();
 
-                Spannable spanText = Spannable.Factory.getInstance().newSpannable(editPageText.getText());
-                spanText.setSpan(new StyleSpan(Typeface.ITALIC), selectionStart, selectionEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                editPageText.setText(spanText);
+                Spannable ss = editPageText.getText();
+                StyleSpan [] spans = ss.getSpans(selectionStart,
+                        selectionEnd, StyleSpan.class);
 
+
+                boolean hasSpan = false;
+
+                for(int i = 0; i < spans.length; i++){
+                    if (spans[i].getStyle() == Typeface.ITALIC) {
+                        hasSpan = true;
+                    }
+                    //ss.removeSpan(spans[i]);
+                }
+
+                if (!hasSpan) {
+                    Spannable spanText = Spannable.Factory.getInstance().newSpannable(editPageText.getText());
+                    spanText.setSpan(new StyleSpan(Typeface.ITALIC), selectionStart, selectionEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    editPageText.setText(spanText);
+
+
+                }
+                else {
+                    StyleSpanRemover spanRemover = new StyleSpanRemover();
+                    spanRemover.RemoveStyle(ss ,selectionStart, selectionEnd, Typeface.ITALIC);
+                    editPageText.setText(ss);
+                }
 
                 editPageText.setSelection(selectionStart, selectionEnd);
             }
@@ -283,10 +330,26 @@ public class ViewPageActivity extends AppCompatActivity {
                 int selectionStart = editPageText.getSelectionStart();
                 int selectionEnd = editPageText.getSelectionEnd();
 
-                Spannable spanText = Spannable.Factory.getInstance().newSpannable(editPageText.getText());
-                spanText.setSpan(new UnderlineSpan(), selectionStart, selectionEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                editPageText.setText(spanText);
+                Spannable ss = editPageText.getText();
+                UnderlineSpan [] spans = ss.getSpans(selectionStart,
+                        selectionEnd, UnderlineSpan.class);
 
+
+                boolean hasSpan = spans.length > 0;
+
+
+                if (!hasSpan) {
+                    Spannable spanText = Spannable.Factory.getInstance().newSpannable(editPageText.getText());
+                    spanText.setSpan(new UnderlineSpan(), selectionStart, selectionEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    editPageText.setText(spanText);
+
+
+                }
+                else {
+                    StyleSpanRemover spanRemover = new StyleSpanRemover();
+                    spanRemover.RemoveOne(ss ,selectionStart, selectionEnd, UnderlineSpan.class);
+                    editPageText.setText(ss);
+                }
 
                 editPageText.setSelection(selectionStart, selectionEnd);
             }
@@ -325,6 +388,7 @@ public class ViewPageActivity extends AppCompatActivity {
     }
 
     private void save() {
+        editPageText.setSelection(editPageText.getText().toString().length() - 1);
         String text;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             text = Html.toHtml(editPageText.getText(), Html.FROM_HTML_MODE_LEGACY);
