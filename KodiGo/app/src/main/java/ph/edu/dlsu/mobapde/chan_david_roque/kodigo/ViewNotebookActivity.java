@@ -153,10 +153,10 @@ public class ViewNotebookActivity extends AppCompatActivity {
                 return true;
             case R.id.action_delete:
                 new MaterialDialog.Builder(this)
-                        .title("Confirm Delete")
+                        .title("Delete?")
                         .content("Are you sure you want to delete this notebook?")
-                        .positiveText("Yes")
-                        .negativeText("No")
+                        .positiveText("Ok")
+                        .negativeText("Cancel")
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
