@@ -85,10 +85,10 @@ public class ViewPageActivity extends AppCompatActivity {
                 clearFocus();
 
                 new MaterialDialog.Builder(this)
-                        .title("Confirm Delete")
+                        .title("Delete?")
                         .content("Are you sure you want to delete this page?")
-                        .positiveText("Yes")
-                        .negativeText("No")
+                        .positiveText("Ok")
+                        .negativeText("Cancel")
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -172,10 +172,10 @@ public class ViewPageActivity extends AppCompatActivity {
     public void showOnCancelConfirmDialog() {
         clearFocus();
         MaterialDialog dialog = new MaterialDialog.Builder(this)
-                .title("Discard Changes")
+                .title("Discard?")
                 .content("Are you sure you want to discard your changes?")
-                .positiveText("Yes")
-                .negativeText("No")
+                .positiveText("Ok")
+                .negativeText("Cancel")
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {

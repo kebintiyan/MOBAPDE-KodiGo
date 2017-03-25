@@ -133,10 +133,10 @@ public class AddNotebookActivity extends AppCompatActivity {
         clearFocus();
 
         new MaterialDialog.Builder(this)
-                .title("Add Notebook")
-                .content("Are you sure you want to cancel adding a notebook?")
-                .positiveText("Yes")
-                .negativeText("No")
+                .title("Discard?")
+                .content("Are you sure you want to discard your notebook?")
+                .positiveText("Ok")
+                .negativeText("Cancel")
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
