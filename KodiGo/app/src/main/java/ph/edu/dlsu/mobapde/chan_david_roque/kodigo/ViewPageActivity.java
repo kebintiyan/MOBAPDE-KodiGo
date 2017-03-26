@@ -59,6 +59,7 @@ public class ViewPageActivity extends AppCompatActivity {
     ImageView iconBold;
     ImageView iconItalic;
     ImageView iconUnderline;
+    ImageView iconComment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -249,6 +250,42 @@ public class ViewPageActivity extends AppCompatActivity {
             }
         });
 
+        initToolbarIcons();
+
+    }
+
+    private void initActionBar() {
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        toolbarTitle.setText(page.getName());
+        toolbarTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showEditTitleDialog();
+            }
+        });
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+    }
+
+    private void showEditTitleDialog() {
+        new MaterialDialog.Builder(this)
+                .title("Edit Title")
+                .inputRange(1, 24)
+                .input("Page title", page.getName(), false, new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(MaterialDialog dialog, CharSequence input) {
+                        if (!page.getName().equals(input + "")) {
+                            page.setName(input + "");
+                            dbHelper.updatePage(page);
+                            toolbarTitle.setText(page.getName());
+                        }
+                    }
+                })
+                .show();
+    }
+
+    private void initToolbarIcons() {
         // Icons
         iconBold = (ImageView) findViewById(R.id.icon_bold);
         iconBold.setOnClickListener(new View.OnClickListener() {
@@ -268,7 +305,7 @@ public class ViewPageActivity extends AppCompatActivity {
                     if (spans[i].getStyle() == Typeface.BOLD) {
                         hasSpan = true;
                     }
-                        //ss.removeSpan(spans[i]);
+                    //ss.removeSpan(spans[i]);
                 }
 
                 Log.i("HAS SPAN", hasSpan + "");
@@ -362,37 +399,33 @@ public class ViewPageActivity extends AppCompatActivity {
                 editPageText.setSelection(selectionStart, selectionEnd);
             }
         });
-    }
 
-    private void initActionBar() {
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
-        toolbarTitle.setText(page.getName());
-        toolbarTitle.setOnClickListener(new View.OnClickListener() {
+        iconComment = (ImageView) findViewById(R.id.icon_comment);
+        iconComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showEditTitleDialog();
+                int selectionStart = editPageText.getSelectionStart();
+                int selectionEnd = editPageText.getSelectionEnd();
+
+                if (selectionStart == selectionEnd) {
+                    selectionEnd = editPageText.getText().toString().length();
+                }
+
+                Spannable ss = editPageText.getText();
+                CommentSpan [] spans = ss.getSpans(selectionStart,
+                        selectionEnd, CommentSpan.class);
+
+                boolean hasSpan = spans.length > 0;
+
+                if (hasSpan) {
+                    spans[0].onClick(v);
+                }
+                else if (selectionStart != editPageText.getSelectionEnd()) {
+                    // Show dialog for creating comment
+                    // Create comment
+                }
             }
         });
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-    }
-
-    private void showEditTitleDialog() {
-        new MaterialDialog.Builder(this)
-                .title("Edit Title")
-                .inputRange(1, 24)
-                .input("Page title", page.getName(), false, new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(MaterialDialog dialog, CharSequence input) {
-                        if (!page.getName().equals(input + "")) {
-                            page.setName(input + "");
-                            dbHelper.updatePage(page);
-                            toolbarTitle.setText(page.getName());
-                        }
-                    }
-                })
-                .show();
     }
 
     private void save() {

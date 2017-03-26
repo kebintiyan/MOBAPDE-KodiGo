@@ -56,41 +56,10 @@ public class HTMLTagHandler implements Html.TagHandler {
     private void processComment(boolean opening, Editable output, String commentID) {
         int len = output.length();
 
+        Log.i("COMEEEEEEEENT", output.toString());
+
         Comment comment = dbHelper.queryCommentByID(Long.parseLong(commentID));
-//        final String content = comment.getComment();
-//        ClickableSpan clickableSpan;
-
-        CommentSpan commentSpan;
-
-        commentSpan = new CommentSpan(comment, mode == MODE_VIEW);
-
-        /*if (mode == MODE_EDIT) {
-            clickableSpan = new ClickableSpan() {
-                @Override
-                public void onClick(View widget) {
-                    new MaterialDialog.Builder(widget.getContext())
-                            .title("Comment")
-                            .input("Comment", content, false, new MaterialDialog.InputCallback() {
-                                @Override
-                                public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
-                                    dialog.setContent(input);
-                                }
-                            })
-                            .show();
-                }
-            };
-        }
-        else {
-            clickableSpan = new ClickableSpan() {
-                @Override
-                public void onClick(View widget) {
-                    new MaterialDialog.Builder(widget.getContext())
-                            .title("Comment")
-                            .content(content)
-                            .show();
-                }
-            };
-        }*/
+        CommentSpan commentSpan = new CommentSpan(comment, output.toString(), mode == MODE_VIEW);
 
         if(opening) {
             output.setSpan(commentSpan, len, len, Spannable.SPAN_MARK_MARK);
