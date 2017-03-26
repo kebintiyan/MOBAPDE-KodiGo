@@ -19,60 +19,6 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/viewTitlePage"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="20sp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:gravity="center"
-                    />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:inputType="textMultiLine"
-                    android:id="@+id/viewPageText"
-                    android:layout_below="@id/viewTitlePage"
-                    android:textColor="@color/colorPrimaryText"
-                    android:textSize="16sp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    />
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/editTitlePage"
-                    android:visibility="invisible"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="20sp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:gravity="center"
-                    />
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="start"
-                    android:inputType="textMultiLine"
-                    android:id="@+id/editPageText"
-                    android:layout_below="@id/editTitlePage"
-                    android:backgroundTint="@android:color/transparent"
-                    android:visibility="invisible"
-                    android:textColor="@color/colorPrimaryText"
-                    android:textSize="16sp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    />
                 <HorizontalScrollView
                     android:id="@+id/custom_toolbar"
                     android:layout_width="wrap_content"
@@ -161,14 +107,10 @@
             </HorizontalScrollView>
     </LinearLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:src="@drawable/ic_edit_white_24px"
-        app:fabSize="normal"
-        android:id="@+id/toggleEditButton"
-        android:layout_gravity="bottom|right"
-        android:layout_margin="16dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_anchorGravity="bottom|right|end"/>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </android.support.design.widget.CoordinatorLayout>

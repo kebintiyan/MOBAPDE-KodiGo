@@ -2,6 +2,7 @@ package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import java.util.Random;
 
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_EDITABLE;
+import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_NOTEBOOK_ID;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_PAGE_ID;
 
 public class ViewPageActivity extends AppCompatActivity {
@@ -31,8 +33,11 @@ public class ViewPageActivity extends AppCompatActivity {
     Menu menu;
     MenuItem saveItem;
     Page page;
-    long pageID;
+    long pageID, notebookID;
     DatabaseHelper dbHelper;
+
+    private SectionsPagerAdapter mSectionsPagerAdapter;
+    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,90 +53,21 @@ public class ViewPageActivity extends AppCompatActivity {
         Log.i("AAA", isEditable+"");
 
 
-        page = dbHelper.queryPageByID(pageID);
+        dbHelper = new DatabaseHelper(getBaseContext());
+        notebookID = (long) getIntent().getExtras().get(KEY_NOTEBOOK_ID);
+        pageID = (long) getIntent().getExtras().get(KEY_PAGE_ID);
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), dbHelper.queryPagesByNotebookID(notebookID));
 
-        editTitlePage = (EditText) findViewById(R.id.editTitlePage);
-        editPageText = (EditText) findViewById(R.id.editPageText);
-        editTitlePage.setText(page.getName());
-        editPageText.setText(page.getText());
-        editPageText.setHint(getRandomHint());
+        // Set up the ViewPager with the sections adapter.
+        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        viewTitlePage = (TextView) findViewById(R.id.viewTitlePage);
-        viewPageText = (TextView) findViewById(R.id.viewPageText);
-        viewTitlePage.setText(page.getName());
-        viewPageText.setText(page.getText());
+        int pageNumber = dbHelper.queryPageByID(pageID).getPageNumber();
+        mViewPager.setCurrentItem(pageNumber-1);
 
-        toolbar = (LinearLayout) findViewById(R.id.my_toolbar);
-
-        toggleEditButton = (FloatingActionButton) findViewById(R.id.toggleEditButton);
-
-        toggleEditButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleEdit(true);
-            }
-        });
 
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        inflater = getMenuInflater();
-        this.menu = menu;
-        inflater.inflate(R.menu.page_menu_bar, menu);
-        saveItem = menu.findItem(R.id.action_save);
-        saveItem.setVisible(false);
-        toggleEdit(isEditable);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle presses on the action bar items
-        switch (item.getItemId()) {
-            case R.id.action_save:
-                page.setName(editTitlePage.getText().toString());
-                page.setText(editPageText.getText().toString());
-                dbHelper.updatePage(page);
-                toggleEdit(false);
-                return true;
-            case android.R.id.home: if(isEditable)
-                                        toggleEdit(false);
-                                    else
-                                        finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    public void toggleEdit(boolean isEditable){
-
-        int textView, editText;
-        this.isEditable = isEditable;
-        if(isEditable){
-            textView = View.INVISIBLE;
-            editText = View.VISIBLE;
-            saveItem.setVisible(true);
-        }else {
-            textView = View.VISIBLE;
-            editText = View.INVISIBLE;
-            viewTitlePage.setText(page.getName());
-            viewPageText.setText(page.getText());
-            saveItem.setVisible(false);
-        }
-
-        viewTitlePage.setVisibility(textView);
-        viewPageText.setVisibility(textView);
-        toggleEditButton.setVisibility(textView);
-
-
-        editTitlePage.setVisibility(editText);
-        editPageText.setVisibility(editText);
-        toolbar.setVisibility(editText);
-
-    }
 
     public String getRandomHint() {
         Random rand = new Random();

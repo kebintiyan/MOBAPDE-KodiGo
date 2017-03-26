@@ -71,6 +71,8 @@ public class PlaceholderFragment extends Fragment {
 
         dbHelper = new DatabaseHelper(rootView.getContext());
 
+        Log.i("pgas", getActivity().getIntent().getExtras().getLong(KEY_PAGE_ID)+"");
+        isEditable = Boolean.parseBoolean(getActivity().getIntent().getExtras().getLong(KEY_PAGE_ID)+"");
 
         pageID = getArguments().getLong(KEY_PAGE_ID);
 
@@ -96,6 +98,7 @@ public class PlaceholderFragment extends Fragment {
                 toggleEdit(true);
             }
         });
+        setHasOptionsMenu(true);
         return rootView;
     }
 
@@ -118,11 +121,6 @@ public class PlaceholderFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
