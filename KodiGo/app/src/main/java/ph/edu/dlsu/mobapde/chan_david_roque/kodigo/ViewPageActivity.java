@@ -225,11 +225,15 @@ public class ViewPageActivity extends AppCompatActivity {
 
 
         Spanned pageText;
+        String originalText = page.getText();
+        originalText = originalText.replaceAll("&lt;", "<").replaceAll("&gt;", ">");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            pageText = Html.fromHtml(page.getText(), Html.FROM_HTML_MODE_LEGACY, new HTMLImageHandler(), new HTMLTagHandler(getBaseContext()));
+            pageText = Html.fromHtml(originalText, Html.FROM_HTML_MODE_LEGACY, new HTMLImageHandler(),
+                    new HTMLTagHandler(getBaseContext(), HTMLTagHandler.MODE_EDIT));
         }
         else {
-            pageText = Html.fromHtml(page.getText(), new HTMLImageHandler(), new HTMLTagHandler(getBaseContext()));
+            pageText = Html.fromHtml(originalText, new HTMLImageHandler(), new HTMLTagHandler(getBaseContext(),
+                    HTMLTagHandler.MODE_EDIT));
         }
 
         editPageText.setText(pageText);
@@ -267,12 +271,17 @@ public class ViewPageActivity extends AppCompatActivity {
                         //ss.removeSpan(spans[i]);
                 }
 
+                Log.i("HAS SPAN", hasSpan + "");
+
                 if (!hasSpan) {
                     Spannable spanText = Spannable.Factory.getInstance().newSpannable(editPageText.getText());
-                    spanText.setSpan(new StyleSpan(Typeface.BOLD), selectionStart, selectionEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    if (selectionStart != selectionEnd) {
+                        spanText.setSpan(new StyleSpan(Typeface.BOLD), selectionStart, selectionEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
+                    else {
+                        spanText.setSpan(new StyleSpan(Typeface.BOLD), selectionStart, selectionEnd, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                    }
                     editPageText.setText(spanText);
-
-
                 }
                 else {
                     StyleSpanRemover spanRemover = new StyleSpanRemover();
@@ -281,7 +290,6 @@ public class ViewPageActivity extends AppCompatActivity {
                 }
 
                 editPageText.setSelection(selectionStart, selectionEnd);
-
             }
         });
 

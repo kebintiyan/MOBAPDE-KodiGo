@@ -117,6 +117,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        dbHelper.insertComment(new Comment()
+        .setComment("Pare pulis ako.")
+        .setPageID(1));
     }
 
     @Override

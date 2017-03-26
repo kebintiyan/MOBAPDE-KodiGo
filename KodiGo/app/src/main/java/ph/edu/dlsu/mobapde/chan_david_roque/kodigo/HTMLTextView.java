@@ -6,6 +6,7 @@ import android.text.Html;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.TextView;
 
 /**
@@ -36,11 +37,17 @@ public class HTMLTextView extends android.support.v7.widget.AppCompatTextView {
 
     private Spanned getHTMLText(String text) {
         text = text.replaceAll("\\n", "<br />");
+
+        // You might need to remove this:
+        text = text.replaceAll("&lt;", "<");
+        text = text.replaceAll("&gt;", ">");
+
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            return Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY, new HTMLImageHandler(), new HTMLTagHandler(getContext()));
+            return Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY, new HTMLImageHandler(), new HTMLTagHandler(getContext(), HTMLTagHandler.MODE_VIEW));
         }
         else {
-            return Html.fromHtml(text, new HTMLImageHandler(), new HTMLTagHandler(getContext()));
+            return Html.fromHtml(text, new HTMLImageHandler(), new HTMLTagHandler(getContext(), HTMLTagHandler.MODE_VIEW));
         }
     }
 }

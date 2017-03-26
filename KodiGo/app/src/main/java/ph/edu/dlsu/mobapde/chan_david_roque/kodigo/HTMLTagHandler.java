@@ -2,6 +2,7 @@ package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.Html;
 import android.text.Spannable;
@@ -29,18 +30,21 @@ public class HTMLTagHandler implements Html.TagHandler {
 
     private final static String TAG_COMMENT = "comment";
     private final static String TAG_IMAGE = "image";
+    public final static int MODE_VIEW = 0;
+    public final static int MODE_EDIT = 1;
 
     DatabaseHelper dbHelper;
+    int mode;
 
-    public HTMLTagHandler(Context context) {
+    public HTMLTagHandler(Context context, int mode) {
         dbHelper = new DatabaseHelper(context);
+        this.mode = mode;
     }
 
     @Override
     public void handleTag(boolean opening, String tag, Editable output, XMLReader xmlReader) {
-
         if(tag.indexOf(TAG_COMMENT) == 0) {
-            String id = tag.substring(TAG_COMMENT.length() + 1);
+            String id = tag.split("_")[1];
             processComment(opening, output, id);
         }
         else if (tag.indexOf(TAG_IMAGE) == 0) {
@@ -52,34 +56,53 @@ public class HTMLTagHandler implements Html.TagHandler {
     private void processComment(boolean opening, Editable output, String commentID) {
         int len = output.length();
 
-        final String content = dbHelper.queryCommentByID(Long.parseLong(commentID)).getComment();
-        ClickableSpan clickableSpan = new ClickableSpan() {
-            @Override
-            public void onClick(View widget) {
-                new MaterialDialog.Builder(widget.getContext())
-                        .title("Comment")
-                        .content(content)
-                        .show();
-            }
+        Comment comment = dbHelper.queryCommentByID(Long.parseLong(commentID));
+//        final String content = comment.getComment();
+//        ClickableSpan clickableSpan;
 
-            /*@Override
-            public void updateDrawState(TextPaint ds) {
-                super.updateDrawState(ds);
-                ds.setUnderlineText(false);
-            }*/
-        };
+        CommentSpan commentSpan;
 
-        if(opening) {
-            output.setSpan(clickableSpan, len, len, Spannable.SPAN_MARK_MARK);
+        commentSpan = new CommentSpan(comment, mode == MODE_VIEW);
+
+        /*if (mode == MODE_EDIT) {
+            clickableSpan = new ClickableSpan() {
+                @Override
+                public void onClick(View widget) {
+                    new MaterialDialog.Builder(widget.getContext())
+                            .title("Comment")
+                            .input("Comment", content, false, new MaterialDialog.InputCallback() {
+                                @Override
+                                public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                                    dialog.setContent(input);
+                                }
+                            })
+                            .show();
+                }
+            };
         }
         else {
-            Object obj = getLast(output, ClickableSpan.class);
+            clickableSpan = new ClickableSpan() {
+                @Override
+                public void onClick(View widget) {
+                    new MaterialDialog.Builder(widget.getContext())
+                            .title("Comment")
+                            .content(content)
+                            .show();
+                }
+            };
+        }*/
+
+        if(opening) {
+            output.setSpan(commentSpan, len, len, Spannable.SPAN_MARK_MARK);
+        }
+        else {
+            Object obj = getLast(output, CommentSpan.class);
             int where = output.getSpanStart(obj);
 
             output.removeSpan(obj);
 
             if (where != len) {
-                output.setSpan(clickableSpan, where, len, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                output.setSpan(commentSpan, where, len, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
     }
