@@ -3,6 +3,7 @@ package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 import android.content.Context;
 import android.os.Build;
 import android.support.v7.widget.AppCompatEditText;
+import android.text.Editable;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.AttributeSet;
@@ -31,6 +32,21 @@ public class HTMLEditText extends AppCompatEditText {
             super.setText(text);
         else {
             super.setText(getHTMLText(text + ""));
+        }
+    }
+
+    public String getTextAsString(boolean asHTML) {
+        if (!asHTML)
+            return super.getText().toString();
+        else {
+            String text;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                text = Html.toHtml(super.getText(), Html.FROM_HTML_MODE_LEGACY);
+            }
+            else {
+                text = Html.toHtml(super.getText());
+            }
+            return text;
         }
     }
 

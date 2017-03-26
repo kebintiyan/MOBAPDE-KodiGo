@@ -44,7 +44,7 @@ import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.RESULT_NOTEB
 public class ViewPageActivity extends AppCompatActivity {
 
     TextView toolbarTitle;
-    EditText editPageText;
+    HTMLEditText editPageText;
     HTMLTextView viewPageText;
 
     boolean isEditable;
@@ -217,14 +217,14 @@ public class ViewPageActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        editPageText        = (EditText)                findViewById(R.id.editPageText);
+        editPageText        = (HTMLEditText)            findViewById(R.id.editPageText);
         viewPageText        = (HTMLTextView)            findViewById(R.id.viewPageText);
         toolbar             = (HorizontalScrollView)    findViewById(R.id.my_toolbar);
         toggleEditButton    = (FloatingActionButton)    findViewById(R.id.toggleEditButton);
         toolbarTitle        = (TextView)                findViewById(R.id.toolbarTitle);
 
 
-        Spanned pageText;
+        /*Spanned pageText;
         String originalText = page.getText();
         originalText = originalText.replaceAll("&lt;", "<").replaceAll("&gt;", ">");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -234,9 +234,9 @@ public class ViewPageActivity extends AppCompatActivity {
         else {
             pageText = Html.fromHtml(originalText, new HTMLImageHandler(), new HTMLTagHandler(getBaseContext(),
                     HTMLTagHandler.MODE_EDIT));
-        }
+        }*/
 
-        editPageText.setText(pageText);
+        editPageText.setText(page.getText(), true);
         editPageText.setHint(getRandomHint());
 
 
@@ -396,16 +396,8 @@ public class ViewPageActivity extends AppCompatActivity {
     }
 
     private void save() {
-        editPageText.setSelection(editPageText.getText().toString().length() - 1);
-        String text;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            text = Html.toHtml(editPageText.getText(), Html.FROM_HTML_MODE_LEGACY);
-        }
-        else {
-            text = Html.toHtml(editPageText.getText());
-        }
-
-        page.setText(text);
+        page.setText(editPageText.getTextAsString(true));
+        Log.i("SAAAAAAAAVE", page.getText());
         dbHelper.updatePage(page);
         toggleEdit(false);
     }
