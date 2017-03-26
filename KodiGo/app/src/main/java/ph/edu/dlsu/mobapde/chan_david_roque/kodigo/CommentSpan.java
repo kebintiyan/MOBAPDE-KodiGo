@@ -16,14 +16,12 @@ import com.afollestad.materialdialogs.MaterialDialog;
 public class CommentSpan extends ClickableSpan {
 
     private Comment comment;
-    private String coveredText;
     private boolean isViewing;
     private boolean deleted;
 
-    public CommentSpan(Comment comment, String coveredText, boolean isViewing) {
+    public CommentSpan(Comment comment, boolean isViewing) {
         super();
         this.comment = comment;
-        this.coveredText = coveredText;
         this.isViewing = isViewing;
         this.deleted = false;
     }
@@ -88,6 +86,13 @@ public class CommentSpan extends ClickableSpan {
                         .show();
             }
         }
+    }
+
+    @Override
+    public void updateDrawState(TextPaint ds) {
+        super.updateDrawState(ds);
+
+        ds.setColor(Color.parseColor("#757575"));
     }
 
     public Comment getComment() {

@@ -12,7 +12,7 @@ public class Comment {
     public static final String COLUMN_COMMENT       = "comment";
 
     private int commentID;
-    private int pageID;
+    private long pageID;
     private String comment;
 
     public Comment() {
@@ -27,11 +27,11 @@ public class Comment {
         return this;
     }
 
-    public int getPageID() {
+    public long getPageID() {
         return pageID;
     }
 
-    public Comment setPageID(int pageID) {
+    public Comment setPageID(long pageID) {
         this.pageID = pageID;
         return this;
     }

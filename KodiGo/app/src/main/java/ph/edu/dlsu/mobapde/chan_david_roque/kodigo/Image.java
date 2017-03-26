@@ -12,7 +12,7 @@ public class Image {
     public static final String COLUMN_URL       = "url";
 
     private int imageID;
-    private int pageID;
+    private long pageID;
     private String url;
 
     public Image() {
@@ -28,11 +28,11 @@ public class Image {
         return this;
     }
 
-    public int getPageID() {
+    public long getPageID() {
         return pageID;
     }
 
-    public Image setPageID(int pageID) {
+    public Image setPageID(long pageID) {
         this.pageID = pageID;
         return this;
     }

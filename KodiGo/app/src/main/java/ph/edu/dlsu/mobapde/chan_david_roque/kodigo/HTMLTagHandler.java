@@ -59,7 +59,7 @@ public class HTMLTagHandler implements Html.TagHandler {
         Log.i("COMEEEEEEEENT", output.toString());
 
         Comment comment = dbHelper.queryCommentByID(Long.parseLong(commentID));
-        CommentSpan commentSpan = new CommentSpan(comment, output.toString(), mode == MODE_VIEW);
+        CommentSpan commentSpan = new CommentSpan(comment, mode == MODE_VIEW);
 
         if(opening) {
             output.setSpan(commentSpan, len, len, Spannable.SPAN_MARK_MARK);

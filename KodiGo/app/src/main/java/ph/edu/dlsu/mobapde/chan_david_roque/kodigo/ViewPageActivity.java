@@ -15,6 +15,7 @@ import android.text.InputType;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
@@ -421,11 +422,40 @@ public class ViewPageActivity extends AppCompatActivity {
                     spans[0].onClick(v);
                 }
                 else if (selectionStart != editPageText.getSelectionEnd()) {
+
+                    new MaterialDialog.Builder(v.getContext())
+                            .title("Add Comment")
+                            .positiveText("Save")
+                            .negativeText("Cancel")
+                            .input("Comment", "", false, new MaterialDialog.InputCallback() {
+                                @Override
+                                public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                                    createComment(input + "");
+                                }
+                            })
+                            .show();
                     // Show dialog for creating comment
                     // Create comment
                 }
             }
         });
+    }
+
+    private void createComment(String text) {
+        Comment comment = new Comment();
+        comment.setComment(text);
+        comment.setPageID(page.getPageID());
+
+        int selectionStart = editPageText.getSelectionStart();
+        int selectionEnd = editPageText.getSelectionEnd();
+
+        CommentSpan commentSpan = new CommentSpan(comment, false);
+
+        Spannable spanText = Spannable.Factory.getInstance().newSpannable(editPageText.getText());
+        spanText.setSpan(commentSpan, selectionStart, selectionEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        editPageText.setText(spanText);
+
+        editPageText.setSelection(selectionStart, selectionEnd);
     }
 
     private void save() {
