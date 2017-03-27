@@ -7,6 +7,7 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
+import android.support.v4.text.TextUtilsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -14,7 +15,9 @@ import android.text.Html;
 import android.text.InputType;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
@@ -144,7 +147,6 @@ public class ViewPageActivity extends AppCompatActivity {
         }else {
             textView = View.VISIBLE;
             editText = View.GONE;
-            viewPageText.setText(page.getText());
             saveItem.setVisible(false);
             deletePage.setVisible(true);
         }
@@ -434,8 +436,6 @@ public class ViewPageActivity extends AppCompatActivity {
                                 }
                             })
                             .show();
-                    // Show dialog for creating comment
-                    // Create comment
                 }
             }
         });
@@ -459,9 +459,51 @@ public class ViewPageActivity extends AppCompatActivity {
     }
 
     private void save() {
+        saveComments();
         page.setText(editPageText.getTextAsString(true));
-        Log.i("SAAAAAAAAVE", page.getText());
         dbHelper.updatePage(page);
+        viewPageText.setText(page.getText());
+        editPageText.setText(page.getText(), true);
         toggleEdit(false);
+    }
+
+    private void saveComments() {
+        CharSequence charSequence = editPageText.getText();
+        if (charSequence instanceof Spannable) {
+            Spannable spannableText = (Spannable)charSequence;
+            CommentSpan[] spans = spannableText.getSpans(0, editPageText.length(), CommentSpan.class);
+            for (CommentSpan span : spans) {
+
+                // If comment span is deleted, delete from db
+                if (span.isDeleted() && span.getComment().getCommentID() != 0) {
+                    dbHelper.deleteComment(span.getComment().getCommentID());
+                }
+                else {
+                    long id = span.getComment().getCommentID();
+                    int start = spannableText.getSpanStart(span);
+                    int end = spannableText.getSpanEnd(span);
+
+                    CharSequence before = spannableText.subSequence(0, start);
+                    CharSequence middle = spannableText.subSequence(start, end);
+                    CharSequence after = spannableText.subSequence(end, spannableText.length());
+
+                    if (id != 0) {
+                        // If has id, update comment in db
+                        dbHelper.updateComment(span.getComment());
+                    }
+                    else {
+                        // If no id, create comment in db
+                        // Set id
+                        id = dbHelper.insertComment(span.getComment());
+                    }
+
+                    // Append tags
+                    CharSequence newText = TextUtils.concat(before, "<comment_" + id + ">", middle,
+                            "</comment_" + id + ">", after);
+
+                    editPageText.setText(newText);
+                }
+            }
+        }
     }
 }

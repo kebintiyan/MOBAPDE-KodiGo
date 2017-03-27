@@ -92,7 +92,8 @@ public class CommentSpan extends ClickableSpan {
     public void updateDrawState(TextPaint ds) {
         super.updateDrawState(ds);
 
-        ds.setColor(Color.parseColor("#757575"));
+        ds.setColor(Color.parseColor("#64B5F6"));
+        ds.setUnderlineText(false);
     }
 
     public Comment getComment() {
@@ -102,5 +103,9 @@ public class CommentSpan extends ClickableSpan {
     public CommentSpan setComment(Comment comment) {
         this.comment = comment;
         return this;
+    }
+
+    public boolean isDeleted() {
+        return this.deleted;
     }
 }
