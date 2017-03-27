@@ -116,7 +116,7 @@ public class ViewPageActivity extends AppCompatActivity {
             case android.R.id.home:
                 clearFocus();
                 if(isEditable) {
-                    if (!page.getText().equals(editPageText.getText().toString()))
+                    if (!page.getText().equals(editPageText.getTextAsString(true)))
                         showOnCancelConfirmDialog();
                     else
                         finish();
