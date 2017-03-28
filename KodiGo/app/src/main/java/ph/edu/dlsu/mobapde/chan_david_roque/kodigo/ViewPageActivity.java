@@ -1,40 +1,24 @@
 package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Typeface;
-import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.NavUtils;
-import android.support.v4.text.TextUtilsCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
-import android.text.InputType;
 import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.style.ClickableSpan;
-import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -43,7 +27,6 @@ import java.util.Random;
 
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_EDITABLE;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_PAGE_ID;
-import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.RESULT_NOTEBOOK_DELETED;
 
 public class ViewPageActivity extends AppCompatActivity {
 
@@ -63,6 +46,8 @@ public class ViewPageActivity extends AppCompatActivity {
     ImageView iconBold;
     ImageView iconItalic;
     ImageView iconUnderline;
+    ImageView iconCamera;
+    ImageView iconGallery;
     ImageView iconComment;
 
     @Override
@@ -308,20 +293,13 @@ public class ViewPageActivity extends AppCompatActivity {
                     if (spans[i].getStyle() == Typeface.BOLD) {
                         hasSpan = true;
                     }
-                    //ss.removeSpan(spans[i]);
                 }
-
-                Log.i("HAS SPAN", hasSpan + "");
 
                 if (!hasSpan) {
                     Spannable spanText = Spannable.Factory.getInstance().newSpannable(editPageText.getText());
-                    if (selectionStart != selectionEnd) {
-                        spanText.setSpan(new StyleSpan(Typeface.BOLD), selectionStart, selectionEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    }
-                    else {
-                        spanText.setSpan(new StyleSpan(Typeface.BOLD), selectionStart, selectionEnd, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-                    }
+                    spanText.setSpan(new StyleSpan(Typeface.BOLD), selectionStart, selectionEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     editPageText.setText(spanText);
+
                 }
                 else {
                     StyleSpanRemover spanRemover = new StyleSpanRemover();
@@ -344,22 +322,18 @@ public class ViewPageActivity extends AppCompatActivity {
                 StyleSpan [] spans = ss.getSpans(selectionStart,
                         selectionEnd, StyleSpan.class);
 
-
                 boolean hasSpan = false;
 
                 for(int i = 0; i < spans.length; i++){
                     if (spans[i].getStyle() == Typeface.ITALIC) {
                         hasSpan = true;
                     }
-                    //ss.removeSpan(spans[i]);
                 }
 
                 if (!hasSpan) {
                     Spannable spanText = Spannable.Factory.getInstance().newSpannable(editPageText.getText());
                     spanText.setSpan(new StyleSpan(Typeface.ITALIC), selectionStart, selectionEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     editPageText.setText(spanText);
-
-
                 }
                 else {
                     StyleSpanRemover spanRemover = new StyleSpanRemover();
@@ -385,13 +359,10 @@ public class ViewPageActivity extends AppCompatActivity {
 
                 boolean hasSpan = spans.length > 0;
 
-
                 if (!hasSpan) {
                     Spannable spanText = Spannable.Factory.getInstance().newSpannable(editPageText.getText());
                     spanText.setSpan(new UnderlineSpan(), selectionStart, selectionEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     editPageText.setText(spanText);
-
-
                 }
                 else {
                     StyleSpanRemover spanRemover = new StyleSpanRemover();
@@ -400,6 +371,22 @@ public class ViewPageActivity extends AppCompatActivity {
                 }
 
                 editPageText.setSelection(selectionStart, selectionEnd);
+            }
+        });
+
+        iconCamera = (ImageView) findViewById(R.id.icon_camera);
+        iconCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        iconGallery = (ImageView) findViewById(R.id.icon_gallery);
+        iconGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
 

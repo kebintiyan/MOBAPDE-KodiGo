@@ -116,11 +116,6 @@ public class MainActivity extends AppCompatActivity {
                 v.vibrate(500);
             }
         });
-
-
-        dbHelper.insertComment(new Comment()
-        .setComment("Pare pulis ako.")
-        .setPageID(1));
     }
 
     @Override

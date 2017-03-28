@@ -36,8 +36,6 @@ public class HTMLTextView extends android.support.v7.widget.AppCompatTextView {
     }
 
     private Spanned getHTMLText(String text) {
-        text = text.replaceAll("\\n", "<br />");
-
         // You might need to remove this:
         text = text.replaceAll("&lt;", "<");
         text = text.replaceAll("&gt;", ">");
