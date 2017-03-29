@@ -7,6 +7,7 @@ package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -27,6 +28,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
         // Return a PlaceholderFragment (defined as a static inner class below).
+        Log.i("getItemf", position+"");
         return PlaceholderFragment.newInstance(pages.get(0).getNotebookID(), pages.get(position).getPageID());
     }
 
@@ -47,5 +49,9 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                 return "SECTION 3";
         }
         return null;
+    }
+
+    public interface OnBackPressedListener {
+        void onBackPressed();
     }
 }

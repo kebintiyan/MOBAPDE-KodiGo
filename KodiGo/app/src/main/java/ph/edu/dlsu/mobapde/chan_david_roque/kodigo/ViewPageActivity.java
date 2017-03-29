@@ -1,42 +1,18 @@
 package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Typeface;
-import android.os.Build;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.text.Html;
-import android.text.InputType;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.ClickableSpan;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
-import android.text.style.UnderlineSpan;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_EDITABLE;
@@ -79,16 +55,26 @@ public class ViewPageActivity extends AppCompatActivity {
         isEditable = (boolean) getIntent().getExtras().get(KEY_EDITABLE);
         pageID = (long) getIntent().getExtras().get(KEY_PAGE_ID);
         notebookID = (long) getIntent().getExtras().get(KEY_NOTEBOOK_ID);
-
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), dbHelper.queryPagesByNotebookID(notebookID));
+        ArrayList<Page> pages = dbHelper.queryPagesByNotebookID(notebookID);
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), pages);
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         int pageNumber = dbHelper.queryPageByID(pageID).getPageNumber();
+
         mViewPager.setCurrentItem(pageNumber-1);
 
+
+
     }
+
+    @Override
+    public void invalidateOptionsMenu() {
+        super.invalidateOptionsMenu();
+        Toast toast = Toast.makeText(getBaseContext(), "IM HERE", Toast.LENGTH_SHORT);
+    }
+
 
 }

@@ -8,8 +8,10 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
@@ -43,10 +45,6 @@ import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_PAGE_ID;
  */
 public class PlaceholderFragment extends Fragment {
 
-    EditText editTitlePage;
-    TextView viewTitlePage;
-    MenuInflater inflater;
-    Menu menu;
     long pageID;
     TextView toolbarTitle;
     HTMLEditText editPageText;
@@ -74,6 +72,8 @@ public class PlaceholderFragment extends Fragment {
     private static final String ARG_SECTION_NUMBER = "section_number";
 
     public PlaceholderFragment() {
+        setHasOptionsMenu(true);
+
     }
 
     /**
@@ -108,18 +108,24 @@ public class PlaceholderFragment extends Fragment {
         initViews(rootView);
         initActionBar(rootView);
         setHasOptionsMenu(true);
+
         return rootView;
     }
 
 
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.page_menu_bar, menu);
+        inflater.inflate(R.menu.menu_view_page_slide, menu);
         saveItem = menu.findItem(R.id.action_save);
         saveItem.setVisible(false);
         deletePage = menu.findItem(R.id.action_delete);
-        toggleEdit(isEditable);
-        super.onCreateOptionsMenu(menu, inflater);
+        deletePage.setVisible(true);
+
+        Log.i("saveitemvisibility", saveItem.isVisible()+"");
+        Log.i("delitemvisibility", deletePage.isVisible()+"");
+
+        toggleEdit(false);
     }
 
     @Override
@@ -167,7 +173,7 @@ public class PlaceholderFragment extends Fragment {
 
         int textView, editText;
         this.isEditable = isEditable;
-
+        Log.i("editable?", isEditable+"");
         clearFocus();
         if(isEditable){
             Log.i("isedit","yes");
@@ -175,6 +181,7 @@ public class PlaceholderFragment extends Fragment {
             editText = View.VISIBLE;
             saveItem.setVisible(true);
             deletePage.setVisible(false);
+
         }else {
             textView = View.VISIBLE;
             editText = View.GONE;
@@ -183,6 +190,8 @@ public class PlaceholderFragment extends Fragment {
             deletePage.setVisible(true);
         }
 
+        Log.i("del",  deletePage.isVisible()+"");
+        Log.i("save", saveItem.isVisible()+"");
         viewPageText.setVisibility(textView);
         toggleEditButton.setVisibility(textView);
 
@@ -197,17 +206,6 @@ public class PlaceholderFragment extends Fragment {
             editPageText.setSelection(editPageText.getText().toString().length());
         }
 
-    }
-
-    public void onBackPressed() {
-        clearFocus();
-        if (isEditable) {
-
-            showOnCancelConfirmDialog();
-        }
-        else {
-            super.getActivity().onBackPressed();
-        }
     }
 
     public void showOnCancelConfirmDialog() {
@@ -297,7 +295,7 @@ public class PlaceholderFragment extends Fragment {
                 showEditTitleDialog();
             }
         });
-
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(page.getName());
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
@@ -497,8 +495,6 @@ public class PlaceholderFragment extends Fragment {
         dbHelper.updatePage(page);
         toggleEdit(false);
     }
-
-
 
 
 }
