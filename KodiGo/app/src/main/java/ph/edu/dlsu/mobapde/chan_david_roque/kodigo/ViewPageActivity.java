@@ -11,6 +11,7 @@ import android.text.Editable;
 import android.text.Spannable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.style.BackgroundColorSpan;
 import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
@@ -49,16 +50,13 @@ public class ViewPageActivity extends AppCompatActivity {
     ToggleButton iconBold;
     ToggleButton iconItalic;
     ToggleButton iconUnderline;
+    ToggleButton iconHighlight;
     ImageView iconCamera;
     ImageView iconGallery;
     ImageView iconComment;
 
     int styleStart;
     int cursorLoc;
-
-    boolean isBold;
-    boolean isItalic;
-    boolean isUnderline;
 
 
     @Override
@@ -69,11 +67,6 @@ public class ViewPageActivity extends AppCompatActivity {
         dbHelper    = new DatabaseHelper(getBaseContext());
         isEditable  = (boolean) getIntent().getExtras().get(KEY_EDITABLE);
         page        = dbHelper.queryPageByID((long) getIntent().getExtras().get(KEY_PAGE_ID));
-
-
-        isBold = false;
-        isItalic = false;
-        isUnderline = false;
 
         initViews();
         initActionBar();
@@ -309,6 +302,15 @@ public class ViewPageActivity extends AppCompatActivity {
                         }
                         s.setSpan(new UnderlineSpan(), styleStart, position, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     }
+
+                    if (iconHighlight.isChecked()){
+                        BackgroundColorSpan[] ss = s.getSpans(styleStart, position, BackgroundColorSpan.class);
+
+                        for (int i = 0; i < ss.length; i++) {
+                            s.removeSpan(ss[i]);
+                        }
+                        s.setSpan(new BackgroundColorSpan(0xFFFFFF00), styleStart, position, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
                 }
             }
         });
@@ -316,6 +318,13 @@ public class ViewPageActivity extends AppCompatActivity {
         editPageText.setOnSelectionChangedHandler(new HTMLEditText.OnSelectionChangedHandler() {
             @Override
             public void onSelectionChanged(int selectionStart, int selectionEnd) {
+
+                if (selectionStart > selectionEnd) {
+                    int temp = selectionEnd;
+                    selectionEnd = selectionStart;
+                    selectionStart = temp;
+                }
+
                 // Check if has span
                 boolean hasBold = false;
                 boolean hasItalic = false;
@@ -337,8 +346,10 @@ public class ViewPageActivity extends AppCompatActivity {
                 iconItalic.setChecked(hasItalic);
 
                 UnderlineSpan[] uss = str.getSpans(selectionStart, selectionEnd, UnderlineSpan.class);
-
                 iconUnderline.setChecked(uss.length > 0);
+
+                BackgroundColorSpan[] bss = str.getSpans(selectionStart, selectionEnd, BackgroundColorSpan.class);
+                iconHighlight.setChecked(bss.length > 0);
             }
         });
 
@@ -563,6 +574,43 @@ public class ViewPageActivity extends AppCompatActivity {
                 }
 
                 editPageText.setSelection(selectionStart, selectionEnd);*/
+            }
+        });
+
+        iconHighlight = (ToggleButton) findViewById(R.id.icon_highlight);
+        iconHighlight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int selectionStart = editPageText.getSelectionStart();
+
+                styleStart = selectionStart;
+
+                int selectionEnd = editPageText.getSelectionEnd();
+
+                if (selectionStart > selectionEnd){
+                    int temp = selectionEnd;
+                    selectionEnd = selectionStart;
+                    selectionStart = temp;
+                }
+
+
+                if (selectionEnd > selectionStart)
+                {
+                    Spannable str = editPageText.getText();
+                    BackgroundColorSpan[] ss = str.getSpans(selectionStart, selectionEnd, BackgroundColorSpan.class);
+
+                    boolean exists = ss.length > 0;
+
+                    if (!exists){
+                        str.setSpan(new BackgroundColorSpan(0xFFFFFF00), selectionStart, selectionEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
+                    else {
+                        StyleSpanRemover spanRemover = new StyleSpanRemover();
+                        spanRemover.RemoveOne(str ,selectionStart, selectionEnd, BackgroundColorSpan.class);
+                    }
+
+                    iconHighlight.setChecked(!exists);
+                }
             }
         });
 

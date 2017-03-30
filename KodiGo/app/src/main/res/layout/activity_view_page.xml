@@ -129,13 +129,13 @@
                         android:textOn=""
                         android:padding="4dp"
                         />
-                    <!--<ImageView-->
-                        <!--android:id="@+id/icon_format_text"-->
-                        <!--android:layout_width="40dp"-->
-                        <!--android:layout_height="match_parent"-->
-                        <!--android:src="@drawable/ic_format_color_text_white_24px"-->
-                        <!--android:layout_margin="4dp"-->
-                        <!--android:scaleType="fitCenter"/>-->
+                    <ToggleButton
+                        android:id="@+id/icon_highlight"
+                        android:layout_width="40dp"
+                        android:layout_height="match_parent"
+                        android:textOff=""
+                        android:textOn=""
+                        android:padding="4dp"/>
                     <ImageView
                         android:id="@+id/icon_camera"
                         android:layout_width="40dp"
