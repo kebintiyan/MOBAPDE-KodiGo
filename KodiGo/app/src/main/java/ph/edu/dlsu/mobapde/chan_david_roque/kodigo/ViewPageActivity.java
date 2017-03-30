@@ -7,8 +7,10 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.Spannable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
@@ -19,6 +21,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -43,12 +46,20 @@ public class ViewPageActivity extends AppCompatActivity {
     DatabaseHelper dbHelper;
 
     // Icons
-    ImageView iconBold;
-    ImageView iconItalic;
-    ImageView iconUnderline;
+    ToggleButton iconBold;
+    ToggleButton iconItalic;
+    ToggleButton iconUnderline;
     ImageView iconCamera;
     ImageView iconGallery;
     ImageView iconComment;
+
+    int styleStart;
+    int cursorLoc;
+
+    boolean isBold;
+    boolean isItalic;
+    boolean isUnderline;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +69,11 @@ public class ViewPageActivity extends AppCompatActivity {
         dbHelper    = new DatabaseHelper(getBaseContext());
         isEditable  = (boolean) getIntent().getExtras().get(KEY_EDITABLE);
         page        = dbHelper.queryPageByID((long) getIntent().getExtras().get(KEY_PAGE_ID));
+
+
+        isBold = false;
+        isItalic = false;
+        isUnderline = false;
 
         initViews();
         initActionBar();
@@ -212,21 +228,119 @@ public class ViewPageActivity extends AppCompatActivity {
         toggleEditButton    = (FloatingActionButton)    findViewById(R.id.toggleEditButton);
         toolbarTitle        = (TextView)                findViewById(R.id.toolbarTitle);
 
-
-        /*Spanned pageText;
-        String originalText = page.getText();
-        originalText = originalText.replaceAll("&lt;", "<").replaceAll("&gt;", ">");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            pageText = Html.fromHtml(originalText, Html.FROM_HTML_MODE_LEGACY, new HTMLImageHandler(),
-                    new HTMLTagHandler(getBaseContext(), HTMLTagHandler.MODE_EDIT));
-        }
-        else {
-            pageText = Html.fromHtml(originalText, new HTMLImageHandler(), new HTMLTagHandler(getBaseContext(),
-                    HTMLTagHandler.MODE_EDIT));
-        }*/
-
         editPageText.setText(page.getText(), true);
         editPageText.setHint(getRandomHint());
+        editPageText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                int position = editPageText.getSelectionStart();
+                if (position < 0){
+                    position = 0;
+                }
+
+                if (position > 0){
+
+                    if (styleStart > position || position > (cursorLoc + 1)){
+                        //user changed cursor location, reset
+                        styleStart = position - 1;
+                    }
+
+                    cursorLoc = position;
+
+
+                    StyleSpanRemover spanRemover = new StyleSpanRemover();
+                    int selectionStart = editPageText.getSelectionStart();
+                    int selectionEnd = editPageText.getSelectionEnd();
+                    boolean hasSpan = false;
+
+                    if (iconBold.isChecked()){
+                        /*StyleSpan[] ss = s.getSpans(styleStart, position, StyleSpan.class);
+
+                        for (int i = 0; i < ss.length; i++) {
+                            if (ss[i].getStyle() == android.graphics.Typeface.BOLD) {
+
+                                //s.removeSpan(ss[i]);
+                                hasSpan = true;
+                                break;
+                            }
+                        }
+
+                        if (hasSpan) {
+                            spanRemover.RemoveStyle(s, styleStart, position, Typeface.BOLD);
+                        }*/
+
+                        StyleSpan[] ss = s.getSpans(styleStart, position, StyleSpan.class);
+
+                        for (int i = 0; i < ss.length; i++) {
+                            if (ss[i].getStyle() == Typeface.BOLD){
+                                s.removeSpan(ss[i]);
+                            }
+                        }
+
+                        s.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), styleStart, position, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
+
+                    if (iconItalic.isChecked()){
+                        StyleSpan[] ss = s.getSpans(styleStart, position, StyleSpan.class);
+
+                        for (int i = 0; i < ss.length; i++) {
+                            if (ss[i].getStyle() == Typeface.ITALIC){
+                                s.removeSpan(ss[i]);
+                            }
+                        }
+                        s.setSpan(new StyleSpan(android.graphics.Typeface.ITALIC), styleStart, position, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
+
+                    if (iconUnderline.isChecked()){
+                        UnderlineSpan[] ss = s.getSpans(styleStart, position, UnderlineSpan.class);
+
+                        for (int i = 0; i < ss.length; i++) {
+                            s.removeSpan(ss[i]);
+                        }
+                        s.setSpan(new UnderlineSpan(), styleStart, position, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
+                }
+            }
+        });
+
+        editPageText.setOnSelectionChangedHandler(new HTMLEditText.OnSelectionChangedHandler() {
+            @Override
+            public void onSelectionChanged(int selectionStart, int selectionEnd) {
+                // Check if has span
+                boolean hasBold = false;
+                boolean hasItalic = false;
+
+                // Check if has bold
+                Spannable str = editPageText.getText();
+                StyleSpan[] ss = str.getSpans(selectionStart, selectionEnd, StyleSpan.class);
+
+                for (int i = 0; i < ss.length; i++) {
+                    if (ss[i].getStyle() == Typeface.BOLD){
+                        hasBold = true;
+                    }
+                    else if (ss[i].getStyle() == Typeface.ITALIC){
+                        hasItalic = true;
+                    }
+                }
+
+                iconBold.setChecked(hasBold);
+                iconItalic.setChecked(hasItalic);
+
+                UnderlineSpan[] uss = str.getSpans(selectionStart, selectionEnd, UnderlineSpan.class);
+
+                iconUnderline.setChecked(uss.length > 0);
+            }
+        });
 
 
         viewPageText.setText(page.getText());
@@ -275,47 +389,93 @@ public class ViewPageActivity extends AppCompatActivity {
 
     private void initToolbarIcons() {
         // Icons
-        iconBold = (ImageView) findViewById(R.id.icon_bold);
+        iconBold = (ToggleButton) findViewById(R.id.icon_bold);
         iconBold.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 int selectionStart = editPageText.getSelectionStart();
+
+                styleStart = selectionStart;
+
                 int selectionEnd = editPageText.getSelectionEnd();
 
-                Spannable ss = editPageText.getText();
-                StyleSpan [] spans = ss.getSpans(selectionStart,
-                        selectionEnd, StyleSpan.class);
+                if (selectionStart > selectionEnd){
+                    int temp = selectionEnd;
+                    selectionEnd = selectionStart;
+                    selectionStart = temp;
+                }
 
 
-                boolean hasSpan = false;
+                if (selectionEnd > selectionStart)
+                {
+                    Spannable str = editPageText.getText();
+                    StyleSpan[] ss = str.getSpans(selectionStart, selectionEnd, StyleSpan.class);
 
-                for(int i = 0; i < spans.length; i++){
-                    if (spans[i].getStyle() == Typeface.BOLD) {
-                        hasSpan = true;
+                    boolean exists = false;
+                    for (int i = 0; i < ss.length; i++) {
+                        if (ss[i].getStyle() == android.graphics.Typeface.BOLD){
+                            exists = true;
+                            break;
+                        }
                     }
-                }
 
-                if (!hasSpan) {
-                    Spannable spanText = Spannable.Factory.getInstance().newSpannable(editPageText.getText());
-                    spanText.setSpan(new StyleSpan(Typeface.BOLD), selectionStart, selectionEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    editPageText.setText(spanText);
+                    if (!exists){
+                        str.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), selectionStart, selectionEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
+                    else {
+                        StyleSpanRemover spanRemover = new StyleSpanRemover();
+                        spanRemover.RemoveStyle(str ,selectionStart, selectionEnd, Typeface.BOLD);
+                    }
 
+                    iconBold.setChecked(!exists);
                 }
-                else {
-                    StyleSpanRemover spanRemover = new StyleSpanRemover();
-                    spanRemover.RemoveStyle(ss ,selectionStart, selectionEnd, Typeface.BOLD);
-                    editPageText.setText(ss);
-                }
-
-                editPageText.setSelection(selectionStart, selectionEnd);
             }
         });
 
-        iconItalic = (ImageView) findViewById(R.id.icon_italic);
+        iconItalic = (ToggleButton) findViewById(R.id.icon_italic);
         iconItalic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 int selectionStart = editPageText.getSelectionStart();
+
+                styleStart = selectionStart;
+
+                int selectionEnd = editPageText.getSelectionEnd();
+
+                if (selectionStart > selectionEnd){
+                    int temp = selectionEnd;
+                    selectionEnd = selectionStart;
+                    selectionStart = temp;
+                }
+
+
+                if (selectionEnd > selectionStart)
+                {
+                    Spannable str = editPageText.getText();
+                    StyleSpan[] ss = str.getSpans(selectionStart, selectionEnd, StyleSpan.class);
+
+                    boolean exists = false;
+                    for (int i = 0; i < ss.length; i++) {
+                        if (ss[i].getStyle() == android.graphics.Typeface.ITALIC){
+                            exists = true;
+                            break;
+                        }
+                    }
+
+                    if (!exists){
+                        str.setSpan(new StyleSpan(android.graphics.Typeface.ITALIC), selectionStart, selectionEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
+                    else {
+                        StyleSpanRemover spanRemover = new StyleSpanRemover();
+                        spanRemover.RemoveStyle(str, selectionStart, selectionEnd, Typeface.ITALIC);
+                    }
+
+                    iconItalic.setChecked(!exists);
+                }
+
+                /*int selectionStart = editPageText.getSelectionStart();
                 int selectionEnd = editPageText.getSelectionEnd();
 
                 Spannable ss = editPageText.getText();
@@ -341,15 +501,47 @@ public class ViewPageActivity extends AppCompatActivity {
                     editPageText.setText(ss);
                 }
 
-                editPageText.setSelection(selectionStart, selectionEnd);
+                editPageText.setSelection(selectionStart, selectionEnd);*/
             }
         });
 
-        iconUnderline = (ImageView) findViewById(R.id.icon_underline);
+        iconUnderline = (ToggleButton) findViewById(R.id.icon_underline);
         iconUnderline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 int selectionStart = editPageText.getSelectionStart();
+
+                styleStart = selectionStart;
+
+                int selectionEnd = editPageText.getSelectionEnd();
+
+                if (selectionStart > selectionEnd){
+                    int temp = selectionEnd;
+                    selectionEnd = selectionStart;
+                    selectionStart = temp;
+                }
+
+
+                if (selectionEnd > selectionStart)
+                {
+                    Spannable str = editPageText.getText();
+                    UnderlineSpan[] ss = str.getSpans(selectionStart, selectionEnd, UnderlineSpan.class);
+
+                    boolean exists = ss.length > 0;
+
+                    if (!exists){
+                        str.setSpan(new UnderlineSpan(), selectionStart, selectionEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
+                    else {
+                        StyleSpanRemover spanRemover = new StyleSpanRemover();
+                        spanRemover.RemoveOne(str ,selectionStart, selectionEnd, UnderlineSpan.class);
+                    }
+
+                    iconUnderline.setChecked(!exists);
+                }
+
+                /*int selectionStart = editPageText.getSelectionStart();
                 int selectionEnd = editPageText.getSelectionEnd();
 
                 Spannable ss = editPageText.getText();
@@ -370,7 +562,7 @@ public class ViewPageActivity extends AppCompatActivity {
                     editPageText.setText(ss);
                 }
 
-                editPageText.setSelection(selectionStart, selectionEnd);
+                editPageText.setSelection(selectionStart, selectionEnd);*/
             }
         });
 

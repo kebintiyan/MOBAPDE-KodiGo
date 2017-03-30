@@ -5,8 +5,10 @@ import android.os.Build;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.Html;
+import android.text.InputType;
 import android.text.Spanned;
 import android.util.AttributeSet;
+import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
 /**
@@ -61,5 +63,25 @@ public class HTMLEditText extends AppCompatEditText {
         else {
             return Html.fromHtml(text, new HTMLImageHandler(), new HTMLTagHandler(getContext(), HTMLTagHandler.MODE_EDIT));
         }
+    }
+
+
+    @Override
+    protected void onSelectionChanged(int selStart, int selEnd) {
+//        super.onSelectionChanged(selStart, selEnd);
+
+        if (onSelectionChangedHandler != null) {
+            onSelectionChangedHandler.onSelectionChanged(selStart, selEnd);
+        }
+    }
+
+    private OnSelectionChangedHandler onSelectionChangedHandler;
+
+    public void setOnSelectionChangedHandler(OnSelectionChangedHandler onSelectionChangedHandler) {
+        this.onSelectionChangedHandler = onSelectionChangedHandler;
+    }
+
+    public interface OnSelectionChangedHandler {
+        void onSelectionChanged(int selectionStart, int selectionEnd);
     }
 }
