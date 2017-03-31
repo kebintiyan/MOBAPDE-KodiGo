@@ -132,7 +132,9 @@
                     <ToggleButton
                         android:id="@+id/icon_highlight"
                         android:layout_width="40dp"
-                        android:layout_height="match_parent"
+                        android:layout_height="24dp"
+                        android:button="@drawable/highlight"
+                        android:background="@null"
                         android:textOff=""
                         android:textOn=""
                         android:padding="4dp"/>
