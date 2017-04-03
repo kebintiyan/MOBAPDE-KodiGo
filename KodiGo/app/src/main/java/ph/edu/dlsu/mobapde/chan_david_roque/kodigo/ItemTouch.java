@@ -1,8 +1,10 @@
 package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 
+import android.graphics.Canvas;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,6 +18,8 @@ public class ItemTouch{
     ItemTouchHelper ith;
     CursorRecyclerViewAdapter adapter;
     ArrayList arrayList;
+    boolean isAnimated = false;
+    boolean animating = false;
 
     ItemTouch(CursorRecyclerViewAdapter adapter, ArrayList arrayList) {
         this.adapter = adapter;
@@ -24,17 +28,43 @@ public class ItemTouch{
         createItemTouchCallback();
         ith = new ItemTouchHelper(createItemTouchCallback());
     }
-    // Extend the Callback class
 
+    ItemTouchHelper.ViewDropHandler viewDropHandler() {
+        return new ItemTouchHelper.ViewDropHandler() {
+            @Override
+            public void prepareForDrop(View view, View target, int x, int y) {
+                Log.i("World", "helo");
+            }
+        };
+    }
+    // Extend the Callback class
     ItemTouchHelper.Callback createItemTouchCallback() {
         return new ItemTouchHelper.Callback() {
 
+            @Override
+            public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                Log.i("MAGIC", "Mike");
+                onItemClearViewListener.onItemClearView(recyclerView, viewHolder);
+                isAnimated = false;
+                animating = false;
+                super.clearView(recyclerView, viewHolder);
+            }
+
+            @Override
+            public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                if(isAnimated && !animating) {
+                    Log.i("ANIM", "ate");
+                    onItemLongClickListener.onItemLongClick(viewHolder);
+                    animating = true;
+                }
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+            }
 
             @Override
             public boolean isLongPressDragEnabled() {
-
-                onItemLongClickListener.onItemLongClick(adapter);
-
+                if(!isAnimated)
+                    isAnimated = true;
+                //onItemLongClickListener.onItemLongClick(adapter);
                 return super.isLongPressDragEnabled();
             }
 
@@ -72,6 +102,8 @@ public class ItemTouch{
 
     private OnItemMoveListener onItemMoveListener;
 
+
+
     public interface OnItemMoveListener{
         public void onItemMoveClick(ArrayList arrayList);
     }
@@ -83,7 +115,7 @@ public class ItemTouch{
     private OnItemLongClickListener onItemLongClickListener;
 
     public interface OnItemLongClickListener{
-        public void onItemLongClick(CursorRecyclerViewAdapter adapter);
+        public void onItemLongClick(RecyclerView.ViewHolder viewHolder);
     }
 
     public void setOnItemLongClickListener(OnItemLongClickListener onItemLongClickListener) {
@@ -93,4 +125,15 @@ public class ItemTouch{
     public void setArrayList(ArrayList arrayList) {
         this.arrayList = arrayList;
     }
+
+    private OnItemClearViewListener onItemClearViewListener;
+
+    public interface OnItemClearViewListener{
+        public void onItemClearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder);
+    }
+
+    public void setOnItemClearViewListener(OnItemClearViewListener onItemClearViewListener) {
+        this.onItemClearViewListener = onItemClearViewListener;
+    }
+
 }

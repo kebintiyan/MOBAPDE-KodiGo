@@ -72,7 +72,7 @@ public class NotebookCursorAdapter extends CursorRecyclerViewAdapter<NotebookCur
             public boolean onLongClick(View v) {
                 isLongPressed = true;
                 v = (View) v.getTag(R.id.key_item_notebook);
-                onNotebookLongClickListener.onNotebookLongClick(v);
+                //onNotebookLongClickListener.onNotebookLongClick(v);
 
                 return true;
             }

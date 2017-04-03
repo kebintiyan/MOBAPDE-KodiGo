@@ -122,15 +122,15 @@ public class ViewNotebookActivity extends AppCompatActivity {
             }
         });
 
-        it.setOnItemLongClickListener(new ItemTouch.OnItemLongClickListener() {
-            @Override
-            public void onItemLongClick(CursorRecyclerViewAdapter adapter) {
-
-                Vibrator v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
-                v.vibrate(500);
-
-            }
-        });
+//        it.setOnItemLongClickListener(new ItemTouch.OnItemLongClickListener() {
+//            @Override
+//            public void onItemLongClick(CursorRecyclerViewAdapter adapter) {
+//
+//                Vibrator v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
+//                v.vibrate(500);
+//
+//            }
+//        });
 
     }
 

@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -79,24 +80,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        notebookCursorAdapter.setOnNotebookLongClickListener(new NotebookCursorAdapter.OnNotebookLongClickListener() {
+        it.setOnItemClearViewListener(new ItemTouch.OnItemClearViewListener() {
             @Override
-            public void onNotebookLongClick(View v) {
-//                StateListAnimator stateListAnimator = AnimatorInflater
-//                        .loadStateListAnimator(v.getContext(), R.anim.elevate);
-//                v.setStateListAnimator(stateListAnimator);
+            public void onItemClearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+
+                viewHolder.itemView.clearAnimation();
 
                 //v.setAnimation(AnimationUtils.loadAnimation(v.getContext(), R.anim.shake));
             }
         });
-
-        notebookCursorAdapter.setOnNotebookReleaseListener(new NotebookCursorAdapter.OnNotebookReleaseListener() {
-            @Override
-            public void onNotebookRelease(View v) {
-                v.setAnimation(null);
-            }
-        });
-
         it.setOnItemMoveListener(new ItemTouch.OnItemMoveListener() {
             @Override
             public void onItemMoveClick(ArrayList arrayList) {
@@ -104,16 +96,17 @@ public class MainActivity extends AppCompatActivity {
                 notebooks = (ArrayList<Notebook>) arrayList;
                 notebookCursorAdapter.isLongPressed= false;
                 refreshPosition();
-                //view.setAnimation(null);
+
             }
         });
 
         it.setOnItemLongClickListener(new ItemTouch.OnItemLongClickListener() {
             @Override
-            public void onItemLongClick(CursorRecyclerViewAdapter adapter) {
-
+            public void onItemLongClick(RecyclerView.ViewHolder viewHolder) {
                 Vibrator v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
                 v.vibrate(500);
+                Log.i("SIZE", ""+viewHolder.itemView.getWidth());
+                viewHolder.itemView.setAnimation(AnimationUtils.loadAnimation(viewHolder.itemView.getContext(), R.anim.elevate ));
             }
         });
 

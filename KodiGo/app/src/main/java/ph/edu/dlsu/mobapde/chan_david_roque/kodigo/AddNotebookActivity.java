@@ -2,24 +2,28 @@ package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import uz.shift.colorpicker.LineColorPicker;
+import uz.shift.colorpicker.OnColorChangedListener;
+
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_COLOR;
+import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_COLORS;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.REQUEST_ADD_COLOR_NOTEBOOK;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.REQUEST_ADD_COLOR_TITLE;
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.RESULT_COLOR;
@@ -27,10 +31,13 @@ import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.RESULT_COLOR
 public class AddNotebookActivity extends AppCompatActivity {
 
     EditText notebookName;
-    ImageView titleColor;
-    ImageView notebookColor;
     CardView notebookIcon;
     DatabaseHelper dbHelper;
+    LineColorPicker notebookColorPicker;
+    LineColorPicker titleColorPicker;
+    Button customNotebookColorPicker;
+    Button customTitleColorPicker;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,27 +51,54 @@ public class AddNotebookActivity extends AppCompatActivity {
         dbHelper = new DatabaseHelper(getApplicationContext());
 
         notebookName = (EditText) findViewById(R.id.notebookName);
-        notebookColor = (ImageView) findViewById(R.id.notebookColor);
-        titleColor = (ImageView) findViewById(R.id.titleColor);
         notebookIcon = (CardView) findViewById(R.id.notebookIcon);
+        customNotebookColorPicker = (Button) findViewById(R.id.customNotebookColorPicker);
+        customTitleColorPicker = (Button) findViewById(R.id.customTitleColorPicker);
 
+        notebookColorPicker = (LineColorPicker) findViewById(R.id.notebookColor);
 
+        notebookColorPicker.setColors(KEY_COLORS);
 
-        notebookColor.setOnClickListener(new View.OnClickListener(){
+        notebookColorPicker.setSelectedColorPosition(1);
+
+        notebookColorPicker.setOnColorChangedListener(new OnColorChangedListener() {
+            @Override
+            public void onColorChanged(int c) {
+                notebookIcon.setCardBackgroundColor(c);
+            }
+        });
+
+        titleColorPicker = (LineColorPicker) findViewById(R.id.titleColor);
+        titleColorPicker.setColors(KEY_COLORS);
+
+        titleColorPicker.setSelectedColorPosition(6);
+
+        titleColorPicker.setOnColorChangedListener(new OnColorChangedListener() {
+            @Override
+            public void onColorChanged(int c) {
+                notebookName.setTextColor(c);
+            }
+        });
+
+        customNotebookColorPicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 colorPicker(REQUEST_ADD_COLOR_NOTEBOOK);
             }
         });
 
-        titleColor.setOnClickListener(new View.OnClickListener(){
+        customTitleColorPicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 colorPicker(REQUEST_ADD_COLOR_TITLE);
             }
         });
 
+    }
 
+    public void colorPicker(int requestCode){
+        clearFocus();
+        startActivityForResult(new Intent(getBaseContext(), ColorpickerActivity.class), requestCode);
     }
 
     @Override
@@ -80,10 +114,9 @@ public class AddNotebookActivity extends AppCompatActivity {
 
                 Notebook notebook = new Notebook();
                 notebook.setTitle(notebookName.getText().toString());
-                ColorDrawable color = (ColorDrawable) titleColor.getBackground();
-                notebook.setTitleColor(color.getColor());
-                color = (ColorDrawable) notebookColor.getBackground();
-                notebook.setNotebookColor(color.getColor());
+                titleColorPicker.getColor();
+                notebook.setTitleColor(notebookName.getTextColors().getDefaultColor());
+                notebook.setNotebookColor(notebookIcon.getCardBackgroundColor().getDefaultColor());
                 Log.i("AddNotebookActivity", "Notebook created");
                 dbHelper.insertNotebook(notebook);
                 clearFocus();
@@ -93,12 +126,6 @@ public class AddNotebookActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
-    public void colorPicker(int requestCode) {
-        clearFocus();
-        startActivityForResult(new Intent(getBaseContext(), ColorpickerActivity.class), requestCode);
-    }
-
 
     private boolean validateInput() {
         String name = notebookName.getText().toString();
@@ -113,14 +140,16 @@ public class AddNotebookActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         if(REQUEST_ADD_COLOR_TITLE == requestCode && resultCode == RESULT_COLOR){
-            titleColor.setBackgroundColor((Integer) data.getExtras().get(KEY_COLOR));
+            customTitleColorPicker.setBackgroundColor((Integer) data.getExtras().get(KEY_COLOR));
             notebookName.setTextColor((Integer) data.getExtras().get(KEY_COLOR));;
         }
         else if(REQUEST_ADD_COLOR_NOTEBOOK == requestCode && resultCode == RESULT_COLOR){
-            notebookColor.setBackgroundColor((Integer) data.getExtras().get(KEY_COLOR));
-            notebookIcon.setBackgroundColor((Integer) data.getExtras().get(KEY_COLOR));
+            customNotebookColorPicker.setBackgroundColor((Integer) data.getExtras().get(KEY_COLOR));
+            notebookIcon.setCardBackgroundColor((Integer) data.getExtras().get(KEY_COLOR));
         }
+
     }
 
     @Override
@@ -156,7 +185,6 @@ public class AddNotebookActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        notebookName.requestFocus();
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
     }

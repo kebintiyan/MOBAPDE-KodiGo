@@ -1,5 +1,7 @@
 package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 
+import android.graphics.Color;
+
 /**
  * Created by USER on 3/4/2017.
  */
@@ -31,5 +33,9 @@ public class KeysCodes {
 
     final static String KEY_LOAD_NOTEBOOKS = "loadnotebooks";
     final static String KEY_LOAD_PAGES = "loadpages";
+
+    final static int [] KEY_COLORS = new int[] {
+        Color.WHITE, Color.rgb(232, 234, 215), Color.RED,
+                Color.GREEN,Color.BLUE,Color.YELLOW, Color.rgb(45, 45, 45)};
 
 }
