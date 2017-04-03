@@ -109,11 +109,6 @@ public class MainActivity extends AppCompatActivity {
                 viewHolder.itemView.setAnimation(AnimationUtils.loadAnimation(viewHolder.itemView.getContext(), R.anim.elevate ));
             }
         });
-
-
-        dbHelper.insertComment(new Comment()
-        .setComment("Pare pulis ako.")
-        .setPageID(1));
     }
 
     @Override
