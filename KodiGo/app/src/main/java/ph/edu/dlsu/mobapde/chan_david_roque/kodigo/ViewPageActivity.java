@@ -1,17 +1,32 @@
 package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.style.BackgroundColorSpan;
+import android.text.style.ImageSpan;
 import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
@@ -19,14 +34,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Calendar;
 import java.util.Random;
 
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_EDITABLE;
@@ -34,8 +56,18 @@ import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_PAGE_ID;
 
 public class ViewPageActivity extends AppCompatActivity {
 
+
+
+
+    public static final int REQUEST_STORAGE= 0;
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int REQUEST_IMAGE_GALLERY = 2;
+
+
+    String imageFile = "";
     TextView toolbarTitle;
     HTMLEditText editPageText;
+
     HTMLTextView viewPageText;
 
     boolean isEditable;
@@ -45,6 +77,8 @@ public class ViewPageActivity extends AppCompatActivity {
     MenuItem deletePage;
     Page page;
     DatabaseHelper dbHelper;
+    String imageFileLocation;
+    String editPageTextTemp;
 
     // Icons
     ToggleButton iconBold;
@@ -54,6 +88,7 @@ public class ViewPageActivity extends AppCompatActivity {
     ImageView iconCamera;
     ImageView iconGallery;
     ImageView iconComment;
+    ImageView imageView;
 
     int styleStart;
     int cursorLoc;
@@ -64,10 +99,17 @@ public class ViewPageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_page);
 
+        Log.i("ta", "oncreate");
+
         dbHelper    = new DatabaseHelper(getBaseContext());
         isEditable  = (boolean) getIntent().getExtras().get(KEY_EDITABLE);
         page        = dbHelper.queryPageByID((long) getIntent().getExtras().get(KEY_PAGE_ID));
+        if(savedInstanceState!=null) {
+            isEditable = savedInstanceState.getBoolean("isEditable");
+            editPageTextTemp = savedInstanceState.getString("editText");
+            imageFileLocation = savedInstanceState.getString("imageFileLocation");
 
+        }
         initViews();
         initActionBar();
     }
@@ -135,9 +177,6 @@ public class ViewPageActivity extends AppCompatActivity {
             editText = View.VISIBLE;
             saveItem.setVisible(true);
             deletePage.setVisible(false);
-
-
-
         }else {
             textView = View.VISIBLE;
             editText = View.GONE;
@@ -618,6 +657,9 @@ public class ViewPageActivity extends AppCompatActivity {
         iconCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                takePhoto();
+                // /storage/emulated/0/Pictures/HIaaa-1380824659.jpg
+
 
             }
         });
@@ -626,7 +668,28 @@ public class ViewPageActivity extends AppCompatActivity {
         iconGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+                startActivityForResult(photoPickerIntent, REQUEST_IMAGE_GALLERY);
+                /*
+                Bitmap selectedImage = BitmapFactory.decodeFile("/storage/emulated/0/Pictures/Pictures/20170118_142545.jpg");
+                Bitmap scaled = Bitmap.createScaledBitmap(selectedImage, 48*5, 48*5, true);
+                Uri.fr
+                ImageSpan imageSpan = new ImageSpan(getBaseContext(),  scaled);
 
+                SpannableStringBuilder ss = new SpannableStringBuilder(editPageText.getText());
+
+                if(editPageText.getSelectionStart() == editPageText.getText().toString().length()) {
+                    editPageText.getText().insert(editPageText.getSelectionStart(), " ");
+                    editPageText.setSelection(editPageText.getSelectionStart()-1);
+                }
+                String imageTag = "!image!";
+                ss.replace(editPageText.getSelectionStart(), editPageText.getSelectionEnd(), imageTag);
+                ss.append("\r");
+                ss.setSpan(imageSpan, editPageText.getSelectionStart(), editPageText.getSelectionStart()+imageTag.length(),Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                Log.i("ss", editPageText.getTextAsString(true));
+                editPageText.setText(ss);
+                editPageText.setText(editPageText.getText());*/
             }
         });
 
@@ -685,12 +748,19 @@ public class ViewPageActivity extends AppCompatActivity {
         editPageText.setSelection(selectionStart, selectionEnd);
     }
 
+
+
     private void save() {
         saveComments();
+        Log.i("eptgette", editPageText.getTextAsString(true));
         page.setText(editPageText.getTextAsString(true));
         dbHelper.updatePage(page);
-        viewPageText.setText(page.getText());
-        editPageText.setText(page.getText(), true);
+
+        SpannableString s = new SpannableString(page.getText());
+        Spannable spanText = Spannable.Factory.getInstance().newSpannable(editPageText.getText());
+
+        viewPageText.setText(s);
+        editPageText.setText(s, true);
         toggleEdit(false);
     }
 
@@ -698,6 +768,7 @@ public class ViewPageActivity extends AppCompatActivity {
         CharSequence charSequence = editPageText.getText();
         if (charSequence instanceof Spannable) {
             Spannable spannableText = (Spannable)charSequence;
+
             CommentSpan[] spans = spannableText.getSpans(0, editPageText.length(), CommentSpan.class);
             for (CommentSpan span : spans) {
 
@@ -732,5 +803,158 @@ public class ViewPageActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    private void createImageSpan(Intent data){
+        try {
+            Uri imageUri = data.getData();
+            InputStream imageStream = getContentResolver().openInputStream(imageUri);
+            Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+            Bitmap scaled = Bitmap.createScaledBitmap(selectedImage, 48*5, 48*5, true);
+
+            int selectionStart = editPageText.getSelectionStart();
+
+            ImageSpanHandler imageSpan = new ImageSpanHandler(getBaseContext(), imageUri);
+
+            if(selectionStart == editPageText.getText().toString().length()) {
+                editPageText.getText().insert(selectionStart, " ");
+                if(selectionStart>0)
+                    editPageText.setSelection(selectionStart-1);
+            }
+            Spannable spanText = Spannable.Factory.getInstance().newSpannable(editPageText.getText());
+            spanText.setSpan(imageSpan, selectionStart, selectionStart+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            editPageText.setText(spanText);
+            /*
+            viewPageText.setText(editPageText.getTextAsString(true));
+            editPageText.setVisibility(View.GONE);
+            viewPageText.setVisibility(View.VISIBLE);
+            Log.i("viewgone", View.GONE+"");
+            Log.i("editp", editPageText.getVisibility()+"");
+            Log.i("viewgone", View.VISIBLE+"");
+            Log.i("editp", viewPageText.getVisibility()+"");
+            isEditable = false;
+            int textView;
+            int editText;
+            if(isEditable){
+                textView = View.GONE;
+                editText = View.VISIBLE;
+
+            }else {
+                textView = View.VISIBLE;
+                editText = View.GONE;
+
+            }
+
+            viewPageText.setVisibility(textView);
+            toggleEditButton.setVisibility(textView);
+
+            editPageText.setVisibility(editText);
+            //toolbar.setVisibility(editText);
+
+            if (isEditable) {
+                editPageText.requestFocus();
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+
+                editPageText.setSelection(editPageText.getText().toString().length());
+            }
+            //editPageText.setSelection(selectionStart, selectionEnd);
+        */
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public File createImageFile() throws IOException{
+        Calendar c = Calendar.getInstance();
+        int seconds = c.get(Calendar.SECOND);
+        String imageFileName = page.getNotebookID() +"-" +page.getPageID() +""+seconds;
+        File photo;
+//        if(checkStoragePermission()){
+        File storageDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            //File storageDirectory = Environment.getExternalStorageDirectory();
+        photo = File.createTempFile(imageFileName, ".jpg",storageDirectory);
+        imageFileLocation = photo.getAbsolutePath();
+        return photo;
+//        }
+        // sreturn null;
+    }
+
+    public boolean checkStoragePermission(){
+        if(ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+            return true;
+        }else{
+            ActivityCompat.requestPermissions(ViewPageActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_STORAGE);
+            return false;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == REQUEST_STORAGE){
+            takePhoto();
+        }
+    }
+
+    public void takePhoto(){
+        if(checkStoragePermission()) {
+
+            Intent cameraIntent = new Intent();
+            cameraIntent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+
+            File photoFIle = null;
+            try {
+                photoFIle = createImageFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            imageFile = photoFIle.getAbsolutePath();
+            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFIle));
+            startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
+
+            BitmapFactory.Options options;
+            options = new BitmapFactory.Options();
+            options.inSampleSize = 2;
+
+            Bitmap bitmap = BitmapFactory.decodeFile(imageFileLocation, options);
+            Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 48*5, 48*5, true);
+            ImageSpan imageSpan = new ImageSpan(getBaseContext(),  scaled);
+            String tagSpan = "!/image/!";
+            if(editPageText.getSelectionStart() == editPageText.getText().toString().length()) {
+
+                editPageText.getText().insert(editPageText.getSelectionStart(), tagSpan);
+                editPageText.setSelection(editPageText.getSelectionStart()-tagSpan.length());
+            }
+
+            SpannableStringBuilder ss = new SpannableStringBuilder(editPageText.getText());
+
+            ss.append("\r");
+            ss.setSpan(imageSpan, editPageText.getSelectionStart(), editPageText.getSelectionStart()+tagSpan.length(),Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            editPageText.setText(ss);
+        }else if(requestCode == REQUEST_IMAGE_GALLERY && resultCode == RESULT_OK){
+            createImageSpan(data);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean("isEditable", true);
+        editPageTextTemp = editPageText.getText().toString();
+        Log.i("editp", editPageTextTemp+"");
+        outState.putString("editText", editPageTextTemp);
+        outState.putString("imageFileLocation", imageFileLocation);
+
     }
 }

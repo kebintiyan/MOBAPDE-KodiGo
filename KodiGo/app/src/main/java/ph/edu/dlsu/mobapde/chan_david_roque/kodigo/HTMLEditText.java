@@ -8,6 +8,7 @@ import android.text.Html;
 import android.text.InputType;
 import android.text.Spanned;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
@@ -30,8 +31,9 @@ public class HTMLEditText extends AppCompatEditText {
     }
 
     public void setText(CharSequence text, boolean renderAsHTML) {
-        if (!renderAsHTML)
+        if (!renderAsHTML) {
             super.setText(text);
+        }
         else {
             super.setText(getHTMLText(text + ""));
         }
@@ -56,7 +58,6 @@ public class HTMLEditText extends AppCompatEditText {
         // You might need to remove this:
         text = text.replaceAll("&lt;", "<");
         text = text.replaceAll("&gt;", ">");
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             return Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY, new HTMLImageHandler(), new HTMLTagHandler(getContext(), HTMLTagHandler.MODE_EDIT));
         }
@@ -64,7 +65,6 @@ public class HTMLEditText extends AppCompatEditText {
             return Html.fromHtml(text, new HTMLImageHandler(), new HTMLTagHandler(getContext(), HTMLTagHandler.MODE_EDIT));
         }
     }
-
 
     @Override
     protected void onSelectionChanged(int selStart, int selEnd) {
