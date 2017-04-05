@@ -20,7 +20,8 @@ public class HTMLImageHandler implements Html.ImageGetter {
         Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 48*5, 48*5, true);
 
         BitmapDrawable bd = new BitmapDrawable(Resources.getSystem(), scaled);
-
+        bd.setBounds(0, 0, bd.getIntrinsicWidth(),
+                bd.getIntrinsicHeight());
         return bd;
     }
 }
