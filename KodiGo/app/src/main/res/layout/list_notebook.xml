@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/container"
-    android:elevation="10dp">
+    >
 
     <!--<Button-->
         <!--android:layout_width="180dp"-->
@@ -12,53 +12,52 @@
         <!--android:text=""-->
         <!--android:id="@+id/notebookIcon"/>-->
 
-    <ImageView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:layout_gravity="center_horizontal"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_margin="10dp"
+        android:elevation="10dp">
 
-        android:layout_width="10dp"
-        android:layout_height="180dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginBottom="10dp"
-        android:id="@+id/bar"
-        android:background="@color/defaultTitleColor">
+        <ImageView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:layout_width="10dp"
+            android:layout_height="180dp"
+            android:id="@+id/bar"
+            android:background="@color/defaultTitleColor">
 
-    </ImageView>
-    <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:layout_width="140dp"
-        android:layout_height="180dp"
-        android:id="@+id/notebookIcon"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="0dp"
-        android:layout_toRightOf="@id/bar"
-        >
-
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+        </ImageView>
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:layout_width="130dp"
+            android:layout_height="180dp"
+            android:id="@+id/notebookIcon"
+            android:layout_toRightOf="@id/bar"
             >
 
-            <TextView
+
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/notebookName"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginTop="20dp"
-                android:gravity="center"
-                android:layout_centerHorizontal="true"
-                android:ellipsize="end"
-                android:maxLines="8"
-                />
+                android:layout_height="match_parent"
+                >
 
-        </RelativeLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/notebookName"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:layout_centerHorizontal="true"
+                    android:ellipsize="end"
+                    android:maxLines="8"
+                    />
 
-    </android.support.v7.widget.CardView>
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
+    </RelativeLayout>
 
 </RelativeLayout>

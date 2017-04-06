@@ -102,7 +102,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public ArrayList<Notebook> queryAllNotebooks() {
         SQLiteDatabase db = getReadableDatabase();
-        String sql = "Select * From " +Notebook.TABLE_NAME + ";";
+        String sql = "Select * From " +Notebook.TABLE_NAME + " Order by " +Notebook.COLUMN_NOTEBOOK_NUMBER +";";
         Cursor c = db.rawQuery(sql,null);
 
         ArrayList<Notebook> notebooks = new ArrayList<>();

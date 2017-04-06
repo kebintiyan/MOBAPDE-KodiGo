@@ -2,7 +2,7 @@
 <set xmlns:android="http://schemas.android.com/apk/res/android"
     >
     <scale
-        android:duration="500"
+        android:duration="100"
         android:fromXScale="192dp"
         android:fromYScale="200dp"
         android:toXScale="200dp"

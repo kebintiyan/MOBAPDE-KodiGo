@@ -82,31 +82,28 @@ public class MainActivity extends AppCompatActivity {
 
         it.setOnItemClearViewListener(new ItemTouch.OnItemClearViewListener() {
             @Override
-            public void onItemClearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+            public void onItemClearView(ArrayList arrayList, RecyclerView.ViewHolder viewHolder) {
 
                 viewHolder.itemView.clearAnimation();
 
-                //v.setAnimation(AnimationUtils.loadAnimation(v.getContext(), R.anim.shake));
             }
         });
+
         it.setOnItemMoveListener(new ItemTouch.OnItemMoveListener() {
             @Override
             public void onItemMoveClick(ArrayList arrayList) {
-
                 notebooks = (ArrayList<Notebook>) arrayList;
-                notebookCursorAdapter.isLongPressed= false;
                 refreshPosition();
 
             }
         });
-
         it.setOnItemLongClickListener(new ItemTouch.OnItemLongClickListener() {
             @Override
             public void onItemLongClick(RecyclerView.ViewHolder viewHolder) {
                 Vibrator v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
                 v.vibrate(500);
-                Log.i("SIZE", ""+viewHolder.itemView.getWidth());
                 viewHolder.itemView.setAnimation(AnimationUtils.loadAnimation(viewHolder.itemView.getContext(), R.anim.elevate ));
+
             }
         });
     }
@@ -133,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
 
     protected void refreshPosition() {
         for(int i =0; i< notebooks.size(); i++){
-            notebooks.get(i).setNotebookNumber(i);
+            notebooks.get(i).setNotebookNumber(i+1);
             dbHelper.updateNotebook(notebooks.get(i));
         }
     }

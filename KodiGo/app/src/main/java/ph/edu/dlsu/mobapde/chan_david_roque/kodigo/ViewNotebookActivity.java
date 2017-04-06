@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -122,15 +123,21 @@ public class ViewNotebookActivity extends AppCompatActivity {
             }
         });
 
-//        it.setOnItemLongClickListener(new ItemTouch.OnItemLongClickListener() {
-//            @Override
-//            public void onItemLongClick(CursorRecyclerViewAdapter adapter) {
-//
-//                Vibrator v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
-//                v.vibrate(500);
-//
-//            }
-//        });
+        it.setOnItemLongClickListener(new ItemTouch.OnItemLongClickListener() {
+            @Override
+            public void onItemLongClick(RecyclerView.ViewHolder viewHolder) {
+
+                Vibrator v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
+                v.vibrate(500);
+                viewHolder.itemView.setAnimation(AnimationUtils.loadAnimation(viewHolder.itemView.getContext(), R.anim.elevate ));
+            }
+        });
+        it.setOnItemClearViewListener(new ItemTouch.OnItemClearViewListener() {
+            @Override
+            public void onItemClearView(ArrayList arrayList, RecyclerView.ViewHolder viewHolder) {
+                viewHolder.itemView.clearAnimation();
+            }
+        });
 
     }
 

@@ -11,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -46,34 +47,10 @@ public class NotebookCursorAdapter extends CursorRecyclerViewAdapter<NotebookCur
             }
         });
 
-        /*viewHolder.container.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-
-                v = (View) v.getTag(R.id.key_item_notebook);
-                switch (event.getAction())
-                {
-                    case MotionEvent.ACTION_UP:
-                        Log.i("IAMHERE", "HEREIAM");
-                        if(isLongPressed) {
-                            v.setAnimation(null);
-                            isLongPressed = false;
-                            return true;
-                        }
-
-                }
-                return false;
-            }
-        });*/
-
         viewHolder.container.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
 
             public boolean onLongClick(View v) {
-                isLongPressed = true;
-                v = (View) v.getTag(R.id.key_item_notebook);
-                //onNotebookLongClickListener.onNotebookLongClick(v);
-
                 return true;
             }
         });
@@ -90,15 +67,15 @@ public class NotebookCursorAdapter extends CursorRecyclerViewAdapter<NotebookCur
         //Button notebookIcon;
         CardView notebookIcon;
         TextView notebookName;
+        ImageView bar;
         View container;
         public NotebookHolder (View itemView) {
             super(itemView);
             //notebookIcon = (Button) itemView.findViewById(R.id.notebookIcon);
+            bar = (ImageView) itemView.findViewById(R.id.bar);
             notebookIcon = (CardView) itemView.findViewById(R.id.notebookIcon);
             notebookName = (TextView) itemView.findViewById(R.id.notebookName);
             container = itemView.findViewById(R.id.container);
-
-
         }
     }
 
@@ -124,16 +101,6 @@ public class NotebookCursorAdapter extends CursorRecyclerViewAdapter<NotebookCur
 
     public void setOnNotebookLongClickListener(NotebookCursorAdapter.OnNotebookLongClickListener onNotebookLongClickListener) {
         this.onNotebookLongClickListener = onNotebookLongClickListener;
-    }
-
-    private NotebookCursorAdapter.OnNotebookReleaseListener onNotebookReleaseListener;
-
-    public interface OnNotebookReleaseListener{
-        public void onNotebookRelease(View v);
-    }
-
-    public void setOnNotebookReleaseListener(NotebookCursorAdapter.OnNotebookReleaseListener onNotebookReleaseListener) {
-        this.onNotebookReleaseListener = onNotebookReleaseListener;
     }
 
 }
