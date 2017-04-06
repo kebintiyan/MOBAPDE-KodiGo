@@ -1,27 +1,41 @@
 package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.text.Html;
 import android.util.Log;
+
+import java.io.File;
+import java.io.InputStream;
+import java.net.URI;
 
 /**
  * Created by kevin on 2/27/2017.
  */
 
 public class HTMLImageHandler implements Html.ImageGetter {
+    Context context;
+    InputStream imageStream;
+    public HTMLImageHandler(Context context){
+        this.context = context;
+    }
     @Override
     public Drawable getDrawable(String source) {
-        Log.i("sourcez", source+"");
-        Bitmap bitmap = BitmapFactory.decodeFile("/storage/emulated/0/DCIM/Camera/20170403_170255.jpg");
-        Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 48*5, 48*5, true);
+        try{
+            imageStream = context.getContentResolver().openInputStream(Uri.parse(source));
+        }catch (Exception e){}
+        Bitmap image = BitmapFactory.decodeStream(imageStream);
+        Bitmap scaled = Bitmap.createScaledBitmap(image, 48*19, 48*14, true);
 
         BitmapDrawable bd = new BitmapDrawable(Resources.getSystem(), scaled);
         bd.setBounds(0, 0, bd.getIntrinsicWidth(),
                 bd.getIntrinsicHeight());
+
         return bd;
     }
 }
