@@ -92,7 +92,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(Image.COLUMN_PAGE_ID, i.getPageID());
         cv.put(Image.COLUMN_URL, i.getUrl());
 
-        long result = db.insert(Comment.TABLE_NAME, null, cv);
+        long result = db.insert(Image.TABLE_NAME, null, cv);
         db.close();
 
         return result;
@@ -384,7 +384,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             image = new Image()
                     .setImageID(c.getInt(c.getColumnIndex(Image.COLUMN_IMAGE_ID)))
                     .setPageID(c.getInt(c.getColumnIndex(Image.COLUMN_PAGE_ID)))
-                    .setUrl(c.getString(c.getColumnIndex(Image.COLUMN_IMAGE_ID)));
+                    .setUrl(c.getString(c.getColumnIndex(Image.COLUMN_URL)));
 
         }
 

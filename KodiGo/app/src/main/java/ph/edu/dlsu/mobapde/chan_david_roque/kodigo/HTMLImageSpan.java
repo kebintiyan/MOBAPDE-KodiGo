@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.text.style.ClickableSpan;
 import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.View;
@@ -18,7 +19,7 @@ import java.io.InputStream;
  * Created by kevin on 3/26/2017.
  */
 
-public class HTMLImageSpan extends ImageSpan {
+public class HTMLImageSpan extends ImageSpan{
     Context context;
     Uri imageURI;
     public HTMLImageSpan(Context context, Uri imageURI) {
@@ -30,7 +31,9 @@ public class HTMLImageSpan extends ImageSpan {
     @Override
     public Drawable getDrawable() {
         try {
+            Log.i("getsource", getSource());
             InputStream imageStream = context.getContentResolver().openInputStream(imageURI);
+
             Bitmap image = BitmapFactory.decodeStream(imageStream);
             Bitmap scaled = Bitmap.createScaledBitmap(image, 48 * 19, 48 * 14, true);
             BitmapDrawable bd = new BitmapDrawable(context.getResources(), scaled);

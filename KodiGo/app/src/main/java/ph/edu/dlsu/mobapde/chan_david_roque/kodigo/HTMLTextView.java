@@ -15,9 +15,10 @@ import android.widget.TextView;
  */
 
 public class HTMLTextView extends AppCompatTextView {
-
+    Context context;
     public HTMLTextView(Context context) {
         super(context);
+        this.context=context;
         setMovementMethod(LinkMovementMethod.getInstance());
     }
 
@@ -34,18 +35,20 @@ public class HTMLTextView extends AppCompatTextView {
     @Override
     public void setText(CharSequence text, BufferType type) {
 
-        super.setText(getHTMLText(text + ""), BufferType.SPANNABLE);
+        super.setText(getHTMLText(text + ""), type);
     }
 
     private Spanned getHTMLText(String text) {
         // You might need to remove this:
         text = text.replaceAll("&lt;", "<");
         text = text.replaceAll("&gt;", ">");
+        text = text.replaceAll("\n;", "<br>");
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            return Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY, new HTMLImageHandler(getContext()), new HTMLTagHandler(getContext(), HTMLTagHandler.MODE_VIEW));
+            return Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY, new HTMLImageHandler(context), new HTMLTagHandler(context, HTMLTagHandler.MODE_VIEW));
         }
         else {
-            return Html.fromHtml(text, new HTMLImageHandler(getContext()), new HTMLTagHandler(getContext(), HTMLTagHandler.MODE_VIEW));
+            return Html.fromHtml(text, new HTMLImageHandler(context), new HTMLTagHandler(context, HTMLTagHandler.MODE_VIEW));
         }
     }
 }

@@ -50,6 +50,8 @@ public class HTMLEditText extends AppCompatEditText {
             else {
                 text = Html.toHtml(super.getText());
             }
+            text = text.replaceAll("&lt;", "<");
+            text = text.replaceAll("&gt;", ">");
             return text;
         }
     }
@@ -58,6 +60,8 @@ public class HTMLEditText extends AppCompatEditText {
         // You might need to remove this:
         text = text.replaceAll("&lt;", "<");
         text = text.replaceAll("&gt;", ">");
+        text = text.replaceAll("\n;", "<br>");
+
         Log.i("textch", text);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             return Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY, new HTMLImageHandler(getContext()), new HTMLTagHandler(getContext(), HTMLTagHandler.MODE_EDIT));

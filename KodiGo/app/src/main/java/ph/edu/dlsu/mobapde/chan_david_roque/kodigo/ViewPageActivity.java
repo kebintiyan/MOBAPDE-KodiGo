@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Parcelable;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -23,6 +24,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.style.BackgroundColorSpan;
@@ -103,13 +105,20 @@ public class ViewPageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_page);
 
         Log.i("ta", "oncreate");
+        if(savedInstanceState!=null) {
+            isEditable = savedInstanceState.getBoolean("isEditable");
+            editPageTextTemp = savedInstanceState.getString("editText");
+            imageFileLocation = savedInstanceState.getString("imageFileLocation");
 
+        }
         dbHelper    = new DatabaseHelper(getBaseContext());
         isEditable  = (boolean) getIntent().getExtras().get(KEY_EDITABLE);
         page        = dbHelper.queryPageByID((long) getIntent().getExtras().get(KEY_PAGE_ID));
 
         initViews();
         initActionBar();
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
     }
 
 
@@ -728,12 +737,12 @@ public class ViewPageActivity extends AppCompatActivity {
 
     private void save() {
         saveComments();
+        saveImageClickableSpan();
         Log.i("eptgette", editPageText.getTextAsString(true));
         page.setText(editPageText.getTextAsString(true));
         dbHelper.updatePage(page);
 
         SpannableString s = new SpannableString(page.getText());
-        Spannable spanText = Spannable.Factory.getInstance().newSpannable(editPageText.getText());
 
         viewPageText.setText(s);
         editPageText.setText(s, true);
@@ -781,6 +790,39 @@ public class ViewPageActivity extends AppCompatActivity {
         }
     }
 
+    private void saveImageClickableSpan() {
+        String source;
+        CharSequence charSequence = editPageText.getText();
+        if (charSequence instanceof Spannable) {
+            Spannable spannableText = (Spannable)charSequence;
+
+            ClickableImageSpan[] spans = spannableText.getSpans(0, editPageText.length(), ClickableImageSpan.class);
+            Log.i("spanslengggth", spans.length+"");
+
+            for (ClickableImageSpan span : spans) {
+                source = span.getSource();
+                Log.i("SPAAAAANSOURCE",source);
+                int start = spannableText.getSpanStart(span);
+                int end = spannableText.getSpanEnd(span);
+                Log.i("start",start+"");
+                Log.i("end",end+"");
+
+                CharSequence before = spannableText.subSequence(0, start);
+                CharSequence middle = spannableText.subSequence(start, end);
+                CharSequence after = spannableText.subSequence(end, spannableText.length());
+
+                Long id = dbHelper.insertImage(new Image().setPageID(page.getPageID()).setUrl(source));
+
+
+                // Append tags
+                CharSequence newText = TextUtils.concat(before, "<imageclick_"+id+">", middle,
+                        "<imageclick_"+id+">", after);
+                Log.i("newText", newText.toString());
+                 editPageText.setText(newText);
+            }
+        }
+    }
+
 
 
     private void createImageSpan(Uri imageURI){
@@ -791,30 +833,28 @@ public class ViewPageActivity extends AppCompatActivity {
             imagefs = BitmapFactory.decodeStream(imageStream);
 
             int selectionStart = editPageText.getSelectionStart();
-
+            Log.i("selstart", selectionStart+"");
             HTMLImageSpan imageSpan = new HTMLImageSpan(getBaseContext(), imageURI);
-
+            String imageTag = "!image!";
             if(selectionStart == editPageText.getText().toString().length()) {
-                editPageText.getText().insert(selectionStart, " ");
+                editPageText.getText().insert(selectionStart, imageTag);
                 if(selectionStart>0)
                     editPageText.setSelection(selectionStart-1);
             }
-            SpannableStringBuilder spanText = new SpannableStringBuilder(editPageText.getText());
-
-            spanText.append("\r");
-            spanText.append("\n");
-            spanText.setSpan(imageSpan, selectionStart, selectionStart+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            ClickableSpan cs = new ClickableSpan() {
-                @Override
-                public void onClick(View widget) {
-                    //popup  fullscreen
-                    //ImageView iv = (ImageView) findViewById(R.id.iv_fullscreen);
-                    //iv.setImageBitmap(imagefs);
-                    Toast.makeText(getBaseContext(), "img clicked", Toast.LENGTH_SHORT);
-                }
-            };
-            spanText.setSpan(cs, selectionStart, selectionStart+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            spanText.append("\n");
+            //SpannableStringBuilder spanText = new SpannableStringBuilder(editPageText.getText());
+            Spannable spanText = Spannable.Factory.getInstance().newSpannable(editPageText.getText());
+            ClickableImageSpan clickableImageSpan = new ClickableImageSpan(imageSpan.getSource());
+            //spanText.append("\r");fcrea
+            //spanText.append("\n");
+            spanText.setSpan(clickableImageSpan, selectionStart, selectionStart+imageTag.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spanText.setSpan(imageSpan, selectionStart, selectionStart+imageTag.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+           // spanText.setSpan(new ClickableSpan() {
+             //   @Override
+            //    public void onClick(View widget) {
+           //         Toast.makeText(getBaseContext(), "yes", Toast.LENGTH_SHORT);
+           //     }
+           // }, 0, 2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+           // spanText.append("\n");
 
             editPageText.setText(spanText);
 
@@ -888,6 +928,17 @@ public class ViewPageActivity extends AppCompatActivity {
         }else if(requestCode == REQUEST_IMAGE_GALLERY && resultCode == RESULT_OK){
             createImageSpan(data.getData());
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean("isEditable", true);
+        editPageTextTemp = editPageText.getText().toString();
+        Log.i("editp", editPageTextTemp+"");
+        outState.putString("editText", editPageTextTemp);
+        outState.putString("imageFileLocation", imageFileLocation);
+
     }
 
 }
