@@ -92,7 +92,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(Image.COLUMN_PAGE_ID, i.getPageID());
         cv.put(Image.COLUMN_URL, i.getUrl());
 
-        long result = db.insert(Comment.TABLE_NAME, null, cv);
+        long result = db.insert(Image.TABLE_NAME, null, cv);
         db.close();
 
         return result;
@@ -384,7 +384,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             image = new Image()
                     .setImageID(c.getInt(c.getColumnIndex(Image.COLUMN_IMAGE_ID)))
                     .setPageID(c.getInt(c.getColumnIndex(Image.COLUMN_PAGE_ID)))
-                    .setUrl(c.getString(c.getColumnIndex(Image.COLUMN_IMAGE_ID)));
+                    .setUrl(c.getString(c.getColumnIndex(Image.COLUMN_URL)));
 
         }
 
@@ -544,7 +544,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 Page.COLUMN_PAGE_NUMBER     + " INTEGER NOT NULL DEFAULT 0, " +
                 Page.COLUMN_DATE_CREATED    + " TEXT NOT NULL, " +
                 "FOREIGN KEY (" + Page.COLUMN_NOTEBOOK_ID + ") REFERENCES " +
-                    Notebook.TABLE_NAME + "(" + Notebook.COLUMN_NOTEBOOK_ID + ") ON DELETE CASCADE);";
+                Notebook.TABLE_NAME + "(" + Notebook.COLUMN_NOTEBOOK_ID + ") ON DELETE CASCADE);";
         return sql;
     }
 
@@ -554,7 +554,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 Comment.COLUMN_PAGE_ID      + " INTEGER NOT NULL, " +
                 Comment.COLUMN_COMMENT      + " TEXT NOT NULL, " +
                 "FOREIGN KEY (" + Comment.COLUMN_PAGE_ID + ") REFERENCES " +
-                    Page.TABLE_NAME + "(" + Page.COLUMN_PAGE_ID + ") ON DELETE CASCADE);";
+                Page.TABLE_NAME + "(" + Page.COLUMN_PAGE_ID + ") ON DELETE CASCADE);";
         return sql;
     }
 
@@ -573,10 +573,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 " AFTER INSERT ON " + Notebook.TABLE_NAME +
                 " BEGIN\n" +
                 " UPDATE " + Notebook.TABLE_NAME + " SET " +
-                    Notebook.COLUMN_NOTEBOOK_NUMBER + " = NEW." + Notebook.COLUMN_NOTEBOOK_ID +
-                    "\n" +
+                Notebook.COLUMN_NOTEBOOK_NUMBER + " = NEW." + Notebook.COLUMN_NOTEBOOK_ID +
+                "\n" +
                 " WHERE " + Notebook.COLUMN_NOTEBOOK_ID + " = NEW." +
-                    Notebook.COLUMN_NOTEBOOK_ID + ";\n" +
+                Notebook.COLUMN_NOTEBOOK_ID + ";\n" +
                 " END;";
 
         return sql;
@@ -587,8 +587,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 " AFTER INSERT ON " + Page.TABLE_NAME +
                 " BEGIN\n" +
                 " UPDATE " + Page.TABLE_NAME + " SET " +
-                    Page.COLUMN_PAGE_NUMBER + " = NEW." + Page.COLUMN_PAGE_ID +
-                    "\n" +
+                Page.COLUMN_PAGE_NUMBER + " = NEW." + Page.COLUMN_PAGE_ID +
+                "\n" +
                 " WHERE " + Page.COLUMN_PAGE_ID + " = NEW." +
                 Page.COLUMN_PAGE_ID + ";\n" +
                 " END;";
@@ -619,7 +619,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        
+
     }
 
     /*********** HELPER METHODS ***********/

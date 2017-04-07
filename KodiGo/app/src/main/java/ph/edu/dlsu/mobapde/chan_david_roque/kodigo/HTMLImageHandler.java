@@ -28,14 +28,20 @@ public class HTMLImageHandler implements Html.ImageGetter {
     public Drawable getDrawable(String source) {
         try{
             imageStream = context.getContentResolver().openInputStream(Uri.parse(source));
-        }catch (Exception e){}
-        Bitmap image = BitmapFactory.decodeStream(imageStream);
-        Bitmap scaled = Bitmap.createScaledBitmap(image, 48*19, 48*14, true);
+            Bitmap image = BitmapFactory.decodeStream(imageStream);
+            Bitmap scaled = Bitmap.createScaledBitmap(image, 48*19, 48*14, true);
 
-        BitmapDrawable bd = new BitmapDrawable(Resources.getSystem(), scaled);
-        bd.setBounds(0, 0, bd.getIntrinsicWidth(),
-                bd.getIntrinsicHeight());
+            BitmapDrawable bd = new BitmapDrawable(Resources.getSystem(), scaled);
+            bd.setBounds(0, 0, bd.getIntrinsicWidth(),
+                    bd.getIntrinsicHeight());
+            imageStream.close();
+            Log.i("tapos","tapos");
+            return bd;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
-        return bd;
+
+        return null;
     }
 }

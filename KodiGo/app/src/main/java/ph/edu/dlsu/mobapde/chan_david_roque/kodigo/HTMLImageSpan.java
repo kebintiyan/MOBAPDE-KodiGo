@@ -32,7 +32,7 @@ public class HTMLImageSpan extends ImageSpan {
         try {
             InputStream imageStream = context.getContentResolver().openInputStream(imageURI);
             Bitmap image = BitmapFactory.decodeStream(imageStream);
-            Bitmap scaled = Bitmap.createScaledBitmap(image, 48 * 19, 48 * 14, true);
+            Bitmap scaled = Bitmap.createScaledBitmap(image, 48 * 19, 48 * 16, true);
             BitmapDrawable bd = new BitmapDrawable(context.getResources(), scaled);
             bd.setBounds(0, 0, bd.getIntrinsicWidth(),
                     bd.getIntrinsicHeight());
