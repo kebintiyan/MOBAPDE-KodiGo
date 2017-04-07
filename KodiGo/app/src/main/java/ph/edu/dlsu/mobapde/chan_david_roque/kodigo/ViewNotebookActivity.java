@@ -99,7 +99,6 @@ public class ViewNotebookActivity extends AppCompatActivity {
                 Log.i("PAGEID: ", pageId+"");
                 i.putExtra(KEY_PAGE_ID, pageId);
                 i.putExtra(KEY_EDITABLE, true);
-                i.putExtra(KEY_NOTEBOOK_ID, notebookID);
                 startActivityForResult(i,REQUEST_EDIT_PAGE);
             }
         });
@@ -110,7 +109,6 @@ public class ViewNotebookActivity extends AppCompatActivity {
                 Intent i = new Intent(getBaseContext(), ViewPageActivity.class);
                 i.putExtra(KEY_PAGE_ID, pageId);
                 i.putExtra(KEY_EDITABLE, false);
-                i.putExtra(KEY_NOTEBOOK_ID, notebookID);
                 startActivityForResult(i,REQUEST_EDIT_PAGE);
             }
         });
