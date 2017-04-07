@@ -24,7 +24,7 @@ public class PageCursorAdapter extends CursorRecyclerViewAdapter<PageCursorAdapt
     public void onBindViewHolder(PageHolder viewHolder, Cursor cursor) {
 
         viewHolder.pageName.setText(cursor.getString(cursor.getColumnIndex(Page.COLUMN_NAME)));
-        viewHolder.pageText.setText(cursor.getString(cursor.getColumnIndex(Page.COLUMN_TEXT)));
+        viewHolder.pageText.setListViewText(cursor.getString(cursor.getColumnIndex(Page.COLUMN_TEXT)), TextView.BufferType.SPANNABLE);
         int pageId = cursor.getInt(cursor.getColumnIndex(Page.COLUMN_PAGE_ID));
         viewHolder.container.setTag(pageId);
 
