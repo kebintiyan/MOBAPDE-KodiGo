@@ -31,11 +31,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/ClickableTitleTheme"
             android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".ViewPageSlideActivity"
-            android:label="@string/title_activity_view_page_slide"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
     </application>
 
 </manifest>

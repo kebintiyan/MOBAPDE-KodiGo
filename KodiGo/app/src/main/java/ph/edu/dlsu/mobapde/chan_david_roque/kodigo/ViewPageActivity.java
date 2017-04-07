@@ -63,7 +63,7 @@ public class ViewPageActivity extends AppCompatActivity {
 
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
-    private ViewPager mViewPager;
+    private CustomViewPager mViewPager;
 
     boolean isEditable;
     Long pageID,notebookID;
@@ -72,9 +72,11 @@ public class ViewPageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_page_slide);
+        setContentView(R.layout.activity_view_page);
 
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         //setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -83,24 +85,18 @@ public class ViewPageActivity extends AppCompatActivity {
         dbHelper    = new DatabaseHelper(getBaseContext());
         ArrayList<Page> pages = dbHelper.queryPagesByNotebookID(notebookID);
         isEditable = (boolean) getIntent().getExtras().get(KEY_EDITABLE);
-
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), pages);
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = (CustomViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         int pageNumber = dbHelper.queryPageByID(pageID).getPageNumber();
-
         mViewPager.setCurrentItem(pageNumber-1);
 
     }
 
-    @Override
-    public void invalidateOptionsMenu() {
-        super.invalidateOptionsMenu();
-        Toast.makeText(getBaseContext(), "IM HERE", Toast.LENGTH_SHORT);
-    }
+
 
 
 

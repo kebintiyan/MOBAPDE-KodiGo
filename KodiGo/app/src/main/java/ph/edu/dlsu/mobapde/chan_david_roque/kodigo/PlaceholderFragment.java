@@ -130,17 +130,21 @@ public class PlaceholderFragment extends Fragment{
 
         initViews(rootView);
         initActionBar(rootView);
+
         return rootView;
     }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.page_menu_bar, menu);
-        Log.i("A", "hello po");
+
+        Log.i("A", "hello po" + page.getPageID());
         saveItem = menu.findItem(R.id.action_save);
         saveItem.setVisible(false);
         deletePage = menu.findItem(R.id.action_delete);
         toggleEdit(isEditable);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -218,19 +222,32 @@ public class PlaceholderFragment extends Fragment{
 
     }
 
-/*
     @Override
-    public void onBackPressed() {
-        clearFocus();
-        if (isEditable) {
+    public void onPrepareOptionsMenu(Menu menu) {
+        menu.clear();
+        Log.i("clear","cleared!");
 
-            showOnCancelConfirmDialog();
-        }
-        else {
-            super.getActivity().onBackPressed();
-        }
+        Log.i("A", "hello po" + page.getPageID());
+        saveItem = menu.findItem(R.id.action_save);
+        saveItem.setVisible(false);
+        deletePage = menu.findItem(R.id.action_delete);
+        toggleEdit(isEditable);
+        super.onPrepareOptionsMenu(menu);
     }
-*/
+
+    /*
+        @Override
+        public void onBackPressed() {
+            clearFocus();
+            if (isEditable) {
+
+                showOnCancelConfirmDialog();
+            }
+            else {
+                super.getActivity().onBackPressed();
+            }
+        }
+    */
     public void showOnCancelConfirmDialog() {
         clearFocus();
         MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
