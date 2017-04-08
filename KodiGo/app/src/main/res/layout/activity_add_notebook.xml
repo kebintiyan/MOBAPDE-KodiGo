@@ -12,45 +12,60 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="ph.edu.dlsu.mobapde.chan_david_roque.kodigo.AddNotebookActivity">
 
-    <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:layout_width="180dp"
-        android:layout_height="220dp"
+    <RelativeLayout
+        android:id="@+id/notebook_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_margin="10dp"
+        android:elevation="10dp">
+        <ImageView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:layout_width="10dp"
+            android:layout_height="220dp"
+            android:id="@+id/bar"
+            android:background="@color/defaultTitleColor">
+         </ImageView>
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:layout_width="180dp"
+            android:layout_height="220dp"
+            android:layout_toRightOf="@id/bar"
+            card_view:cardBackgroundColor="@color/defaultNotebookColor"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/notebookIcon">
 
-        card_view:cardBackgroundColor="@color/defaultNotebookColor"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/notebookIcon">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <EditText
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="3dp"
-                android:id="@+id/notebookName"
-                android:backgroundTint="@color/defaultTitleColor"
-                android:textCursorDrawable="@null"
-                android:textColor="@color/defaultTitleColor"
-                android:textColorHint="@color/defaultTitleColor"
-                android:text="Untitled"
-                android:gravity="center"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="10dp"
-                android:selectAllOnFocus="true"
-                android:maxLines="8"
-                android:maxLength="32"
-                />
+                android:layout_height="match_parent">
 
-        </RelativeLayout>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="3dp"
+                    android:id="@+id/notebookName"
+                    android:backgroundTint="@color/defaultTitleColor"
+                    android:textCursorDrawable="@null"
+                    android:textColor="@color/defaultTitleColor"
+                    android:textColorHint="@color/defaultTitleColor"
+                    android:text="Untitled"
+                    android:gravity="center"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="10dp"
+                    android:selectAllOnFocus="true"
+                    android:maxLines="8"
+                    android:maxLength="32"
+                    />
 
-    </android.support.v7.widget.CardView>
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/notebookIcon"
+        android:layout_below="@id/notebook_layout"
         android:id="@+id/colorPickerPanel"
         android:layout_centerHorizontal="true"
         android:gravity="center_horizontal"

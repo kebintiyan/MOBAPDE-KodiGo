@@ -236,6 +236,7 @@ public class ViewPageActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
+
                 int position = editPageText.getSelectionStart();
                 if (position < 0){
                     position = 0;
@@ -255,7 +256,7 @@ public class ViewPageActivity extends AppCompatActivity {
                     int selectionStart = editPageText.getSelectionStart();
                     int selectionEnd = editPageText.getSelectionEnd();
                     boolean hasSpan = false;
-
+                    Log.i("med " + styleStart,"rite " +position);
                     if (iconBold.isChecked()){
                         /*StyleSpan[] ss = s.getSpans(styleStart, position, StyleSpan.class);
 
@@ -276,7 +277,7 @@ public class ViewPageActivity extends AppCompatActivity {
 
                         for (int i = 0; i < ss.length; i++) {
                             if (ss[i].getStyle() == Typeface.BOLD){
-                                s.removeSpan(ss[i]);
+                                //s.removeSpan(ss[i]);
                             }
                         }
 
@@ -288,7 +289,7 @@ public class ViewPageActivity extends AppCompatActivity {
 
                         for (int i = 0; i < ss.length; i++) {
                             if (ss[i].getStyle() == Typeface.ITALIC){
-                                s.removeSpan(ss[i]);
+                                //s.removeSpan(ss[i]);
                             }
                         }
                         s.setSpan(new StyleSpan(android.graphics.Typeface.ITALIC), styleStart, position, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -298,7 +299,7 @@ public class ViewPageActivity extends AppCompatActivity {
                         UnderlineSpan[] ss = s.getSpans(styleStart, position, UnderlineSpan.class);
 
                         for (int i = 0; i < ss.length; i++) {
-                            s.removeSpan(ss[i]);
+                            //s.removeSpan(ss[i]);
                         }
                         s.setSpan(new UnderlineSpan(), styleStart, position, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     }
@@ -307,10 +308,11 @@ public class ViewPageActivity extends AppCompatActivity {
                         BackgroundColorSpan[] ss = s.getSpans(styleStart, position, BackgroundColorSpan.class);
 
                         for (int i = 0; i < ss.length; i++) {
-                            s.removeSpan(ss[i]);
+                            //s.removeSpan(ss[i]);
                         }
                         s.setSpan(new BackgroundColorSpan(0xFFFFFF00), styleStart, position, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     }
+
                 }
             }
         });
@@ -318,6 +320,7 @@ public class ViewPageActivity extends AppCompatActivity {
         editPageText.setOnSelectionChangedHandler(new HTMLEditText.OnSelectionChangedHandler() {
             @Override
             public void onSelectionChanged(int selectionStart, int selectionEnd) {
+                Log.i("HI "+ selectionStart, "japan" + selectionEnd);
 
                 if (selectionStart > selectionEnd) {
                     int temp = selectionEnd;
@@ -330,10 +333,12 @@ public class ViewPageActivity extends AppCompatActivity {
                 boolean hasItalic = false;
 
                 // Check if has bold
+
                 Spannable str = editPageText.getText();
-                StyleSpan[] ss = str.getSpans(selectionStart, selectionEnd, StyleSpan.class);
+                StyleSpan[] ss = str.getSpans(selectionStart, selectionEnd , StyleSpan.class);
 
                 for (int i = 0; i < ss.length; i++) {
+
                     if (ss[i].getStyle() == Typeface.BOLD){
                         hasBold = true;
                     }
