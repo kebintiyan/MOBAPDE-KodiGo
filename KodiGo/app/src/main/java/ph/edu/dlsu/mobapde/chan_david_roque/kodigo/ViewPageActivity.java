@@ -1,17 +1,33 @@
 package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.style.BackgroundColorSpan;
+import android.text.style.ClickableSpan;
+import android.text.style.ImageSpan;
 import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
@@ -19,14 +35,22 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Calendar;
 import java.util.Random;
 
 import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_EDITABLE;
@@ -34,8 +58,18 @@ import static ph.edu.dlsu.mobapde.chan_david_roque.kodigo.KeysCodes.KEY_PAGE_ID;
 
 public class ViewPageActivity extends AppCompatActivity {
 
+
+
+
+    public static final int REQUEST_STORAGE= 0;
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int REQUEST_IMAGE_GALLERY = 2;
+
+
+    String imageFile = "";
     TextView toolbarTitle;
     HTMLEditText editPageText;
+
     HTMLTextView viewPageText;
 
     boolean isEditable;
@@ -45,6 +79,8 @@ public class ViewPageActivity extends AppCompatActivity {
     MenuItem deletePage;
     Page page;
     DatabaseHelper dbHelper;
+    String imageFileLocation;
+    String editPageTextTemp;
 
     // Icons
     ToggleButton iconBold;
@@ -54,15 +90,19 @@ public class ViewPageActivity extends AppCompatActivity {
     ImageView iconCamera;
     ImageView iconGallery;
     ImageView iconComment;
+    ImageView imageView;
 
     int styleStart;
     int cursorLoc;
 
+    Bitmap imagefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_page);
+
+        Log.i("ta", "oncreate");
 
         dbHelper    = new DatabaseHelper(getBaseContext());
         isEditable  = (boolean) getIntent().getExtras().get(KEY_EDITABLE);
@@ -135,9 +175,6 @@ public class ViewPageActivity extends AppCompatActivity {
             editText = View.VISIBLE;
             saveItem.setVisible(true);
             deletePage.setVisible(false);
-
-
-
         }else {
             textView = View.VISIBLE;
             editText = View.GONE;
@@ -623,7 +660,7 @@ public class ViewPageActivity extends AppCompatActivity {
         iconCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                takePhoto();
             }
         });
 
@@ -631,7 +668,9 @@ public class ViewPageActivity extends AppCompatActivity {
         iconGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+                startActivityForResult(photoPickerIntent, REQUEST_IMAGE_GALLERY);
             }
         });
 
@@ -690,12 +729,19 @@ public class ViewPageActivity extends AppCompatActivity {
         editPageText.setSelection(selectionStart, selectionEnd);
     }
 
+
+
     private void save() {
         saveComments();
+        Log.i("eptgette", editPageText.getTextAsString(true));
         page.setText(editPageText.getTextAsString(true));
         dbHelper.updatePage(page);
-        viewPageText.setText(page.getText());
-        editPageText.setText(page.getText(), true);
+
+        SpannableString s = new SpannableString(page.getText());
+        Spannable spanText = Spannable.Factory.getInstance().newSpannable(editPageText.getText());
+
+        viewPageText.setText(s);
+        editPageText.setText(s, true);
         toggleEdit(false);
     }
 
@@ -703,6 +749,7 @@ public class ViewPageActivity extends AppCompatActivity {
         CharSequence charSequence = editPageText.getText();
         if (charSequence instanceof Spannable) {
             Spannable spannableText = (Spannable)charSequence;
+
             CommentSpan[] spans = spannableText.getSpans(0, editPageText.length(), CommentSpan.class);
             for (CommentSpan span : spans) {
 
@@ -738,4 +785,114 @@ public class ViewPageActivity extends AppCompatActivity {
             }
         }
     }
+
+
+
+    private void createImageSpan(Uri imageURI){
+
+        try {
+
+            InputStream imageStream = getContentResolver().openInputStream(imageURI);
+            imagefs = BitmapFactory.decodeStream(imageStream);
+
+            int selectionStart = editPageText.getSelectionStart();
+
+            HTMLImageSpan imageSpan = new HTMLImageSpan(getBaseContext(), imageURI);
+
+            if(selectionStart == editPageText.getText().toString().length()) {
+                editPageText.getText().insert(selectionStart, " ");
+                if(selectionStart>0)
+                    editPageText.setSelection(selectionStart-1);
+            }
+            SpannableStringBuilder spanText = new SpannableStringBuilder(editPageText.getText());
+
+            spanText.append("\r");
+            spanText.append("\n");
+            spanText.setSpan(imageSpan, selectionStart, selectionStart+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ClickableSpan cs = new ClickableSpan() {
+                @Override
+                public void onClick(View widget) {
+                    //popup  fullscreen
+                    //ImageView iv = (ImageView) findViewById(R.id.iv_fullscreen);
+                    //iv.setImageBitmap(imagefs);
+                    Toast.makeText(getBaseContext(), "img clicked", Toast.LENGTH_SHORT);
+                }
+            };
+            spanText.setSpan(cs, selectionStart, selectionStart+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spanText.append("\n");
+
+            editPageText.setText(spanText);
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public File createImageFile() throws IOException{
+        Calendar c = Calendar.getInstance();
+        int seconds = c.get(Calendar.SECOND);
+        String imageFileName = page.getNotebookID() +"-" +page.getPageID() +""+seconds;
+        File photo;
+        File storageDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        photo = File.createTempFile(imageFileName, ".jpg",storageDirectory);
+        imageFileLocation = photo.getAbsolutePath();
+        return photo;
+    }
+
+    public boolean checkStoragePermission(){
+        if(ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+            return true;
+        }else{
+            ActivityCompat.requestPermissions(ViewPageActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_STORAGE);
+            return false;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == REQUEST_STORAGE){
+            takePhoto();
+        }
+    }
+
+    public void takePhoto(){
+        if(checkStoragePermission()) {
+
+            Intent cameraIntent = new Intent();
+            cameraIntent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+
+            File photoFIle = null;
+            try {
+                photoFIle = createImageFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            imageFile = photoFIle.getAbsolutePath();
+            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFIle));
+            startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        Bitmap scaled = Bitmap.createScaledBitmap(inImage, 48*10, 48*7, true);
+
+
+        scaled.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), scaled, "Title", null);
+        return Uri.parse(path);
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
+            Bitmap bitmap = BitmapFactory.decodeFile(imageFileLocation);
+            createImageSpan(getImageUri(getBaseContext(),bitmap));
+        }else if(requestCode == REQUEST_IMAGE_GALLERY && resultCode == RESULT_OK){
+            createImageSpan(data.getData());
+        }
+    }
+
 }

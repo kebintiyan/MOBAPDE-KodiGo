@@ -2,6 +2,7 @@ package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 
 import android.content.Context;
 import android.os.Build;
+import android.support.v7.widget.AppCompatTextView;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
@@ -13,7 +14,7 @@ import android.widget.TextView;
  * Created by kevin on 2/27/2017.
  */
 
-public class HTMLTextView extends android.support.v7.widget.AppCompatTextView {
+public class HTMLTextView extends AppCompatTextView {
 
     public HTMLTextView(Context context) {
         super(context);
@@ -32,7 +33,12 @@ public class HTMLTextView extends android.support.v7.widget.AppCompatTextView {
 
     @Override
     public void setText(CharSequence text, BufferType type) {
+//<<<<<<< HEAD
         super.setText(getHTMLText(text + "", HTMLTagHandler.MODE_VIEW), type);
+//=======
+//
+//        super.setText(getHTMLText(text + ""), BufferType.SPANNABLE);
+//>>>>>>> origin/ryandevcamera
     }
 
     private Spanned getHTMLText(String text, int mode) {
@@ -40,13 +46,12 @@ public class HTMLTextView extends android.support.v7.widget.AppCompatTextView {
         text = text.replaceAll("&lt;", "<");
         text = text.replaceAll("&gt;", ">");
 
-        Log.i("GET HTML TEXT", mode + "");
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            return Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY, new HTMLImageHandler(), new HTMLTagHandler(getContext(), mode));
+            return Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY, new HTMLImageHandler(getContext()), new HTMLTagHandler(getContext(), HTMLTagHandler.MODE_VIEW));
         }
         else {
-            return Html.fromHtml(text, new HTMLImageHandler(), new HTMLTagHandler(getContext(), mode));
+            return Html.fromHtml(text, new HTMLImageHandler(getContext()), new HTMLTagHandler(getContext(), HTMLTagHandler.MODE_VIEW));
+
         }
     }
 

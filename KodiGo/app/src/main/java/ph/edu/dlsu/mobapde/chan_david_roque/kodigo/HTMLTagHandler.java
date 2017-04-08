@@ -1,6 +1,10 @@
 package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.text.Editable;
@@ -45,18 +49,19 @@ public class HTMLTagHandler implements Html.TagHandler {
     @Override
     public void handleTag(boolean opening, String tag, Editable output, XMLReader xmlReader) {
         if(tag.indexOf(TAG_COMMENT) == 0) {
+
             String id = tag.split("_")[1];
             processComment(opening, output, id);
         }
-        else if (tag.indexOf(TAG_IMAGE) == 0) {
-            String id = tag.substring(TAG_IMAGE.length() + 1);
-            processImage(opening, output, id);
-        }
+        //if (tag.equals("image")) {
+        //    String source = tag.split("_")[1];
+//            String id = tag.substring(TAG_IMAGE.length());
+        //    processImage(opening, output, source);
+        //}
     }
 
     private void processComment(boolean opening, Editable output, String commentID) {
         int len = output.length();
-
         Comment comment = dbHelper.queryCommentByID(Long.parseLong(commentID));
         CommentSpan commentSpan = new CommentSpan(comment, mode);
 
@@ -75,13 +80,21 @@ public class HTMLTagHandler implements Html.TagHandler {
         }
     }
 
-    private void processImage(boolean opening, Editable output, String imageID) {
-        Image image = dbHelper.queryImageByID(Integer.parseInt(imageID));
-        Drawable d = Drawable.createFromPath(image.getUrl());
+    private void processImage(boolean opening, Editable output, String source) {
+
+        Bitmap bitmap = BitmapFactory.decodeFile(source);
+        Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 48*5, 48*5, true);
+
+        BitmapDrawable bd = new BitmapDrawable(Resources.getSystem(), scaled);
 
         int len = output.length();
+        Log.i("IMAAAAAAAAGE", output.toString());
+
+        Log.i("opening", opening+"");
+        Log.i("len", len+"");
+
         if(opening) {
-            output.setSpan(new ImageSpan(d), len, len, Spannable.SPAN_MARK_MARK);
+            output.setSpan(new ImageSpan(bd), len, len, Spannable.SPAN_MARK_MARK);
         }
         else {
             Object obj = getLast(output, ImageSpan.class);
@@ -90,7 +103,8 @@ public class HTMLTagHandler implements Html.TagHandler {
             output.removeSpan(obj);
 
             if (where != len) {
-                output.setSpan(new ImageSpan(d), where, len, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                Log.i("where", where+"");
+                output.setSpan(new ImageSpan(bd), 0, len, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
     }
