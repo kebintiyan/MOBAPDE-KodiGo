@@ -2,8 +2,10 @@ package ph.edu.dlsu.mobapde.chan_david_roque.kodigo;
 
 import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.text.Html;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
+import android.util.Log;
 import android.view.View;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -15,26 +17,30 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 public class CommentSpan extends ClickableSpan {
 
+
+
     private Comment comment;
-    private boolean isViewing;
+    private int viewMode;
     private boolean deleted;
 
-    public CommentSpan(Comment comment, boolean isViewing) {
+    public CommentSpan(Comment comment, int viewMode) {
         super();
         this.comment = comment;
-        this.isViewing = isViewing;
+        this.viewMode = viewMode;
         this.deleted = false;
+
+        Log.i("COMMENT", viewMode + "");
     }
 
     @Override
     public void onClick(final View widget) {
-        if (isViewing) {
+        if (viewMode == HTMLTagHandler.MODE_VIEW) {
             new MaterialDialog.Builder(widget.getContext())
                     .title("Comment")
                     .content(comment.getComment())
                     .show();
         }
-        else {
+        else if (viewMode == HTMLTagHandler.MODE_EDIT) {
             if (!deleted) {
                 new MaterialDialog.Builder(widget.getContext())
                         .title("Comment")
@@ -85,6 +91,9 @@ public class CommentSpan extends ClickableSpan {
                         })
                         .show();
             }
+        }
+        else {
+            return;
         }
     }
 

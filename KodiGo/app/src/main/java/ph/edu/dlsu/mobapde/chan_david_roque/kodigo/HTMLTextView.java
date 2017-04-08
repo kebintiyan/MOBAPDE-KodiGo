@@ -32,20 +32,25 @@ public class HTMLTextView extends android.support.v7.widget.AppCompatTextView {
 
     @Override
     public void setText(CharSequence text, BufferType type) {
-        super.setText(getHTMLText(text + ""), type);
+        super.setText(getHTMLText(text + "", HTMLTagHandler.MODE_VIEW), type);
     }
 
-    private Spanned getHTMLText(String text) {
+    private Spanned getHTMLText(String text, int mode) {
         // You might need to remove this:
         text = text.replaceAll("&lt;", "<");
         text = text.replaceAll("&gt;", ">");
 
+        Log.i("GET HTML TEXT", mode + "");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            return Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY, new HTMLImageHandler(), new HTMLTagHandler(getContext(), HTMLTagHandler.MODE_VIEW));
+            return Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY, new HTMLImageHandler(), new HTMLTagHandler(getContext(), mode));
         }
         else {
-            return Html.fromHtml(text, new HTMLImageHandler(), new HTMLTagHandler(getContext(), HTMLTagHandler.MODE_VIEW));
+            return Html.fromHtml(text, new HTMLImageHandler(), new HTMLTagHandler(getContext(), mode));
         }
+    }
+
+    public void setListViewText(CharSequence text, BufferType type) {
+        super.setText(getHTMLText(text + "", HTMLTagHandler.MODE_VIEW_LIST), type);
     }
 }

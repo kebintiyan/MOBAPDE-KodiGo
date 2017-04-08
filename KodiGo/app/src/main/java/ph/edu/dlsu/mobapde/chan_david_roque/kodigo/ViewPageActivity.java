@@ -681,7 +681,7 @@ public class ViewPageActivity extends AppCompatActivity {
         int selectionStart = editPageText.getSelectionStart();
         int selectionEnd = editPageText.getSelectionEnd();
 
-        CommentSpan commentSpan = new CommentSpan(comment, false);
+        CommentSpan commentSpan = new CommentSpan(comment, HTMLTagHandler.MODE_EDIT);
 
         Spannable spanText = Spannable.Factory.getInstance().newSpannable(editPageText.getText());
         spanText.setSpan(commentSpan, selectionStart, selectionEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
