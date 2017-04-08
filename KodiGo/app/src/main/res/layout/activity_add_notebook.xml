@@ -31,7 +31,6 @@
             android:layout_width="180dp"
             android:layout_height="220dp"
             android:layout_toRightOf="@id/bar"
-            card_view:cardBackgroundColor="@color/defaultNotebookColor"
             android:layout_centerHorizontal="true"
             android:id="@+id/notebookIcon">
 

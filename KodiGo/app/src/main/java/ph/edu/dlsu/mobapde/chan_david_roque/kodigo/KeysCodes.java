@@ -35,7 +35,8 @@ public class KeysCodes {
     final static String KEY_LOAD_PAGES = "loadpages";
 
     final static int [] KEY_COLORS = new int[] {
-        Color.WHITE, Color.rgb(232, 234, 215), Color.RED,
-                Color.GREEN,Color.BLUE,Color.YELLOW, Color.rgb(45, 45, 45)};
+        Color.WHITE, Color.rgb(232, 234, 215), Color.parseColor("#F44336"),
+            Color.parseColor("#4CAF50"), Color.parseColor("#2196F3"),
+            Color.parseColor("#FFEB3B"), Color.rgb(45, 45, 45)};
 
 }

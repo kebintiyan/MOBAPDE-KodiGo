@@ -600,7 +600,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
         Notebook n = new Notebook()
-                .setNotebookColor(Color.parseColor("#e8ead7"))
+                .setNotebookColor(Color.WHITE)
                 .setTitleColor(Color.parseColor("#2d2d2d"))
                 .setTitle("Default");
 

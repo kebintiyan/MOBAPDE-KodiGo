@@ -59,7 +59,7 @@ public class AddNotebookActivity extends AppCompatActivity {
 
         notebookColorPicker.setColors(KEY_COLORS);
 
-        notebookColorPicker.setSelectedColorPosition(1);
+        notebookColorPicker.setSelectedColorPosition(0);
 
         notebookColorPicker.setOnColorChangedListener(new OnColorChangedListener() {
             @Override
